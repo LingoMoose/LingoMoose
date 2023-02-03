@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import Home from "./pages/Home";
 import ForgotPassword from "./pages/ForgotPassword";
 import Offers from "./pages/Offers";
@@ -7,6 +7,7 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Header from './components/Header';
 
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 function App() {
   return (
     <div>

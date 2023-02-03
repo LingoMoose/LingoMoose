@@ -10,6 +10,12 @@ const Header = () => {
         }
     }
 
+    const styles = {
+        listItem: `cursor-pointer py-3 text-sm font-semibold 
+        text-gray-400 border-b-[3px] border-b-transparent`,
+        listItemCurrent: "text-black border-b-red-500"
+    }
+
     return ( 
         <div className="bg-white border-b shadow-sm sticky top-0 z-50">
             <header className="flex justify-between items-center max-w-6xl mx-auto">
@@ -19,20 +25,18 @@ const Header = () => {
                 </div>
                 <div>
                     <ul className="flex flex-row space-x-10">
-                        <li onClick={() => navigate("/")} className={`cursor-pointer py-3 text-sm font-semibold 
-                        text-gray-400 border-b-[3px] border-b-transparent
-                        ${pathMatchRoute("/") && "text-black border-b-red-500"}`}>Home</li>
-                        <li onClick={() => navigate("/offers")} className={`cursor-pointer py-3 text-sm font-semibold 
-                        text-gray-400 border-b-[3px] border-b-transparent
-                        ${pathMatchRoute("/offers") && "text-black border-b-red-500"}`} >Offers</li>
-                        <li onClick={() => navigate("/profile")}  className={`cursor-pointer py-3 text-sm font-semibold 
-                        text-gray-400 border-b-[3px] border-b-transparent
-                        ${pathMatchRoute("/profile") && "text-black border-b-red-500"}`}>Profile</li>
+                        <li onClick={() => navigate("/")} className={`${styles.listItem}
+                        ${pathMatchRoute("/") && styles.listItemCurrent}`}>Home</li>
+                        <li onClick={() => navigate("/offers")} className={`${styles.listItem}
+                        ${pathMatchRoute("/offers") && styles.listItemCurrent}`} >Offers</li>
+                        <li onClick={() => navigate("/sign-in")}  className={`${styles.listItem}
+                        ${pathMatchRoute("/sign-in") && styles.listItemCurrent}`}>Sign In</li>
                     </ul>
                 </div>
                 
             </header>
         </div>
+    
      );
 }
  
