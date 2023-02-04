@@ -1,11 +1,25 @@
+import { sendPasswordResetEmail, getAuth } from "firebase/auth";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState("");
 
     function onChange(e){
         setEmail(e.target.value)
+    }
+
+    async function onSubmit(e){
+        e.preventDefault();
+        try {
+            const auth = getAuth();
+            await sendPasswordResetEmail(auth, email);
+            toast.success("Email was sent!")
+        } catch(error){
+            toast.error("User not found");
+        }
     }
 
     return ( 
@@ -16,7 +30,7 @@ const ForgotPassword = () => {
                     <img className="w-full rounded-2xl" src="/sign-in-logo.jpg" alt="house keys" />
                 </div>
                 <div className="w-full md:w-[67%] lg:w-[40%] lg:ml-20">
-                    <form action="">
+                    <form onSubmit={onSubmit}>
                         <input 
                         className="w-full mb-6 px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded ease-in-out"
                         type="email" 
@@ -37,7 +51,7 @@ const ForgotPassword = () => {
                             <button 
                             type="submit" 
                             className="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-7 py-3 text-sm font-medium uppercase rounded shadow-sm transition duration-150 ease-in-out hover:shadow-md"
-                        >reset password</button>
+                        >send password reset</button>
      
                         
                     </form>
