@@ -1,8 +1,22 @@
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Header = () => {
+    const [pageState, setPageState] = useState("Sign in");
     const location = useLocation();
     const navigate = useNavigate();
+    const auth = getAuth();
+
+    useEffect(()=>{
+        onAuthStateChanged(auth, user => {
+            if(user){
+                setPageState("Profile");
+            } else {
+                setPageState("Sign in"); 
+            }
+        })
+    }, [auth])
 
     function pathMatchRoute(route){
         if(route === location.pathname){
@@ -25,12 +39,16 @@ const Header = () => {
                 </div>
                 <div>
                     <ul className="flex flex-row space-x-10">
+
                         <li onClick={() => navigate("/")} className={`${styles.listItem}
                         ${pathMatchRoute("/") && styles.listItemCurrent}`}>Home</li>
+
                         <li onClick={() => navigate("/offers")} className={`${styles.listItem}
                         ${pathMatchRoute("/offers") && styles.listItemCurrent}`} >Offers</li>
-                        <li onClick={() => navigate("/sign-in")}  className={`${styles.listItem}
-                        ${pathMatchRoute("/sign-in") && styles.listItemCurrent}`}>Sign In</li>
+
+                        <li onClick={() => navigate("/profile")}  className={`${styles.listItem}
+                        ${(pathMatchRoute("/sign-in") || pathMatchRoute("/profile")) && styles.listItemCurrent}`}>{pageState}</li>
+
                     </ul>
                 </div>
                 

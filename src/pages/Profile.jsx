@@ -3,6 +3,7 @@ import { updateDoc, doc } from "firebase/firestore";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import { generateUsername } from 'username-generator';
 import { db } from "../Firebase";
 
 
@@ -31,6 +32,17 @@ const Profile = () => {
 
     async function onSubmit(){
         try {
+
+            const randomName = generateUsername("-");
+       
+            if(name === ""){
+                setFormData(prevState => ({
+                    ...prevState,
+                    name: randomName
+                }))
+            }
+
+
             if(auth.currentUser.displayName !== name){
                 await updateProfile(auth.currentUser, {
                     displayName: name

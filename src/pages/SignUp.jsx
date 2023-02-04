@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai"
+import { MdAutorenew } from "react-icons/md"
 import { Link } from "react-router-dom";
 import OAuth from "../components/OAuth";
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
@@ -7,6 +8,7 @@ import { db } from '../Firebase'
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { generateUsername } from 'username-generator';
 
 function SignUp() {
     const [showPassword, setShowPassword] = useState(false);
@@ -21,6 +23,13 @@ function SignUp() {
       setFormData((prevState) => ({
         ...prevState,
         [e.target.id]: e.target.value,
+      }));
+    }
+    function randomName() {
+      const randomName = generateUsername("-");
+      setFormData((prevState) => ({
+        ...prevState,
+        name: randomName,
       }));
     }
     async function onSubmit(e) {
@@ -61,14 +70,18 @@ function SignUp() {
                 </div>
                 <div className="w-full md:w-[67%] lg:w-[40%] lg:ml-20">
                     <form onSubmit={onSubmit}>
-                        <input 
-                        className="w-full mb-6 px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded ease-in-out"
-                        type="name" 
-                        id="name" 
-                        value={name}
-                        onChange={onChange}
-                        placeholder="Full name"
-                          />
+                      <div className="relative">                    
+                          <input 
+                          className="w-full mb-6 px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded ease-in-out"
+                          type="name" 
+                          id="name" 
+                          value={name}
+                          onChange={onChange}
+                          placeholder="Username"
+                            />
+                            
+                          <MdAutorenew className="absolute right-3 top-3 text-xl cursor-pointer" onClick={randomName}/>
+                        </div>
                         <input 
                         className="w-full mb-6 px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded ease-in-out"
                         type="email" 
