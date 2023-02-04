@@ -8,49 +8,48 @@ import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const SignUp = () => {
+function SignUp() {
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        password: ""
+      name: "",
+      email: "",
+      password: "",
     });
-
-    const {name, email, password} = formData;
+    const { name, email, password } = formData;
     const navigate = useNavigate();
-
-    function onChange(e){
-        setFormData((prevState) => ({
-            ...prevState,
-            [e.target.id] : e.target.value
-        }))
+    function onChange(e) {
+      setFormData((prevState) => ({
+        ...prevState,
+        [e.target.id]: e.target.value,
+      }));
     }
-
-    function onSubmit(e) {
-        e.preventDefault();
+    async function onSubmit(e) {
+      e.preventDefault();
+  
+      try {
         const auth = getAuth();
-        createUserWithEmailAndPassword(auth, email, password)
-          .then((userCredential) => {
-            // Signed in 
-            const user = userCredential.user;
-            const formDataCopy = { ...formData };
-            delete formDataCopy.password;
-            formDataCopy.timestamp = serverTimestamp();
-
-            setDoc(doc(db, "users", user.uid), formDataCopy);
-            navigate("/");
-
-            updateProfile(auth.currentUser, {
-                displayName: name
-            })
-            console.log(user);
-          })
-          .catch((error) => {
-            // const errorCode = error.code;
-            const errorMessage = error.message;
-            toast(errorMessage)
-          });
-
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+  
+        updateProfile(auth.currentUser, {
+          displayName: name,
+        });
+        const user = userCredential.user;
+        const formDataCopy = { ...formData };
+        delete formDataCopy.password;
+        formDataCopy.timestamp = serverTimestamp();
+  
+        await setDoc(doc(db, "users", user.uid), formDataCopy);
+        // toast.success("Sign up was successful");
+        navigate("/");
+      } catch (error) {
+        // const errorCode = error.code;
+      const errorMessage = error.message;
+      toast(errorMessage);
+      }
     }
 
     return ( 
