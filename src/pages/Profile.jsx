@@ -5,6 +5,8 @@ import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { generateUsername } from 'username-generator';
 import { db } from "../Firebase";
+import { ShakeLittle } from "reshake";
+import { GiPerspectiveDiceSixFacesRandom } from "react-icons/gi"
 
 
 const Profile = () => {
@@ -59,6 +61,14 @@ const Profile = () => {
         }
     }
 
+    function randomName() {
+        const randomName = generateUsername("-");
+        setFormData((prevState) => ({
+          ...prevState,
+          name: randomName,
+        }));
+      }
+
     const style = {
         email: `w-full mb-6 px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-in-out`,
         edit: `text-red-600 pr-3 hover:text-red-700 transition ease-in-out duration-200 cursor-pointer ml-1`,
@@ -71,17 +81,26 @@ const Profile = () => {
                 <h1 className="text-3xl text-center mt-6 font-bold">My Profile</h1>
                 <div className="w-full md:w-[50%] mt-6 px-3">
                     <form>
-                        <input 
-                            type="text" 
-                            id="name" 
-                            value={name} 
-                            className={`mb-6 w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded transition ease-in-out ${
-                                changeDetail && "bg-red-200 focus:bg-red-200"
-                              }`}
-                           
-                            disabled={!changeDetail}
-                            onChange={onChange}
-                        />
+                        <div className="relative">
+                            <div disabled={!changeDetail} className={`absolute right-3 top-3 text-xl cursor-pointer ${changeDetail ? "Block" : "hidden"}  `}>
+                            <ShakeLittle >
+                              <GiPerspectiveDiceSixFacesRandom  onClick={randomName}/>
+                            </ShakeLittle>
+                            </div> 
+                        
+                            <input 
+                                type="text" 
+                                id="name" 
+                                value={name} 
+                                className={`mb-6 w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded transition ease-in-out ${
+                                    changeDetail && "bg-red-200 focus:bg-red-200"
+                                }`}
+                            
+                                disabled={!changeDetail}
+                                onChange={onChange}
+                                placeholder="Username"
+                            />
+                        </div>
                         <input 
                             type="email" 
                             id="email" 

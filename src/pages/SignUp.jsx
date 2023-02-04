@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai"
-import { MdAutorenew } from "react-icons/md"
+import { GiPerspectiveDiceSixFacesRandom } from "react-icons/gi"
 import { Link } from "react-router-dom";
 import OAuth from "../components/OAuth";
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
@@ -9,6 +9,7 @@ import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { generateUsername } from 'username-generator';
+import { ShakeLittle } from "reshake";
 
 function SignUp() {
     const [showPassword, setShowPassword] = useState(false);
@@ -79,8 +80,13 @@ function SignUp() {
                           onChange={onChange}
                           placeholder="Username"
                             />
-                            
-                          <MdAutorenew className="absolute right-3 top-3 text-xl cursor-pointer" onClick={randomName}/>
+
+                          <div className="absolute right-3 top-3 text-xl cursor-pointer">
+                            <ShakeLittle>
+                              <GiPerspectiveDiceSixFacesRandom  onClick={randomName}/>
+                            </ShakeLittle>
+                          </div> 
+                          
                         </div>
                         <input 
                         className="w-full mb-6 px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded ease-in-out"
