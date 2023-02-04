@@ -30,7 +30,7 @@ const SignIn = () => {
             }
 
         } catch(error) {
-            toast(error.message);
+            toast.error(error.message);
         }
     }
 
