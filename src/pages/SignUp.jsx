@@ -27,7 +27,12 @@ function SignUp() {
       }));
     }
     function randomName() {
-      const randomName = generateUsername("-");
+      const randBoolean = Math.random() < 0.5;
+      let randomNumber = Math.floor(Math.random()*1000);
+      randomNumber = randBoolean ? "-" + randomNumber : randomNumber;
+      let randomName = randBoolean ? generateUsername("-") : generateUsername("");
+      randomName += randomNumber;
+
       setFormData((prevState) => ({
         ...prevState,
         name: randomName,

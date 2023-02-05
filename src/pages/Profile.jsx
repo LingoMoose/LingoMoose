@@ -1,6 +1,6 @@
 import { getAuth, updateProfile } from "firebase/auth";
-import { updateDoc, doc } from "firebase/firestore";
-import { useState } from "react";
+import { updateDoc, doc, collection, orderBy, query, where, getDocs } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { generateUsername } from 'username-generator';
@@ -9,12 +9,15 @@ import { ShakeLittle } from "reshake";
 import { GiPerspectiveDiceSixFacesRandom } from "react-icons/gi";
 import { FcHome } from 'react-icons/fc';
 import { Link } from "react-router-dom";
+import ListingItem from "../components/ListingItem";
 
 
 const Profile = () => {
     const auth = getAuth();
     const navigate = useNavigate();
     const [changeDetail, setChangeDetail] = useState(false);
+    const [listings, setListings] = useState(null);
+    const [loading, setLoading] = useState(true);
     const [formData, setFormData] = useState({
         name: auth.currentUser.displayName,
         email: auth.currentUser.email
@@ -34,18 +37,25 @@ const Profile = () => {
         }))
     }
 
+    function randomName() {
+        const randBoolean = Math.random() < 0.5;
+        let randomNumber = Math.floor(Math.random()*1000);
+        randomNumber = randBoolean ? "-" + randomNumber : randomNumber;
+        let randomName = randBoolean ? generateUsername("-") : generateUsername("");
+        randomName += randomNumber;
+
+        setFormData((prevState) => ({
+          ...prevState,
+          name: randomName,
+        }));
+      }
+
     async function onSubmit(){
         try {
-
-            const randomName = generateUsername("-");
        
             if(name === ""){
-                setFormData(prevState => ({
-                    ...prevState,
-                    name: randomName
-                }))
+                randomName();
             }
-
 
             if(auth.currentUser.displayName !== name){
                 await updateProfile(auth.currentUser, {
@@ -63,19 +73,34 @@ const Profile = () => {
         }
     }
 
-    function randomName() {
-        const randomName = generateUsername("-");
-        setFormData((prevState) => ({
-          ...prevState,
-          name: randomName,
-        }));
-      }
 
     const style = {
         email: `w-full mb-6 px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-in-out`,
         edit: `text-red-600 pr-3 hover:text-red-700 transition ease-in-out duration-200 cursor-pointer ml-1`,
         signout: `text-blue-600 hover:text-blue-800 transition duration-200 ease-in-out cursor-pointer`
     }
+
+    useEffect(() => {
+        async function fetchUserListings() {
+          const listingRef = collection(db, "listings");
+          const q = query(
+            listingRef,
+            where("userRef", "==", auth.currentUser.uid),
+            orderBy("timestamp", "desc")
+          );
+          const querySnap = await getDocs(q);
+          let listings = [];
+          querySnap.forEach((doc) => {
+            return listings.push({
+              id: doc.id,
+              data: doc.data(),
+            });
+          });
+          setListings(listings);
+          setLoading(false);
+        }
+        fetchUserListings();
+      }, [auth.currentUser.uid]);
 
     return ( 
         <div>
@@ -127,6 +152,26 @@ const Profile = () => {
                     </button>
                 </div>
             </section>
+            <div className="max-w-6xl px-3 mt-6 mx-auto">
+                {!loading && listings.length > 0 && (
+                    <div>
+                         <h2 className="text-xl sm:text-2xl text-center font-semibold mb-6 mt-6">
+                        My Listings
+                        </h2>
+                        <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 mt-6 mb-6">
+                        {listings.map((listing) => (
+                            <ListingItem
+                            key={listing.id}
+                            id={listing.id}
+                            listing={listing.data}
+                            // onDelete={() => handleDelete(listing.id)}
+                            // onEdit={() => handleEdit(listing.id)}
+                            />
+                        ))}
+                        </ul>
+                    </div>
+                )}
+            </div>
         </div>
      );
 }
