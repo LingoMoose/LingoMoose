@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 
 const CreateListing = () => {
     const navigate = useNavigate();
-    const [geolocationEnabled, setGeolocationEnabled] = useState(true);
+    const [geolocationEnabled] = useState(true);
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         type: "rent",
@@ -69,6 +69,16 @@ const CreateListing = () => {
             toast.error("Maximum 6 images are allowed")
             return;
         }
+
+        for (let i = 0; i < images.length; i++) {
+            if (images[i].size > 2000000) {
+              toast.error(
+                `${images.length > 1 ? "Each image" : "Image"} must not exceed 2MB`
+              );
+    
+              return;
+            }
+          }
         
         let geolocation = {};
         let location;
