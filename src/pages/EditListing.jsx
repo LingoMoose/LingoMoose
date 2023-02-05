@@ -4,7 +4,7 @@ import Spinner from "../components/Spinner";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 import { uuidv4 } from "@firebase/util";
-import { addDoc, collection, serverTimestamp, doc, getDoc, updateDoc } from "firebase/firestore";
+import { serverTimestamp, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../Firebase";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
@@ -272,7 +272,7 @@ const EditListing = () => {
                     >No</button>
                 </div>
                 <p className={style.label}>Address</p>
-                <textarea type="text" id="address" value={address} onChange={onChange} placeholder="Address" maxLength="32" minLength="10" required 
+                <textarea type="text" id="address" value={address} onChange={onChange} placeholder="Address" maxLength="100" minLength="10" required 
                     className="w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-out duration-150 focus:text-gray-700 focus:bg-white focus:border-slate-600 mb-6"
                 />
                 {!geolocationEnabled && (
