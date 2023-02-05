@@ -6,7 +6,9 @@ import { toast } from "react-toastify";
 import { generateUsername } from 'username-generator';
 import { db } from "../Firebase";
 import { ShakeLittle } from "reshake";
-import { GiPerspectiveDiceSixFacesRandom } from "react-icons/gi"
+import { GiPerspectiveDiceSixFacesRandom } from "react-icons/gi";
+import { FcHome } from 'react-icons/fc';
+import { Link } from "react-router-dom";
 
 
 const Profile = () => {
@@ -117,6 +119,12 @@ const Profile = () => {
                             <p onClick={onLogout} className={style.signout}>Sign out</p>
                         </div>
                     </form>
+                    <button type="submit" className="w-full bg-blue-600 text-white uppercase px-7 py-3 text-sm font-medium rounded shadow-md hover:bg-blue-700 transition ease-in-out duration-150 hover:shadow-lg active:bg-blue-800">
+                        <Link to="/create-listing" className="flex justify-center items-center">
+                        <FcHome className="mr-2 text-3xl bg-red-200 rounded-full p-1 border-2"/>
+                        Sell or rent your home
+                        </Link>                        
+                    </button>
                 </div>
             </section>
         </div>
