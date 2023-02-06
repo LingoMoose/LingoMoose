@@ -14,7 +14,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 
-import { FaMapMarkerAlt, FaShare } from "react-icons/fa";
+import { FaBath, FaBed, FaChair, FaMapMarkerAlt, FaParking, FaShare } from "react-icons/fa";
 
 const Listings = () => {
 
@@ -98,7 +98,17 @@ const Listings = () => {
                             </p>
                         )}
                     </div>
-                    <p className="mt-3 mb-3">Description - <span className="font-semibold">{listing.description}</span></p>
+                    <p className="mt-3 mb-3">
+                        <span className="font-semibold">Description - </span>
+                        {listing.description}
+                    </p>
+                    <ul className="flex items-center space-x-2 sm:space-x-10 text-sm font-semibold">
+                        <li className="flex items-center whitespace-nowrap"><FaBed className="mr-1" />{(+listing.bedrooms) > 1 ? `${listing.bedrooms} beds` : `${listing.bedrooms} bed` }</li>
+                        <li className="flex items-center whitespace-nowrap"><FaBath className="mr-1" />{(+listing.bathrooms) > 1 ? `${listing.bathrooms} beds` : `${listing.bathrooms} bed` }</li>
+                        <li className="flex items-center whitespace-nowrap"><FaParking className="mr-1" />{(+listing.parking) == true ? `Parking Spot` : `No Parking` }</li>
+                        <li className="flex items-center whitespace-nowrap"><FaChair className="mr-1" />{(+listing.furnished) == true ? `Furnished` : `Not Furnished` }</li>
+                        
+                    </ul>
                 </div>
                 <div className="bg-blue-300 w-full h-[200px] lg:h-[400px] z-10 overflow-x-hidden">
                     
