@@ -7,7 +7,7 @@ import SwiperCore, { Autoplay, EffectFade, Navigation, Pagination } from "swiper
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { Navigate, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 
 const Slider = () => {
 
