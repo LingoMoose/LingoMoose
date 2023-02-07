@@ -23,7 +23,7 @@ const Home = () => {
                 <PreviewSection 
                  whereInfo={["type", "==", "sell"]}
                  caption={"Place for sale"}
-                 link={"/forsale"}
+                 link={"/sell"}
                  linkText={"sale listings"}
                 />
             </div>
