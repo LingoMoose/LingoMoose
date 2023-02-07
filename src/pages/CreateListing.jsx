@@ -80,10 +80,11 @@ const CreateListing = () => {
             }
           }
         
+        //   process.env.REACT_APP_GEOCODE_API_KEY
         let geolocation = {};
         let location;
         if(geolocationEnabled){
-            const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${process.env.REACT_APP_GEOCODE_API_KEY}`);
+            const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=AIzaSyB0Of1uJeVCP_PKMmf4dqSdUxSuENixrUE`);
             const data = await response.json();
             geolocation.lat = data.results[0]?.geometry.location.lat ?? 0;
             geolocation.lng = data.results[0]?.geometry.location.lng ?? 0;
@@ -260,7 +261,7 @@ const CreateListing = () => {
                 )}
 
                 <p className={`${style.label} mt-0`}>Description</p>
-                <textarea type="text" id="description" value={description} onChange={onChange} placeholder="Description" maxLength="32" minLength="10" required 
+                <textarea type="text" id="description" value={description} onChange={onChange} placeholder="Description" maxLength="500" minLength="10" required 
                     className="w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-out duration-150 focus:text-gray-700 focus:bg-white focus:border-slate-600 mb-6"
                 />
 
