@@ -1,4 +1,4 @@
-import PreviewSection from "../components/PreviewSection";
+import PreviewSectionTemplate from "../components/PreviewSectionTemplate";
 import Slider from "../components/Slider";
 
 const Home = () => {
@@ -8,19 +8,19 @@ const Home = () => {
         <div>
             <Slider />
             <div className="max-6-xl mx-auto pt-4 space-y-6">
-                <PreviewSection 
+                <PreviewSectionTemplate
                  whereInfo={["offer", "==", true]}
                  caption={"Recent offers"}
                  link={"/offers"}
                  linkText={"offers"}
                 />
-                <PreviewSection 
+                <PreviewSectionTemplate
                  whereInfo={["type", "==", "rent"]}
                  caption={"Place for rent"}
                  link={"/rent"}
                  linkText={"rent listings"}
                 />
-                <PreviewSection 
+                <PreviewSectionTemplate
                  whereInfo={["type", "==", "sell"]}
                  caption={"Place for sale"}
                  link={"/sell"}

@@ -21,10 +21,10 @@ const ListingItem = ({listing, id, onEdit, onDelete}) => {
                         <p className="text-[#457b9d] mt-2 font-semibold">
                             $
                             {listing.offer
-                            ? listing.discountedPrice
+                            ? Number(listing.discountedPrice)
                                 .toString()
                                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                            : listing.regularPrice
+                            : Number(listing.regularPrice)
                                 .toString()
                                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                             {listing.type === "rent" && " / month"}

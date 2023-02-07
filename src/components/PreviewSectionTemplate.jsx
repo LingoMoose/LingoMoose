@@ -1,10 +1,10 @@
 import { collection, query, where, orderBy, getDocs, limit } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import ListingItem from "../components/ListingItem";
+import ListingItem from "./ListingItem";
 import { db } from "../Firebase";
 
-const PreviewSection = ({whereInfo, caption, link, linkText}) => {
+const PreviewSectionTemplate = ({whereInfo, caption, link, linkText}) => {
     let operand1 = whereInfo[0];
     let condition = whereInfo[1];
     let operand2 = whereInfo[2];
@@ -65,4 +65,4 @@ const PreviewSection = ({whereInfo, caption, link, linkText}) => {
      );
 }
  
-export default PreviewSection;
+export default PreviewSectionTemplate;

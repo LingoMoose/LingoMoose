@@ -1,15 +1,15 @@
 import CategoryPageTemplate from "../components/CategoryPageTemplate";
 
-const Offers = () => {
+const Sale = () => {
     
     return ( 
         <div>
             <CategoryPageTemplate 
-                title="Sale"
+                title="Offers"
                 whereInfo={["offer", "==", true]}
             />
         </div>
      );
 }
  
-export default Offers;
+export default Sale;

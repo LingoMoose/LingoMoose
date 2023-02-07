@@ -85,9 +85,9 @@ const Listings = () => {
             <div className="m-4 flex flex-col md:flex-row max-w-6xl lg:mx-auto p-4 rounded-lg shadow-lg bg-white lg:space-x-5">
                 <div className=" w-full ">
                     <p className="text-2xl font-bold mb-3 text-blue-900">
-                        {listing.name} - $ {listing.offer ? 
-                        listing.discountedPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 
-                        listing.regularPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        {listing.name} - ${listing.offer ? 
+                        Number(listing.discountedPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 
+                        Number(listing.regularPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                         {listing.type === "rent" ? " / month" : ""}
                     </p>
                     <p className="flex items-center mt-6 mb-3 font-semibold">
