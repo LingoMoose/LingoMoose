@@ -114,7 +114,7 @@ const EditListing = () => {
         let geolocation = {};
         let location;
         if(geolocationEnabled){
-            const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${process.env.REACT_APP_GEOCODE_API_KEY}`);
+            const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=AIzaSyB0Of1uJeVCP_PKMmf4dqSdUxSuENixrUE`);
             const data = await response.json();
             geolocation.lat = data.results[0]?.geometry.location.lat ?? 0;
             geolocation.lng = data.results[0]?.geometry.location.lng ?? 0;
