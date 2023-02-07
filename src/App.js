@@ -31,7 +31,7 @@ function App() {
           <Route path="/category/:categoryName/:listingId" element={<Listing/>} />
           <Route path="/offers" element={<Offers/>} />
           <Route path="/category/:categoryName" element={<Category/>} />  
-          <Route path="/create-listing" element={<Category />}>
+          <Route path="/create-listing" element={<CreateListing />}>
             <Route path="/create-listing" element={<CreateListing/>} />
           </Route>
           <Route path="/edit-listing" element={<PrivateRoute />}>

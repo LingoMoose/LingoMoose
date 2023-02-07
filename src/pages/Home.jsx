@@ -16,13 +16,13 @@ const Home = () => {
                 />
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "rent"]}
-                 caption={"Place for rent"}
+                 caption={"Places for rent"}
                  link={"category/rent"}
                  linkText={"rent listings"}
                 />
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "sell"]}
-                 caption={"Place for sale"}
+                 caption={"Places for sale"}
                  link={"category/sell"}
                  linkText={"sale listings"}
                 />
