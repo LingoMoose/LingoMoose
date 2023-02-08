@@ -33,16 +33,26 @@ const EditListing = () => {
         dialect: "northern",
         audioFileNames: [],
         imgFileNames: [],
+        audioUrls: [],
+        imgUrls: [],
 
     })
 
-    const {language, type, title, author, images, audio, dialect, isSeries, part, seriesSummary, storySummary, seriesTitle, level, storyBody, audioFileNames, imgFileNames} = formData;
+    const {language, type, title, author, images, audio, dialect, isSeries, part, seriesSummary, storySummary, seriesTitle, level, storyBody, audioFileNames, imgFileNames, audioUrls, imgUrls} = formData;
 
     const { listingId } = useParams();
+
     const existingAudioFileNames = audioFileNames;
     const existingImgFileNames = imgFileNames;
+
+    console.log(formData);
     console.log(existingAudioFileNames)
     console.log(existingImgFileNames)
+    console.log("existing")
+
+    console.log(audio)
+    console.log(images)
+
 
     useEffect(() => {
         if (listing && listing.userRef !== auth.currentUser.uid) {
@@ -69,6 +79,7 @@ const EditListing = () => {
           }
         fetchListing()
     },[listingId, navigate])
+
 
     function onChange(e){
         let boolean = null;
@@ -104,6 +115,9 @@ const EditListing = () => {
         const auth = getAuth();
         e.preventDefault();
         setLoading(true);
+
+        console.log("images: "+images)
+        if(images !== undefined){
         if(images.length > 6){
             setLoading(false);
             toast.error("Maximum 6 images are allowed")
@@ -118,9 +132,8 @@ const EditListing = () => {
               return;
             }
           }
+        }
         
-        
-        let imgFileNames = [];
         
         async function storeImage(image) {
             return new Promise((resolve, reject) => {
@@ -161,8 +174,16 @@ const EditListing = () => {
               );
             });
           }
-      
-          const imgUrls = await Promise.all(
+        
+          if(images !== undefined && images.length !== 0){
+            setFormData((prevState)=>({
+                ...prevState,
+                imgUrls: [],
+                imgFileNames: []
+            }))
+            console.log("inside updating images")
+
+            imgUrls = await Promise.all(
             [...images].map((image) => storeImage(image))
           ).catch((error) => {
             setLoading(false);
@@ -170,8 +191,7 @@ const EditListing = () => {
             console.log("error message: " + error);
             return;
           });
-
-          let audioFileNames = [];
+        } 
 
           async function storeAudio(audio) {
             return new Promise((resolve, reject) => {
@@ -212,20 +232,34 @@ const EditListing = () => {
               );
             });
           }
-      
-          const audioUrl = await Promise.all(
-            [...audio].map((audio) => storeAudio(audio))
-          ).catch((error) => {
-            setLoading(false);
-            toast.error("Audio not uploaded");
-            return;
-          });
+
+          if(audio !== undefined && audio.length !== 0){
+            
+            setFormData((prevState)=>({
+                ...prevState,
+                audioUrls: [],
+                audioFileNames: []
+            }))
+            
+            console.log("inside updating audio")
+            audioUrls = await Promise.all(
+                [...audio].map((audio) => storeAudio(audio))
+            ).catch((error) => {
+                setLoading(false);
+                toast.error("Audio not uploaded");
+                return;
+            });
+
+
+            
+          } 
+          
 
 
           const formDataCopy = {
             ...formData,
             imgUrls,
-            audioUrl,
+            audioUrls,
             imgFileNames,
             audioFileNames,
             timestamp: serverTimestamp(),
@@ -241,26 +275,32 @@ const EditListing = () => {
           console.log(language)
 
 
-        function deleteExistingFiles(fileName){
+        function deleteExistingFiles(existingImgFileNames){
+            existingImgFileNames.forEach(fileName => {
+                // code to delete the file with the given file name
 
-            // Create a reference to the file to delete
-            const desertRef = ref(storage, fileName);
+                // Create a reference to the file to delete
+                const desertRef = ref(storage, fileName);
 
-            // Delete the file
-            deleteObject(desertRef).then(() => {
-            // File deleted successfully
-            }).catch((error) => {
-                console.log(error)
-            });
+                // Delete the file
+                deleteObject(desertRef).then(() => {
+                // File deleted successfully
+                }).catch((error) => {
+                    console.log(error)
+                });
 
+              });
         }
 
-        deleteExistingFiles(existingAudioFileNames[0]);
-        deleteExistingFiles(existingImgFileNames[0]);
+        if(images !== undefined){
+            deleteExistingFiles(existingImgFileNames); 
+        }
+        if(audio !== undefined){
+            deleteExistingFiles(existingAudioFileNames);  
+        }
+
         
-
-
-        const docRef = doc(db, language, listingId);
+ const docRef = doc(db, language, listingId);
 
         await updateDoc(docRef, formDataCopy);
         setLoading(false);
@@ -280,7 +320,7 @@ const EditListing = () => {
 
     return ( 
         <main className="max-w-md md:max-w-3xl lg:max-w-6xl px-2 mx-auto">
-            <h1 className="text-3xl text-center mt-6 font-bold">Create a Story</h1>
+            <h1 className="text-3xl text-center mt-6 font-bold">Edit Story</h1>
             <form onSubmit={onSubmit}>
                 
                 <p className={style.label}>Title</p>
@@ -441,16 +481,16 @@ const EditListing = () => {
 
                 <div className="mb-6">
                     <p className={`${style.label} mt-0`}>Images</p>
-                    <p className="text-gray-600">The first image will be the cover (max 6)</p>
-                    <input type="file" id="images" onChange={onChange} accept =".jpg,.png,.jpeg" multiple required 
+                    <p className="text-gray-600">(not required, will replace any existing images if selected) (max 6)</p>
+                    <input type="file" id="images" onChange={onChange} accept =".jpg,.png,.jpeg" multiple 
                         className="w-full px-3 py-1.5 text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-out focus:bg-white focus:border-slate-600" 
                     />
                 </div>
 
                 <div className="mb-6">
                     <p className={`${style.label} mt-0`}>Audio</p>
-                    <p className="text-gray-600">Audio file should match the body section exactly (Vietnamese only)</p>
-                    <input type="file" id="audio" onChange={onChange} accept=".mp3, .wav, .aac, .ogg" required 
+                    <p className="text-gray-600">(not required, will replace any existing audio if selected)</p>
+                    <input type="file" id="audio" onChange={onChange} accept=".mp3, .wav, .aac, .ogg" 
                         className="w-full px-3 py-1.5 text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-out focus:bg-white focus:border-slate-600" 
                     />
                 </div>
@@ -476,7 +516,7 @@ const EditListing = () => {
 
 
                 <button type="submit" 
-                    className="mb-6 px-7 py-3 w-full bg-blue-600 text-white font-medium text-sm uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg active:bg-blue-800 active:shadow-lg transition ease-in-out duration-150">Create Story</button>
+                    className="mb-6 px-7 py-3 w-full bg-blue-600 text-white font-medium text-sm uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg active:bg-blue-800 active:shadow-lg transition ease-in-out duration-150">Edit Story</button>
 
             </form>
         </main>

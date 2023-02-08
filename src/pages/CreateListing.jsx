@@ -173,7 +173,7 @@ const CreateListing = () => {
             });
           }
       
-          const audioUrl = await Promise.all(
+          const audioUrls = await Promise.all(
             [...audio].map((audio) => storeAudio(audio))
           ).catch((error) => {
             setLoading(false);
@@ -185,7 +185,7 @@ const CreateListing = () => {
           const formDataCopy = {
             ...formData,
             imgUrls,
-            audioUrl,
+            audioUrls,
             imgFileNames,
             audioFileNames,
             timestamp: serverTimestamp(),
