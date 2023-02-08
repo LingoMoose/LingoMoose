@@ -198,7 +198,7 @@ const CreateListing = () => {
           delete formDataCopy.images;
           delete formDataCopy.audio;
 
-        console.log(language)
+          console.log(language)
           const docRef = await addDoc(collection(db, language), formDataCopy);
           setLoading(false);
           toast.success("Story created");

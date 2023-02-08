@@ -1,41 +1,48 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 import { uuidv4 } from "@firebase/util";
-import { serverTimestamp, doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, serverTimestamp, updateDoc, } from "firebase/firestore";
 import { db } from "../Firebase";
-import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import 'firebase/storage';
+import { useNavigate, useParams } from "react-router-dom";
 
 
 const EditListing = () => {
     const auth = getAuth();
+    const storage = getStorage();
     const navigate = useNavigate();
-    const [geolocationEnabled] = useState(true);
     const [loading, setLoading] = useState(false);
-    const [listing, setListing] = useState(null);
+    const [listing, setListing] = useState(null)
     const [formData, setFormData] = useState({
-        type: "rent",
-        name: "",
-        bedrooms: 1,
-        bathrooms: 1,
-        parking: false,
-        furnished: false,
-        address: "",
-        description: "",
-        offer: false,
-        regularPrice: 0,
-        discountedPrice: 0,
-        latitude: 0,
-        longitude: 0,
+        language: "vietnamese",
+        title: "",
+        author: "",
+        storySummary: "",
+        storyBody: "",
+        level: "newbie",
+        type: "everydaylife",
+        isSeries: false,
+        seriesTitle: "",
+        part: 0,
+        seriesSummary: "",
         images: {},
+        audio: {},
+        dialect: "northern",
+        audioFileNames: [],
+        imgFileNames: [],
+
     })
 
-    const {type, name, bedrooms, bathrooms, parking, furnished, address, description, offer, regularPrice, discountedPrice, latitude, longitude, images} = formData;
+    const {language, type, title, author, images, audio, dialect, isSeries, part, seriesSummary, storySummary, seriesTitle, level, storyBody, audioFileNames, imgFileNames} = formData;
 
     const { listingId } = useParams();
+    const existingAudioFileNames = audioFileNames;
+    const existingImgFileNames = imgFileNames;
+    console.log(existingAudioFileNames)
+    console.log(existingImgFileNames)
 
     useEffect(() => {
         if (listing && listing.userRef !== auth.currentUser.uid) {
@@ -56,7 +63,7 @@ const EditListing = () => {
               setLoading(false);
             } else {
               navigate("/");
-              toast.error("Listing not found");
+              toast.error("Story not found");
               setLoading(false);
             }
           }
@@ -71,12 +78,18 @@ const EditListing = () => {
         if(e.target.value === "false"){
             boolean = false;
         }
-        // files
-        if(e.target.files){
+        // files / images
+        if(e.target.files && (e.target.id === "images")){
             setFormData((prevState) => ({
                 ...prevState,
                 images: e.target.files
-
+            }))
+        }
+        // files / audio
+        if(e.target.files && (e.target.id === "audio")){
+            setFormData((prevState) => ({
+                ...prevState,
+                audio: e.target.files
             }))
         }
         // text, booleans, numbers
@@ -88,13 +101,9 @@ const EditListing = () => {
         }
     }
     async function onSubmit(e){
+        const auth = getAuth();
         e.preventDefault();
         setLoading(true);
-        if(+discountedPrice >= +regularPrice){
-            setLoading(false);
-            toast.error("Discounted must be less than regular price")
-            return;
-        }
         if(images.length > 6){
             setLoading(false);
             toast.error("Maximum 6 images are allowed")
@@ -106,16 +115,18 @@ const EditListing = () => {
               toast.error(
                 `${images.length > 1 ? "Each image" : "Image"} must not exceed 2MB`
               );
-    
               return;
             }
           }
         
-
+        
+        let imgFileNames = [];
+        
         async function storeImage(image) {
             return new Promise((resolve, reject) => {
               const storage = getStorage();
               const filename = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`;
+              imgFileNames.push(filename);
               const storageRef = ref(storage, filename);
               const uploadTask = uploadBytesResumable(storageRef, image);
               uploadTask.on(
@@ -156,28 +167,107 @@ const EditListing = () => {
           ).catch((error) => {
             setLoading(false);
             toast.error("Images not uploaded");
+            console.log("error message: " + error);
             return;
           });
+
+          let audioFileNames = [];
+
+          async function storeAudio(audio) {
+            return new Promise((resolve, reject) => {
+              const storage = getStorage();
+              const filename = `${auth.currentUser.uid}-${audio.name}-${uuidv4()}`;
+              audioFileNames.push(filename);
+              const storageRef = ref(storage, filename);
+              const uploadTask = uploadBytesResumable(storageRef, audio);
+              uploadTask.on(
+                "state_changed",
+                (snapshot) => {
+                  // Observe state change events such as progress, pause, and resume
+                  // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                  const progress =
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                  console.log("Upload is " + progress + "% done");
+                  switch (snapshot.state) {
+                    case "paused":
+                      console.log("Upload is paused");
+                      break;
+                    case "running":
+                      console.log("Upload is running");
+                      break;
+                    default:
+                  }
+                },
+                (error) => {
+                  // Handle unsuccessful uploads
+                  reject(error);
+                },
+                () => {
+                  // Handle successful uploads on complete
+                  // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+                  getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                    resolve(downloadURL);
+                  });
+                }
+              );
+            });
+          }
       
+          const audioUrl = await Promise.all(
+            [...audio].map((audio) => storeAudio(audio))
+          ).catch((error) => {
+            setLoading(false);
+            toast.error("Audio not uploaded");
+            return;
+          });
+
+
           const formDataCopy = {
             ...formData,
             imgUrls,
+            audioUrl,
+            imgFileNames,
+            audioFileNames,
             timestamp: serverTimestamp(),
             userRef: auth.currentUser.uid,
           };
-          delete formDataCopy.images;
-          !formDataCopy.offer && delete formDataCopy.discountedPrice;
-          delete formDataCopy.latitude;
-          delete formDataCopy.longitude;
-          const docRef = doc(db, "vietnamese", listingId);
 
-          await updateDoc(docRef, formDataCopy);
-          setLoading(false);
-          toast.success("Listing edited");
-          navigate(`/category/${formDataCopy.type}/${docRef.id}`);
+          console.log("formdataCopy");
+          console.log(formDataCopy);
+
+          delete formDataCopy.images;
+          delete formDataCopy.audio;
+
+          console.log(language)
+
+
+        function deleteExistingFiles(fileName){
+
+            // Create a reference to the file to delete
+            const desertRef = ref(storage, fileName);
+
+            // Delete the file
+            deleteObject(desertRef).then(() => {
+            // File deleted successfully
+            }).catch((error) => {
+                console.log(error)
+            });
+
+        }
+
+        deleteExistingFiles(existingAudioFileNames[0]);
+        deleteExistingFiles(existingImgFileNames[0]);
+        
+
+
+        const docRef = doc(db, language, listingId);
+
+        await updateDoc(docRef, formDataCopy);
+        setLoading(false);
+        toast.success("Story Edited");
+        navigate(`/category/${formDataCopy.type}/${docRef.id}`);
         
     }
-
     
 
     const style = {
@@ -189,140 +279,165 @@ const EditListing = () => {
     }
 
     return ( 
-        <main className="max-w-md px-2 mx-auto">
-            <h1 className="text-3xl text-center mt-6 font-bold">Edit Listing</h1>
+        <main className="max-w-md md:max-w-3xl lg:max-w-6xl px-2 mx-auto">
+            <h1 className="text-3xl text-center mt-6 font-bold">Create a Story</h1>
             <form onSubmit={onSubmit}>
-                <p className="text-lg mt-6 font-semibold">Sell / Rent</p>
-                <div className="flex">
-                    <button type="button" id="type" value="sell" 
-                        onClick={onChange} 
-                        className={`mr-3 px-7 py-3 font-medium text-sm uppercase shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
-                        ${type === 'sell' ? "bg-slate-600 text-white" : "bg-white text-black" }`}
-                    >Sell</button>
-                    <button type="button" id="type" value="rent" 
-                        onClick={onChange} 
-                        className={`ml-3 px-7 py-3 font-medium text-sm uppercase shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
-                        ${type === 'rent' ? "bg-slate-600 text-white" : "bg-white text-black" }`}
-                    >Rent</button>
-                </div>
-                <p className={style.label}>Name</p>
-                <input type="text" id="name" value={name} onChange={onChange} placeholder="Name" maxLength="32" minLength="10" required 
+                
+                <p className={style.label}>Title</p>
+                <input type="text" id="title" value={title} onChange={onChange} placeholder="Title of the story" maxLength="50" minLength="10" required 
                     className="w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-out duration-150 focus:text-gray-700 focus:bg-white focus:border-slate-600 mb-6"
                 />
-                <div className="flex space-x-6 justify-start mb-6">
-                    <div className="">
-                        <p className="text-lg font-semibold">Beds</p>
-                        <input type="number" id="bedrooms" value={bedrooms} onChange={onChange} min="1" max="50" required
-                        className="w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-in-out focus:text-gray-700 focus:bg-white focus:border-slate-600"
-                        />
-                    </div>
-                    <div className="">
-                        <p className="text-lg font-semibold">Baths</p>
-                        <input type="number" id="bathrooms" value={bathrooms} onChange={onChange} min="1" max="50" required
-                        className="w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-in-out focus:text-gray-700 focus:bg-white focus:border-slate-600"
-                        />
-                    </div>
+
+                <p className={`${style.label} mt-0`}>Author</p>
+                <input type="text" id="author" value={author} onChange={onChange} placeholder="Orginal author of the story" maxLength="50" minLength="6" required 
+                    className="w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-out duration-150 focus:text-gray-700 focus:bg-white focus:border-slate-600 mb-6"
+                />
+
+                <div>
+                    <p className={`${style.label} mt-0`}>Summary</p>
+                    <textarea type="text" id="storySummary" value={storySummary} onChange={onChange} placeholder="Summary of the story (in English!)" maxLength="1000" minLength="20" required 
+                        className="w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-out duration-150 focus:text-gray-700 focus:bg-white focus:border-slate-600 mb-6"
+                    />
+                </div>
+
+                <div>
+                    <p className={`${style.label} mt-0`}>Body</p>
+                    <textarea type="text" id="storyBody" value={storyBody} onChange={onChange} placeholder="Write the story here (in Vietnamese)! Character limit of 4000. If longer, please make a series with multiple parts. (see below)" maxLength="4000" minLength="20" required 
+                         style={{ minHeight: "300px" }} className="w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-out duration-150 focus:text-gray-700 focus:bg-white focus:border-slate-600 mb-6"
+                    />
                 </div>
          
-                <p className={style.label}>Parking spot</p>
-                <div className="flex">
-                    <button type="button" id="parking" value="true" 
+                <p className={`${style.label} mt-0`}>Difficulty level</p>
+                <div className="grid grid-cols-3">
+                    <button type="button" id="level" value="newbie" 
                         onClick={onChange} 
-                        className={`mr-3 px-7 py-3 font-medium text-sm uppercase shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
-                        ${parking === true ? "bg-slate-600 text-white" : "bg-white text-black" }`}
-                    >Yes</button>
-                    <button type="button" id="parking" value="false" 
+                        className={`border px-2 py-3 font-medium text-sm uppercase shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
+                        ${level === "newbie" ? "bg-slate-600 text-white" : "bg-white text-black" }`}
+                    >Newbie (A1)</button>
+                    <button type="button" id="level" value="elementary" 
                         onClick={onChange} 
-                        className={`ml-3 px-7 py-3 font-medium text-sm uppercase shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
-                        ${parking === false ? "bg-slate-600 text-white" : "bg-white text-black" }`}
-                    >No</button>
+                        className={`border px-2 py-3 font-medium text-sm uppercase shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
+                        ${level === "elementary" ? "bg-slate-600 text-white" : "bg-white text-black" }`}
+                    >Elementary (A2)</button>
+                    <button type="button" id="level" value="intermediate" 
+                        onClick={onChange} 
+                        className={`border px-2 py-3 font-medium text-sm uppercase shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
+                        ${level === "intermediate" ? "bg-slate-600 text-white" : "bg-white text-black" }`}
+                    >Intermediate (B1)</button>
+                    <button type="button" id="level" value="upperintermediate" 
+                        onClick={onChange} 
+                        className={`border px-2 py-3 font-medium text-sm uppercase shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
+                        ${level === "upperintermediate" ? "bg-slate-600 text-white" : "bg-white text-black" }`}
+                    >Upper Intermediate (B2)</button>
+                    <button type="button" id="level" value="advanced" 
+                        onClick={onChange} 
+                        className={`border px-2 py-3 font-medium text-sm uppercase shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
+                        ${level === "advanced" ? "bg-slate-600 text-white" : "bg-white text-black" }`}
+                    >Advanced (C1)</button>
+                    <button type="button" id="level" value="master" 
+                        onClick={onChange} 
+                        className={`border px-2 py-3 font-medium text-sm uppercase shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
+                        ${level === "master" ? "bg-slate-600 text-white" : "bg-white text-black" }`}
+                    >Master (C2)</button>
                 </div>
 
-                <p className={style.label}>Furnished</p>
-                <div className="flex">
-                    <button type="button" id="furnished" value="true" 
+
+                <p className={`${style.label}`}>Category</p>
+                <div className="grid grid-cols-3">
+                    <button type="button" id="type" value="everydaylife" 
                         onClick={onChange} 
-                        className={`mr-3 px-7 py-3 font-medium text-sm uppercase shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
-                        ${furnished === true ? "bg-slate-600 text-white" : "bg-white text-black" }`}
-                    >Yes</button>
-                    <button type="button" id="furnished" value="false" 
+                        className={`border px-2 py-3 font-medium text-sm uppercase shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
+                        ${type === "everydaylife" ? "bg-slate-600 text-white" : "bg-white text-black" }`}
+                    >Everyday Life</button>
+                    <button type="button" id="type" value="business" 
                         onClick={onChange} 
-                        className={`ml-3 px-7 py-3 font-medium text-sm uppercase shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
-                        ${furnished === false ? "bg-slate-600 text-white" : "bg-white text-black" }`}
-                    >No</button>
+                        className={`border px-2 py-3 font-medium text-sm uppercase shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
+                        ${type === "business" ? "bg-slate-600 text-white" : "bg-white text-black" }`}
+                    >Business</button>
+                    <button type="button" id="type" value="funny" 
+                        onClick={onChange} 
+                        className={`border px-2 py-3 font-medium text-sm uppercase shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
+                        ${type === "funny" ? "bg-slate-600 text-white" : "bg-white text-black" }`}
+                    >Funny</button>
+                    <button type="button" id="type" value="history" 
+                        onClick={onChange} 
+                        className={`border px-2 py-3 font-medium text-sm uppercase shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
+                        ${type === "history" ? "bg-slate-600 text-white" : "bg-white text-black" }`}
+                    >History</button>
+                    <button type="button" id="type" value="culture" 
+                        onClick={onChange} 
+                        className={`border px-2 py-3 font-medium text-sm uppercase shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
+                        ${type === "culture" ? "bg-slate-600 text-white" : "bg-white text-black" }`}
+                    >Culture</button>
+                    <button type="button" id="type" value="currentevents" 
+                        onClick={onChange} 
+                        className={`border px-2 py-3 font-medium text-sm uppercase shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
+                        ${type === "currentevents" ? "bg-slate-600 text-white" : "bg-white text-black" }`}
+                    >Current Events</button>
+                    <button type="button" id="type" value="food" 
+                        onClick={onChange} 
+                        className={`border px-2 py-3 font-medium text-sm uppercase shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
+                        ${type === "food" ? "bg-slate-600 text-white" : "bg-white text-black" }`}
+                    >Food</button>
+                    <button type="button" id="type" value="dialogue" 
+                        onClick={onChange} 
+                        className={`border px-2 py-3 font-medium text-sm uppercase shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
+                        ${type === "dialogue" ? "bg-slate-600 text-white" : "bg-white text-black" }`}
+                    >Dialogue</button>
+                    <button type="button" id="type" value="language" 
+                        onClick={onChange} 
+                        className={`border px-2 py-3 font-medium text-sm uppercase shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
+                        ${type === "language" ? "bg-slate-600 text-white" : "bg-white text-black" }`}
+                    >Language</button>
                 </div>
-                <p className={style.label}>Address</p>
-                <textarea type="text" id="address" value={address} onChange={onChange} placeholder="Address" maxLength="100" minLength="10" required 
-                    className="w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-out duration-150 focus:text-gray-700 focus:bg-white focus:border-slate-600 mb-6"
-                />
-                {!geolocationEnabled && (
-                    <div className="flex space-x-6 justify-start items-center">
-                        <div>
-                            <p className={`${style.label} mt-0`}>Latitude</p>
-                            <input type="number" name="" id="latitude" value={latitude} onChange={onChange} required min="-90" max="90" 
-                                className="w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-out duration-150 focus:text-gray-700 focus:bg-white focus:border-slate-600 mb-6"
-                            />
-                        </div>
-                        <div>
-                            <p className={`${style.label} mt-0`}>Longitude</p>
-                            <input type="number" name="" id="longitude" value={longitude} onChange={onChange} required min="-180" max="180" 
-                                className="w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-out duration-150 focus:text-gray-700 focus:bg-white focus:border-slate-600 mb-6"
-                            />
-                        </div>
+          
+
+                <div className="">
+                    <p className="text-lg mt-6 font-semibold">Is this a standalone story or part of a series?</p>
+                    <div className="flex mb-6">
+                        <button type="button" id="isSeries" value="false" 
+                            onClick={onChange} 
+                            className={`mr-3 px-7 py-3 font-medium text-sm uppercase shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
+                            ${isSeries === false ? "bg-slate-600 text-white" : "bg-white text-black" }`}
+                        >Standalone</button>
+                        <button type="button" id="isSeries" value="true" 
+                            onClick={onChange} 
+                            className={`ml-3 px-7 py-3 font-medium text-sm uppercase shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
+                            ${isSeries === true ? "bg-slate-600 text-white" : "bg-white text-black" }`}
+                        >Series</button>
                     </div>
-                )}
-
-                <p className={`${style.label} mt-0`}>Description</p>
-                <textarea type="text" id="description" value={description} onChange={onChange} placeholder="Description" maxLength="32" minLength="10" required 
-                    className="w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-out duration-150 focus:text-gray-700 focus:bg-white focus:border-slate-600 mb-6"
-                />
-
-                <p className={`${style.label} mt-0`}>Offer</p>
-                <div className="flex">
-                    <button type="button" id="offer" value="true" 
-                        onClick={onChange} 
-                        className={`mr-3 px-7 py-3 font-medium text-sm uppercase shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
-                        ${offer === true ? "bg-slate-600 text-white" : "bg-white text-black" }`}
-                    >Yes</button>
-                    <button type="button" id="offer" value="false" 
-                        onClick={onChange} 
-                        className={`ml-3 px-7 py-3 font-medium text-sm uppercase shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
-                        ${offer === false ? "bg-slate-600 text-white" : "bg-white text-black" }`}
-                    >No</button>
-                </div>
-                   
-                <div className="flex items-center mb-6">
-                    <div className="">
-                        <p className={style.label}>Regular Price</p>
-                        <div className="flex w-full justify-center items-center space-x-6">  
-                            <input type="number" id="regularPrice" value={regularPrice} onChange={onChange} min="50" max="400000000" required
-                            className="w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-in-out focus:text-gray-700 focus:bg-white focus:border-slate-600 text-center"
+                    {isSeries === true && (
+                    <div>
+                        <div>
+                            <p className={`${style.label} mt-0`}>Name of Series <span className="text-sm block">(spelling must match other parts exactly to be paired together)</span></p>
+                            <input type="text" id="seriesTitle" value={seriesTitle} onChange={onChange} placeholder="Name of series" maxLength="60" minLength="10" required 
+                                className="w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-out duration-150 focus:text-gray-700 focus:bg-white focus:border-slate-600 mb-6"
                             />
-                            {type === "rent" && (
-                                <div className="">
-                                <p className="text-md w-full whitespace-nowrap">$ / Month</p>
-                                </div>
-                            )}
                         </div>
+                    
+                        <div className="flex items-center mb-6">
+                            
+                            <div className="">
+                                <p className={`${style.label} mt-0`}>Part</p>
+                                <div className="flex w-full justify-center items-center space-x-6">  
+                                    <input type="number" id="part" value={part} onChange={onChange} min="0" max="100" required={type === "series"}
+                                    className="w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-in-out focus:text-gray-700 focus:bg-white focus:border-slate-600 text-center"
+                                    />
+                                
+                                </div>
+                            </div>  
+                        </div>
+                        {+part === 1 && ( 
+                            <div>
+                                <p className={`${style.label} mt-0`}>Summary of Series</p>
+                                <textarea type="text" id="seriesSummary" value={seriesSummary} onChange={onChange} placeholder="Summary that encompasses the main points of the series (the summary only needs to be included with part 1)" maxLength="2000" minLength="20" required 
+                                    className="w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-out duration-150 focus:text-gray-700 focus:bg-white focus:border-slate-600 mb-6"
+                                />
+                            </div>
+                        )}  
                     </div>  
+                    )}
                 </div>
-                {offer === true && (
-                <div className="flex items-center mb-6">
-                    <div className="">
-                        <p className={`${style.label} mt-0`}>Discounted Price</p>
-                        <div className="flex w-full justify-center items-center space-x-6">  
-                            <input type="number" id="discountedPrice" value={discountedPrice} onChange={onChange} min="50" max="400000000" required={offer}
-                            className="w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-in-out focus:text-gray-700 focus:bg-white focus:border-slate-600 text-center"
-                            />
-                            {type === "rent" && (
-                                <div className="">
-                                <p className="text-md w-full whitespace-nowrap">$ / Month</p>
-                                </div>
-                            )}
-                        </div>
-                    </div>  
-                </div>    
-                )}
 
                 <div className="mb-6">
                     <p className={`${style.label} mt-0`}>Images</p>
@@ -332,8 +447,36 @@ const EditListing = () => {
                     />
                 </div>
 
+                <div className="mb-6">
+                    <p className={`${style.label} mt-0`}>Audio</p>
+                    <p className="text-gray-600">Audio file should match the body section exactly (Vietnamese only)</p>
+                    <input type="file" id="audio" onChange={onChange} accept=".mp3, .wav, .aac, .ogg" required 
+                        className="w-full px-3 py-1.5 text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-out focus:bg-white focus:border-slate-600" 
+                    />
+                </div>
+
+                <p className={`${style.label} mt-0`}>Audio Dialect</p>
+                <div className="grid grid-cols-3 mb-6">
+                    <button type="button" id="dialect" value="northern" 
+                        onClick={onChange} 
+                        className={`border px-2 py-3 font-medium text-sm uppercase shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
+                        ${dialect === "northern" ? "bg-slate-600 text-white" : "bg-white text-black" }`}
+                    >Northern</button>
+                    <button type="button" id="dialect" value="central" 
+                        onClick={onChange} 
+                        className={`border px-2 py-3 font-medium text-sm uppercase shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
+                        ${dialect === "central" ? "bg-slate-600 text-white" : "bg-white text-black" }`}
+                    >Central</button>
+                    <button type="button" id="dialect" value="southern" 
+                        onClick={onChange} 
+                        className={`border px-2 py-3 font-medium text-sm uppercase shadow-md hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full
+                        ${dialect === "southern" ? "bg-slate-600 text-white" : "bg-white text-black" }`}
+                    >Southern</button>
+                </div>
+
+
                 <button type="submit" 
-                    className="mb-6 px-7 py-3 w-full bg-blue-600 text-white font-medium text-sm uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg active:bg-blue-800 active:shadow-lg transition ease-in-out duration-150">Edit Lisiting</button>
+                    className="mb-6 px-7 py-3 w-full bg-blue-600 text-white font-medium text-sm uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg active:bg-blue-800 active:shadow-lg transition ease-in-out duration-150">Create Story</button>
 
             </form>
         </main>
