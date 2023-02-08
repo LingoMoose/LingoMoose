@@ -9,22 +9,58 @@ const Home = () => {
             <Slider />
             <div className="max-6-xl mx-auto pt-4 space-y-6">
                 <PreviewSectionTemplate
-                 whereInfo={["offer", "==", true]}
-                 caption={"Recent offers"}
-                 link={"/offers"}
-                 linkText={"offers"}
+                 whereInfo={["type", "==", "everydaylife"]}
+                 caption={"Every day life"}
+                 link={"/everydaylife"}
+                 linkText={"every day life"}
                 />
                 <PreviewSectionTemplate
-                 whereInfo={["type", "==", "rent"]}
-                 caption={"Places for rent"}
-                 link={"category/rent"}
-                 linkText={"rent listings"}
+                 whereInfo={["type", "==", "business"]}
+                 caption={"Business"}
+                 link={"category/business"}
+                 linkText={"business"}
                 />
                 <PreviewSectionTemplate
-                 whereInfo={["type", "==", "sell"]}
-                 caption={"Places for sale"}
-                 link={"category/sell"}
-                 linkText={"sale listings"}
+                 whereInfo={["type", "==", "funny"]}
+                 caption={"Funny"}
+                 link={"category/funny"}
+                 linkText={"funny"}
+                />
+                <PreviewSectionTemplate
+                 whereInfo={["type", "==", "history"]}
+                 caption={"History"}
+                 link={"/history"}
+                 linkText={"history"}
+                />
+                <PreviewSectionTemplate
+                 whereInfo={["type", "==", "culture"]}
+                 caption={"culture"}
+                 link={"category/culture"}
+                 linkText={"culture"}
+                />
+                <PreviewSectionTemplate
+                 whereInfo={["type", "==", "currentevents"]}
+                 caption={"current events"}
+                 link={"category/currentevents"}
+                 linkText={"current events"}
+                />
+                <PreviewSectionTemplate
+                 whereInfo={["type", "==", "food"]}
+                 caption={"Food"}
+                 link={"/food"}
+                 linkText={"food"}
+                />
+                <PreviewSectionTemplate
+                 whereInfo={["type", "==", "dialogue"]}
+                 caption={"dialogue"}
+                 link={"category/dialogue"}
+                 linkText={"dialogue"}
+                />
+                <PreviewSectionTemplate
+                 whereInfo={["type", "==", "language"]}
+                 caption={"language"}
+                 link={"category/language"}
+                 linkText={"language"}
                 />
             </div>
         </div>

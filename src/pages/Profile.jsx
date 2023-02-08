@@ -7,7 +7,7 @@ import { generateUsername } from 'username-generator';
 import { db } from "../Firebase";
 import { ShakeLittle } from "reshake";
 import { GiPerspectiveDiceSixFacesRandom } from "react-icons/gi";
-import { FcHome } from 'react-icons/fc';
+import { GiBookmarklet } from 'react-icons/gi';
 import { Link } from "react-router-dom";
 import ListingItem from "../components/ListingItem";
 
@@ -160,8 +160,8 @@ const Profile = () => {
                     </form>
                     <button type="submit" className="w-full bg-blue-600 text-white uppercase px-7 py-3 text-sm font-medium rounded shadow-md hover:bg-blue-700 transition ease-in-out duration-150 hover:shadow-lg active:bg-blue-800">
                         <Link to="/create-listing" className="flex justify-center items-center">
-                        <FcHome className="mr-2 text-3xl bg-red-200 rounded-full p-1 border-2"/>
-                        Sell or rent your home
+                        <GiBookmarklet className="mr-2 text-3xl bg-red-200 rounded-full p-1 border-2"/>
+                        Upload a story
                         </Link>                        
                     </button>
                 </div>
@@ -170,7 +170,7 @@ const Profile = () => {
                 {!loading && listings.length > 0 && (
                     <div>
                          <h2 className="text-xl sm:text-2xl text-center font-semibold mb-6 mt-6">
-                        My Listings
+                        My Stories
                         </h2>
                         <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 mt-6 mb-6">
                         {listings.map((listing) => (

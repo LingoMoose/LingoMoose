@@ -35,7 +35,7 @@ const Header = () => {
             <header className="flex justify-between items-center max-w-6xl mx-auto pr-4 pl-4">
                 <div onClick={() => navigate("/")} className="cursor-pointer">
                     <img src="/logo.png" alt="" className="h-10 cursor-pointer inline" />
-                    <h1 className="inline pl-1 text-sm font-semibold ">Mimoville</h1>
+                    <h1 className="inline pl-1 text-sm font-semibold ">LingoMoose</h1>
                 </div>
                 <div>
                     <ul className="flex flex-row space-x-10">

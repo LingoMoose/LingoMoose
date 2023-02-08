@@ -19,27 +19,12 @@ const ListingItem = ({listing, id, onEdit, onDelete}) => {
                             </div>
                         <p className="font-semibold m-0 text-xl truncate">{listing.name}</p>
                         <p className="text-[#457b9d] mt-2 font-semibold">
-                            $
-                            {listing.offer
-                            ? Number(listing.discountedPrice)
-                                .toString()
-                                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                            : Number(listing.regularPrice)
-                                .toString()
-                                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                            {listing.type === "rent" && " / month"}
+                            {listing.title}
                         </p>
                         <div className="flex items-center mt-[10px] space-x-3">
                             <div className="flex items-center space-x-1">
                                 <p className="font-bold text-xs">
-                                    {listing.bedrooms > 1 ? `${listing.bedrooms} Beds` : "1 Bed"}
-                                </p>
-                            </div>
-                            <div className="flex items-center space-x-1">
-                                <p className="font-bold text-xs">
-                                    {listing.bathrooms > 1
-                                    ? `${listing.bathrooms} Baths`
-                                    : "1 Bath"}
+                                    {listing.level.toUpperCase()}
                                 </p>
                             </div>
                         </div>
