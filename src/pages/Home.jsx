@@ -11,7 +11,7 @@ const Home = () => {
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "everydaylife"]}
                  caption={"Every day life"}
-                 link={"/everydaylife"}
+                 link={"category/everydaylife"}
                  linkText={"every day life"}
                 />
                 <PreviewSectionTemplate
@@ -29,7 +29,7 @@ const Home = () => {
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "history"]}
                  caption={"History"}
-                 link={"/history"}
+                 link={"category/history"}
                  linkText={"history"}
                 />
                 <PreviewSectionTemplate
@@ -47,7 +47,7 @@ const Home = () => {
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "food"]}
                  caption={"Food"}
-                 link={"/food"}
+                 link={"category/food"}
                  linkText={"food"}
                 />
                 <PreviewSectionTemplate

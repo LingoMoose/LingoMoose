@@ -18,7 +18,7 @@ const CategoryPageTemplate = ({title, whereInfo}) => {
     useEffect(()=>{
         async function fetchListings(){
             try {
-                const listingRef = collection(db, "listings");
+                const listingRef = collection(db, "vietnamese");
                 const q = query(listingRef, 
                     where(operand1, condition, operand2), 
                     orderBy("timestamp", "desc"), 
@@ -38,6 +38,7 @@ const CategoryPageTemplate = ({title, whereInfo}) => {
 
             } catch(error) {
                 toast.error(error);
+                console.log(error);
             }
         };
 
@@ -46,7 +47,7 @@ const CategoryPageTemplate = ({title, whereInfo}) => {
 
     async function onFetchMoreListings(){
         try {
-            const listingRef = collection(db, "listings");
+            const listingRef = collection(db, "vietnamese");
             const q = query(listingRef, 
                 where(operand1, condition, operand2), 
                 orderBy("timestamp", "desc"),
@@ -67,6 +68,7 @@ const CategoryPageTemplate = ({title, whereInfo}) => {
 
         } catch(error) {
             toast.error(error);
+            console.log(error);
         }
     }
 

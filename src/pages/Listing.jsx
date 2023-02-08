@@ -29,7 +29,7 @@ const Listings = () => {
 
     useEffect(() => {
         async function fetchListing() {
-          const docRef = doc(db, "listings", listingId);
+          const docRef = doc(db, "vietnamese", listingId);
           const docSnap = await getDoc(docRef);
           if (docSnap.exists()) {
             setListing(docSnap.data());

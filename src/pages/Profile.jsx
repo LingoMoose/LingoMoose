@@ -70,6 +70,7 @@ const Profile = () => {
 
         } catch(error){
             toast.error("Could not update the profile username")
+            
         }
     }
 
@@ -82,7 +83,7 @@ const Profile = () => {
 
     useEffect(() => {
         async function fetchUserListings() {
-          const listingRef = collection(db, "listings");
+          const listingRef = collection(db, "vietnamese");
           const q = query(
             listingRef,
             where("userRef", "==", auth.currentUser.uid),
@@ -104,7 +105,7 @@ const Profile = () => {
 
       async function onDelete(listingID){
         if(window.confirm("Are you sure you want to DELETE?")){
-            await deleteDoc(doc(db, "listings", listingID))
+            await deleteDoc(doc(db, "vietnamese", listingID))
             const updatedListings = listings.filter(
                 (listing) => listing.id !== listingID
             );
@@ -160,7 +161,7 @@ const Profile = () => {
                     </form>
                     <button type="submit" className="w-full bg-blue-600 text-white uppercase px-7 py-3 text-sm font-medium rounded shadow-md hover:bg-blue-700 transition ease-in-out duration-150 hover:shadow-lg active:bg-blue-800">
                         <Link to="/create-listing" className="flex justify-center items-center">
-                        <GiBookmarklet className="mr-2 text-3xl bg-red-200 rounded-full p-1 border-2"/>
+                        <GiBookmarklet className="mr-2 text-3xl bg-red-500 rounded-full p-1 border-2"/>
                         Upload a story
                         </Link>                        
                     </button>

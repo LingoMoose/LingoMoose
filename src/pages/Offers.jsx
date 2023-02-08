@@ -4,9 +4,9 @@ const Offers = () => {
     
     return ( 
         <div>
-            <CategoryPageTemplate 
-                title="Offers"
-                whereInfo={["offer", "==", true]}
+            <CategoryPageTemplate
+                title={"Series"}
+                whereInfo={[ "isSeries", "==", true ]}
             />
         </div>
      );

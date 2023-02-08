@@ -12,7 +12,7 @@ const CreateListing = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
-        language: "Vietnamese",
+        language: "vietnamese",
         title: "",
         author: "",
         storySummary: "",
@@ -28,7 +28,7 @@ const CreateListing = () => {
         dialect: "northern", 
     })
 
-    const {type, title, author, images, audio, dialect, isSeries, part, seriesSummary, storySummary, seriesTitle, level, storyBody} = formData;
+    const {language, type, title, author, images, audio, dialect, isSeries, part, seriesSummary, storySummary, seriesTitle, level, storyBody} = formData;
 
     function onChange(e){
         let boolean = null;
@@ -198,7 +198,8 @@ const CreateListing = () => {
           delete formDataCopy.images;
           delete formDataCopy.audio;
 
-          const docRef = await addDoc(collection(db, "listings"), formDataCopy);
+        console.log(language)
+          const docRef = await addDoc(collection(db, language), formDataCopy);
           setLoading(false);
           toast.success("Story created");
           navigate(`/category/${formDataCopy.type}/${docRef.id}`);

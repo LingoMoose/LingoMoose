@@ -20,7 +20,7 @@ const Slider = () => {
     useEffect(()=>{
 
         async function fetchListings(){
-            const listingsRef = collection(db, "listings");
+            const listingsRef = collection(db, "vietnamese");
             const q = query(listingsRef, orderBy("timestamp", "desc"), limit(5));
             const querySnap = await getDocs(q);
             let listings = [];

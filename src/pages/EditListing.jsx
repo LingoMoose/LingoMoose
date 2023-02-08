@@ -47,7 +47,7 @@ const EditListing = () => {
     useEffect(()=>{
         setLoading(true);
         async function fetchListing() {
-            const docRef = doc(db, "listings", listingId);
+            const docRef = doc(db, "vietnamese", listingId);
 
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
@@ -111,25 +111,6 @@ const EditListing = () => {
             }
           }
         
-        let geolocation = {};
-        let location;
-        if(geolocationEnabled){
-            const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=AIzaSyB0Of1uJeVCP_PKMmf4dqSdUxSuENixrUE`);
-            const data = await response.json();
-            geolocation.lat = data.results[0]?.geometry.location.lat ?? 0;
-            geolocation.lng = data.results[0]?.geometry.location.lng ?? 0;
-
-            location = data.status === "ZERO_RESULTS" && undefined;
-
-            if(location === undefined || (geolocation.lat === 0 && geolocation.lng === 0)){
-                setLoading(false);
-                toast.error("Please enter a valid address")
-                return;
-            }
-        } else {
-            geolocation.lat = latitude;
-            geolocation.lng = longitude;
-        }
 
         async function storeImage(image) {
             return new Promise((resolve, reject) => {
@@ -181,7 +162,6 @@ const EditListing = () => {
           const formDataCopy = {
             ...formData,
             imgUrls,
-            geolocation,
             timestamp: serverTimestamp(),
             userRef: auth.currentUser.uid,
           };
@@ -189,7 +169,7 @@ const EditListing = () => {
           !formDataCopy.offer && delete formDataCopy.discountedPrice;
           delete formDataCopy.latitude;
           delete formDataCopy.longitude;
-          const docRef = doc(db, "listings", listingId);
+          const docRef = doc(db, "vietnamese", listingId);
 
           await updateDoc(docRef, formDataCopy);
           setLoading(false);

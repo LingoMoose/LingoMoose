@@ -15,7 +15,7 @@ const PreviewSectionTemplate = ({whereInfo, caption, link, linkText}) => {
         async function fetchListings(){
             try {
                 // get reference
-                const listingsRef = collection(db, "listings");
+                const listingsRef = collection(db, "vietnamese");
                 // create the query
                 const q = query(
                   listingsRef,
