@@ -179,9 +179,9 @@ const Listings = () => {
                     </div>
                     
                 
-                    <div className="mt-4 mb-20 flex justify-start items-center space-x-4 w-[95%] text-xl">
-                        <span className="font-semibold">Summary -</span>
-                        <span>{listing.storySummary}</span>
+                    <div className="mt-4 mb-20  w-[95%] text-xl">
+                        <span className="font-semibold block pb-2 pt-4">Summary</span>
+                        <span className="pl-0 ml-0">{listing.storySummary.replace(/^\s+/, '')}</span>
                     </div>
                     
                     <ul className="w-full flex justify-end items-end space-x-2 sm:space-x-10 text-sm font-semibold mb-6 mr-10">

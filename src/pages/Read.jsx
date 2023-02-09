@@ -35,6 +35,7 @@ const Read = () => {
          <Reader 
          audioUrl={story.audioUrls[0]}
          text={story.storyBody}
+         translation={story.storyBodyTranslation}
          
          />
         </div>

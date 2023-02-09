@@ -73,7 +73,7 @@ const ListingItem = ({listing, id, onEdit, onDelete}) => {
                         <div className="flex items-center mt-[10px] space-x-3">
                             <div className="w-full flex justify-between items-center space-x-1 pr-1">
                                 <p className={`font-bold text-xs ${textLevelColor} uppercase mb-[-10px]`}>
-                                    {listing.level}
+                                    {listing.level === "upperintermediate" ? "upper intermediate" : listing.level}
                                 </p>
                                 {!onDelete && (
                                   <FaBookReader className="h-4 w-4" />
