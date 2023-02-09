@@ -1,6 +1,6 @@
 import { doc, getDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Spinner from "../components/Spinner";
 import { db } from "../Firebase";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -186,7 +186,10 @@ const Listings = () => {
                     
                     <ul className="w-full flex justify-end items-end space-x-2 sm:space-x-10 text-sm font-semibold mb-6 mr-10">
                         <li className="flex flex-col items-center whitespace-nowrap cursor-pointer "><FaHeadphones className="text-5xl p-2 mb-3 text-neutral-500 border rounded-full shadow-md hover:shadow-lg active:shahow-lg focus:shadow-lg" />Listen</li>
-                        <li className="flex flex-col items-center whitespace-nowrap cursor-pointer "><HiBookOpen className="text-6xl p-2 mb-2 bg-sky-700 text-white rounded-full  shadow-md hover:shadow-lg active:shahow-lg focus:shadow-lg" />Study Now</li>
+                        
+                        <Link className="contents" to={`/read/${listingId}`}>
+                          <li className="flex pl-4 flex-col items-center whitespace-nowrap cursor-pointer "><HiBookOpen className="text-6xl p-2 mb-2 bg-sky-700 text-white rounded-full  shadow-md hover:shadow-lg active:shahow-lg focus:shadow-lg" />Study Now</li>
+                        </Link>
                     </ul>
          
                 </div>

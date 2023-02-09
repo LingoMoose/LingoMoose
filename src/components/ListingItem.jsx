@@ -72,7 +72,7 @@ const ListingItem = ({listing, id, onEdit, onDelete}) => {
                         </p>
                         <div className="flex items-center mt-[10px] space-x-3">
                             <div className="w-full flex justify-between items-center space-x-1 pr-1">
-                                <p className={`font-bold text-xs ${textLevelColor} uppercase mb-[-14px]`}>
+                                <p className={`font-bold text-xs ${textLevelColor} uppercase mb-[-10px]`}>
                                     {listing.level}
                                 </p>
                                 {!onDelete && (
