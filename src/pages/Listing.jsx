@@ -12,18 +12,21 @@ import SwiperCore, {
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { getAuth } from "firebase/auth";
-import { FaBath, FaBed, FaChair, FaMapMarkerAlt, FaParking, FaShare } from "react-icons/fa";
-import Contact from "../components/Contact";
+
+import { FaHeadphones, FaShare } from "react-icons/fa";
+import { HiBookOpen } from "react-icons/hi"
 
 const Listings = () => {
-    const auth = getAuth();
+   
 
     const { listingId } = useParams();
     const [listing, setListing] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [borderLevelColor, setBorderLevelColor] = useState("");
+    const [textLevelColor, setTextLevelColor] = useState("");
+    const [shadowLevelColor, setShadowLevelColor] = useState("");
     const [shareLinkCopy, setShareLinkCopy] = useState(false);
-    const [contactLandLord, setContactLandLord] = useState(false);
+
 
     SwiperCore.use([Autoplay, Navigation, Pagination]);
 
@@ -37,7 +40,79 @@ const Listings = () => {
           }
         }
         fetchListing();
+
       }, [listingId]);
+
+      useEffect(()=>{
+        if(listing !== null){
+            setBorderLevelColor(getBorderLevelColor(listing.level));
+            setShadowLevelColor(getShadowLevelColor(listing.level));
+            setTextLevelColor(getTextColorLevel(listing.level))
+          }
+      },[listing])
+
+      function getBorderLevelColor(level) {
+        switch (level) {
+          case "newbie":
+            return 'border-green-400';
+          case "elementary":
+            return 'border-yellow-400';
+          case "intermediate":
+            return 'border-orange-400';
+          case "upperintermediate":
+            return 'border-red-400';
+          case "advanced":
+            return 'border-purple-600';
+          case "master":
+            return 'border-black';
+          default:
+            return 'border-gray-400';
+        }
+      }
+
+      function getTextColorLevel(level) {
+        switch (level) {
+          case "newbie":
+            return 'text-green-400';
+          case "elementary":
+            return 'text-yellow-400';
+          case "intermediate":
+            return 'text-orange-400';
+          case "upperintermediate":
+            return 'text-red-400';
+          case "advanced":
+            return 'text-purple-600';
+          case "master":
+            return 'text-black';
+          default:
+            return 'text-gray-400';
+        }
+      }
+
+      function getShadowLevelColor(level) {
+        switch (level) {
+          case "newbie":
+            return 'shadow-green-400';
+          case "elementary":
+            return 'shadow-yellow-400';
+          case "intermediate":
+            return 'shadow-orange-400';
+          case "upperintermediate":
+            return 'shadow-red-400';
+          case "advanced":
+            return 'shadow-purple-600';
+          case "master":
+            return 'shadow-black';
+          default:
+            return 'shadow-gray-400';
+        }
+      }
+
+      
+
+
+      
+
       if (loading) {
         return <Spinner />;
       }
@@ -81,55 +156,36 @@ const Listings = () => {
                 <p className="fixed top-[23%] right-[5%] font-semibold border-2 border-gray-400 rounded-md bg-white z-50 py-1 px-2">Link copied</p>
             )}
 
-            <div className="m-4 flex flex-col md:flex-row max-w-6xl lg:mx-auto p-4 rounded-lg shadow-lg bg-white lg:space-x-5">
-                <div className=" w-full ">
-                    <p className="text-2xl font-bold mb-3 text-blue-900">
-                        {listing.name} - ${listing.offer ? 
-                        Number(listing.discountedPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 
-                        Number(listing.regularPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                        {listing.type === "rent" ? " / month" : ""}
-                    </p>
-                    <p className="flex items-center mt-6 mb-3 font-semibold">
-                        <FaMapMarkerAlt className="mr-1 text-green-700" />{listing.address}
-                    </p>
-                    <div className="flex justify-start items-center space-x-4 w-[75%]">
-                        <p className="bg-red-800 w-full max-w-[200px] rounded-md p-1 text-white text-center font-semibold shadow-md">{listing.type === "rent" ? "Rent" : "Sale"}</p>
-                        {listing.offer && (
-                            <p className="w-full max-w-[200px] bg-green-800 rounded-md p-1 text-white text-center font-semibold shadow-md">
-                                ${((+listing.regularPrice) - (+listing.discountedPrice)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} discount
-                            </p>
-                        )}
-                    </div>
-                    <p className="mt-3 mb-3">
-                        <span className="font-semibold">Description - </span>
-                        {listing.description}
-                    </p>
-                    <ul className="flex items-center space-x-2 sm:space-x-10 text-sm font-semibold mb-6">
-                        <li className="flex items-center whitespace-nowrap"><FaBed className="mr-1" />{(+listing.bedrooms) > 1 ? `${listing.bedrooms} beds` : `${listing.bedrooms} bed` }</li>
-                        <li className="flex items-center whitespace-nowrap"><FaBath className="mr-1" />{(+listing.bathrooms) > 1 ? `${listing.bathrooms} baths` : `${listing.bathrooms} bath` }</li>
-                        <li className="flex items-center whitespace-nowrap"><FaParking className="mr-1" />{(listing.parking) === true ? `Parking Spot` : `No Parking` }</li>
-                        <li className="flex items-center whitespace-nowrap"><FaChair className="mr-1" />{(listing.furnished) === true ? `Furnished` : `Not Furnished` }</li>
-                        
-                    </ul>
-                    {listing.userRef !== auth.currentUser?.uid  && !contactLandLord && (
-                        <div className="mt-6">
-                        <button
-                            onClick={() => setContactLandLord(true)}
-                            className="px-7 py-3 bg-blue-600 text-white font-medium text-sm uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg w-full text-center transition duration-150 ease-in-out "
-                        >
-                            Contact Landlord
-                        </button>
-                        </div>
-                    )}
-                    {contactLandLord && (
-                        <Contact
-                            userRef={listing.userRef}
-                            listing={listing}
+            <div className="m-4 flex flex-col md:flex-row max-w-4xl lg:mx-auto p-4 rounded-lg shadow-lg bg-white lg:space-x-5">
+                <div className="relative w-full flex flex-col justify-center items-center">
+                    <div className={`${borderLevelColor} border-b-[6px] relative w-full flex flex-col items-center justify-center`}>
+                        <img 
+                            src={listing.imgUrls[0]} 
+                            alt="" 
+                            className={`w-full cover shadow-md ${shadowLevelColor}`}
                         />
-                    )}
-                </div>
-                <div className="bg-pink-300 w-full h-[200px] md:h-[400px] z-10 overflow-x-hidden mt-6 md:mt-0 md:ml-2">
-           
+                        <div className={`absolute flex flex-col justify-center bottom-0 pl-6 inset-x-0 h-20 bg-black opacity-75 z-10`}>
+                            <p className="text-3xl font-normal text-white">
+                                {listing.title}                    
+                            </p>
+                            <p className={`text-xl font-normal uppercase ${textLevelColor} z-20`}>
+                                {listing.level}          
+                            </p>
+                            
+                        </div>
+                    </div>
+                    
+                
+                    <div className="mt-4 mb-20 flex justify-start items-center space-x-4 w-[95%] text-xl">
+                        <span className="font-semibold">Summary - </span>
+                        {listing.storySummary}
+                    </div>
+                    
+                    <ul className="w-full flex justify-end items-end space-x-2 sm:space-x-10 text-sm font-semibold mb-6 mr-10">
+                        <li className="flex flex-col items-center whitespace-nowrap cursor-pointer "><FaHeadphones className="text-5xl p-2 mb-3 text-neutral-500 border rounded-full shadow-md hover:shadow-lg active:shahow-lg focus:shadow-lg" />Listen</li>
+                        <li className="flex flex-col items-center whitespace-nowrap cursor-pointer "><HiBookOpen className="text-6xl p-2 mb-2 bg-sky-700 text-white rounded-full  shadow-md hover:shadow-lg active:shahow-lg focus:shadow-lg" />Study Now</li>
+                    </ul>
+         
                 </div>
             </div>
 
