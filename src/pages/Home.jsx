@@ -1,4 +1,5 @@
 import PreviewSectionTemplate from "../components/PreviewSectionTemplate";
+import Filter from "../components/Search";
 import Slider from "../components/Slider";
 
 const Home = () => {
@@ -7,6 +8,7 @@ const Home = () => {
         
         <div>
             <Slider />
+            <Filter />
             <div className="max-6-xl mx-auto pt-4 space-y-6">
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "everydaylife"]}

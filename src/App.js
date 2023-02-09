@@ -19,6 +19,8 @@ import Read from "./pages/Read";
 function App() {
   return (
     <div>
+      <div className="min-h-screen min-w-full">
+      
       <Router>
         <Header />
         <Routes>
@@ -59,6 +61,7 @@ function App() {
           pauseOnHover
           theme="dark"
       />
+      </div>
     </div>
   );
 }
