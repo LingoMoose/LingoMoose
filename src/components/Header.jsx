@@ -44,7 +44,7 @@ const Header = () => {
                         ${pathMatchRoute("/") && styles.listItemCurrent}`}>Home</li>
 
                         <li onClick={() => navigate("/offers")} className={`${styles.listItem}
-                        ${pathMatchRoute("/offers") && styles.listItemCurrent}`} >Offers</li>
+                        ${pathMatchRoute("/offers") && styles.listItemCurrent}`} >Series</li>
 
                         <li onClick={() => navigate("/profile")}  className={`${styles.listItem}
                         ${(pathMatchRoute("/sign-in") || pathMatchRoute("/profile")) && styles.listItemCurrent}`}>{pageState}</li>

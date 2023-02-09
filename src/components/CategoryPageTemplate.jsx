@@ -74,7 +74,7 @@ const CategoryPageTemplate = ({title, whereInfo}) => {
 
     return ( 
         <div className="max-w-6xl mx-auto px-3">
-            <h1 className="text-center text-3xl mt-6 mb-6 font-bold">{title}</h1>
+            <h1 className="text-center text-3xl mt-6 mb-6 font-bold capitalize">{title}</h1>
             {loading ? (
                 <Spinner />
             ) : (listings && listings.length) > 0 ? (

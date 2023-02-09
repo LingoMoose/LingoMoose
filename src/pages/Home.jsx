@@ -10,9 +10,9 @@ const Home = () => {
             <div className="max-6-xl mx-auto pt-4 space-y-6">
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "everydaylife"]}
-                 caption={"Every day life"}
+                 caption={"Everyday Life"}
                  link={"category/everydaylife"}
-                 linkText={"every day life"}
+                 linkText={"everyday life"}
                 />
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "business"]}
@@ -22,9 +22,9 @@ const Home = () => {
                 />
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "funny"]}
-                 caption={"Funny"}
+                 caption={"Funny Stories"}
                  link={"category/funny"}
-                 linkText={"funny"}
+                 linkText={"funny stories"}
                 />
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "history"]}
@@ -34,13 +34,13 @@ const Home = () => {
                 />
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "culture"]}
-                 caption={"culture"}
+                 caption={"Culture"}
                  link={"category/culture"}
                  linkText={"culture"}
                 />
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "currentevents"]}
-                 caption={"current events"}
+                 caption={"Current Events"}
                  link={"category/currentevents"}
                  linkText={"current events"}
                 />
@@ -52,13 +52,13 @@ const Home = () => {
                 />
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "dialogue"]}
-                 caption={"dialogue"}
+                 caption={"Dialogue"}
                  link={"category/dialogue"}
                  linkText={"dialogue"}
                 />
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "language"]}
-                 caption={"language"}
+                 caption={"Language"}
                  link={"category/language"}
                  linkText={"language"}
                 />
