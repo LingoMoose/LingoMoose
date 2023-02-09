@@ -16,6 +16,15 @@ const Reader = ({ text, audioUrl }) => {
     setLoading(false);
   },[])
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(`https://translate.yandex.net/api/v1.5/tr.json/translate?key=YOUR_API_KEY&text=${text}&lang=en`);
+      const data = await response.json();
+      setTranslatedText(data.text[0]);
+    };
+    fetchData();
+  }, [text]);
+
   const handleSentenceClick = (sentence) => {
     // Make an API call to get the translation for the sentence
     // Replace the mock data with actual data from the API call
@@ -58,32 +67,26 @@ const Reader = ({ text, audioUrl }) => {
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center justify-center max-w-4xl mx-auto">
         {!loading && (
-            <div className="relative top-0 left-0 w-full h-12 p-2 text-white font-medium bg-gray-900">
-            <div className="flex justify-between">
-                <div>{translatedText}</div>
-                <button
-                className="text-gray-300 hover:text-white focus:outline-none focus:shadow-outline"
-                onClick={toggleTranslation}
-                >
-                {showTranslation ? t('Hide Translation') : t('Show Translation')}
-                </button>
+        <div className="relative top-0 left-0 w-full h-12 p-2 text-white font-medium bg-gray-900">
+            <div className="flex justify-center cursor-pointer hover:underline" onClick={toggleTranslation}>
+            <div>{showTranslation ? translatedText : 'Show Translation'}</div>
             </div>
-            </div>
+        </div>
         )}
   
         <div>
-            {text.split('.').map((sentence, index) => (
+        {text.split(/(?<=[.?!])/).map((sentence, index) => (
             <p
                 key={index}
-                className="cursor-pointer hover:underline"
+                className="inline text-base leading-normal cursor-pointer hover:underline"
                 onClick={() => handleSentenceClick(sentence)}
                 onMouseOver={() => handleWordHover(sentence)}
             >
                 {sentence}
             </p>
-            ))}
+        ))}
         </div>
         <div className="flex justify-center">
             <button

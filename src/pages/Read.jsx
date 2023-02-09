@@ -29,6 +29,7 @@ const Read = () => {
 
     return ( 
         <div>
+
          {story ? (
         <div>
          <Reader 
