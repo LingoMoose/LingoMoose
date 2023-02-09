@@ -12,7 +12,7 @@ const Reader = ({ text, audioUrl, translation }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
-  const [playbackRate, setPlaybackRate] = useState(0.5)
+  const [playbackRate, setPlaybackRate] = useState(1);
 
   
   useEffect(()=>{
@@ -32,20 +32,26 @@ const Reader = ({ text, audioUrl, translation }) => {
   const handleWordHover = (word) => {
     // Make an API call to get the translation for the word
     // Replace the mock data with actual data from the API call
-    const translation = 'This is a translation for the word.';
+    // const translation = 'This is a translation for the word.';
   };
 
   useEffect(() => {
     audio.addEventListener('ended', () => setIsPlaying(false));
   }, [audio]);
 
+  useEffect(()=>{
+    audio.playbackRate = playbackRate;
+  },[playbackRate, audio])
+
 
 
   const togglePlay = () => {
     setIsPlaying(!isPlaying);
     if (isPlaying) {
+      audio.playbackRate = playbackRate;
       audio.pause();
     } else {
+      audio.playbackRate = playbackRate;
       audio.play();
     }
   };
@@ -60,8 +66,7 @@ const Reader = ({ text, audioUrl, translation }) => {
     setIsPlaying(true);
   };
 
-  const changeRate = () => {
-    console.log(playbackRate)
+  const changeRate = (playbackRate) => {
     switch(playbackRate) {
         case 0.5:
             setPlaybackRate(0.75);
@@ -81,6 +86,7 @@ const Reader = ({ text, audioUrl, translation }) => {
         default:
             setPlaybackRate(1);
       }
+      audio.playbackRate = playbackRate;
   };
 
   return (
@@ -155,7 +161,7 @@ const Reader = ({ text, audioUrl, translation }) => {
         </div>
         </div>
   
-          <button onClick={changeRate}>
+          <button onClick={() => changeRate(playbackRate)}>
             {playbackRate}x
           </button>
 
