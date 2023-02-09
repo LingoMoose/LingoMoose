@@ -1,6 +1,6 @@
 import Moment from "react-moment";
 import { Link } from "react-router-dom";
-import { FaTrash } from "react-icons/fa";
+import { FaBookReader, FaTrash } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { useEffect, useState } from "react";
 
@@ -58,10 +58,11 @@ const ListingItem = ({listing, id, onEdit, onDelete}) => {
         
             <li className="relative bg-white flex flex-col justify-between items-center shadow-md hover:shadow-xl rounded-md overflow-hidden transition-shadow duration-150 m-[10px]">
                 <Link className="contents" to={`/category/${listing.type}/${id}`}>
-                    <img className={`h-[170px] w-full object-cover hover:scale-150 transition-scale duration-200 ease-in border-b-[6px] ${borderLevelColor}`} loading="lazy" src={listing.imgUrls[0]} alt="listing" />
-        
+                  <div>
+                    <img className={`h-[170px] w-full object-cover hover:scale-110 transition-scale duration-200 ease-in`} loading="lazy" src={listing.imgUrls[0]} alt="listing" />
+                  </div>
                     <Moment className="absolute top-2 left-2 bg-[#3377cc] text-white uppercase text-xs font-semibold rounded-md px-2 py-1 shadow-lg" fromNow>{listing.timestamp?.toDate()}</Moment>
-                    <div className="w-full p-[10px]">
+                    <div className={`w-full p-[10px]  border-b-[6px] ${borderLevelColor}`}>
                             <div className="flex items-center space-x-1">
                                 <p className="font-semibold text-sm mb-[2px] text-gray-600 truncate">{listing.address}</p> 
                             </div>
@@ -70,10 +71,11 @@ const ListingItem = ({listing, id, onEdit, onDelete}) => {
                             {listing.author}
                         </p>
                         <div className="flex items-center mt-[10px] space-x-3">
-                            <div className="flex items-center space-x-1">
+                            <div className="w-full flex justify-between items-center space-x-1 pr-1">
                                 <p className={`font-bold text-xs ${textLevelColor} uppercase`}>
                                     {listing.level}
                                 </p>
+                                <FaBookReader className="h-4 w-4" />
                             </div>
                         </div>
                     </div>
