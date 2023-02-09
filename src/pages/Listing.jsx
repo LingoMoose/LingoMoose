@@ -83,7 +83,7 @@ const Listings = () => {
           case "advanced":
             return 'text-purple-600';
           case "master":
-            return 'text-black';
+            return 'text-black-900';
           default:
             return 'text-gray-400';
         }
@@ -162,23 +162,26 @@ const Listings = () => {
                         <img 
                             src={listing.imgUrls[0]} 
                             alt="" 
-                            className={`w-full cover shadow-md ${shadowLevelColor}`}
+                            className={`w-full max-h-[400px] cover shadow-md ${shadowLevelColor}`}
                         />
-                        <div className={`absolute flex flex-col justify-center bottom-0 pl-6 inset-x-0 h-20 bg-black opacity-75 z-10`}>
-                            <p className="text-3xl font-normal text-white">
+                        <div className={`absolute w-full flex flex-col justify-center bottom-0 pl-6  pb-1 z-50`}>
+                            <p className="text-3xl font-normal text-white pb-1">
                                 {listing.title}                    
                             </p>
-                            <p className={`text-xl font-normal uppercase ${textLevelColor} z-20`}>
+                            <p className={`relative text-xl font-normal uppercase ${textLevelColor} z-50`}>
                                 {listing.level}          
                             </p>
+                            
+                        </div>
+                        <div className={`absolute bottom-0 pl-6 inset-x-0 h-20 bg-black opacity-75 z-10`}>
                             
                         </div>
                     </div>
                     
                 
                     <div className="mt-4 mb-20 flex justify-start items-center space-x-4 w-[95%] text-xl">
-                        <span className="font-semibold">Summary - </span>
-                        {listing.storySummary}
+                        <span className="font-semibold">Summary -</span>
+                        <span>{listing.storySummary}</span>
                     </div>
                     
                     <ul className="w-full flex justify-end items-end space-x-2 sm:space-x-10 text-sm font-semibold mb-6 mr-10">
