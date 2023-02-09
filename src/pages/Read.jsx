@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { db } from '../Firebase';
 import { useState } from 'react';
 import { getDoc, doc } from 'firebase/firestore';
-import Reading from '../components/Reading';
+import Reader from '../components/Reading';
 
 const Read = () => {
     const { storyId } = useParams();
@@ -25,15 +25,13 @@ const Read = () => {
       }, [storyId]);
 
       console.log(story)
-      
+
 
     return ( 
         <div>
          {story ? (
         <div>
-         <h2>{story.storyBody}</h2>
-         <h2>{story.audioUrls[0]}</h2>
-         <Reading 
+         <Reader 
          audioUrl={story.audioUrls[0]}
          text={story.storyBody}
          
