@@ -169,7 +169,7 @@ const Listings = () => {
                                 {listing.title}                    
                             </p>
                             <p className={`relative text-xl font-normal uppercase ${textLevelColor} z-50`}>
-                                {listing.level}          
+                              {listing.level === "upperintermediate" ? "upper intermediate" : listing.level}          
                             </p>
                             
                         </div>
