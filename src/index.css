@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+*:focus {
+  box-shadow: none !important;
+}
+
+
+*[data-focus] {
+  box-shadow: none !important;
+}
+
 body{
     background-color: rgb(240, 253, 244);
 }
@@ -28,4 +37,53 @@ html {
     font-size: 11px !important;
   }
 }
+
+input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  background-color: #d9d9d9;
+  border: 2px solid #333;
+  border-radius: 4px;
+}
+
+
+input[type="checkbox"]:checked,
+input[type="checkbox"]:checked,
+input[type="checkbox"]:checked{
+  background-color: #ccc;
+}
+
+
+input[type="checkbox"]:checked:active,
+input[type="checkbox"]:checked:focus,
+input[type="checkbox"]:checked:hover {
+  outline: none;
+  box-shadow: none;
+  background-color: #333;
+}
+
+input[type="checkbox"]:hover:not(:checked) {
+  box-shadow: none;
+}
+
+input[type="checkbox"] + label:hover {
+  cursor: default;
+}
+
+input[type="checkbox"]:hover:not(:checked) {
+  cursor: default;
+}
+
+input[type="checkbox"]:focus {
+  outline: none;
+}
+
+input[type="checkbox"] + label {
+  cursor: default;
+}
+
+input[type="checkbox"] + label:hover {
+  background-color: transparent;
+}
+
 

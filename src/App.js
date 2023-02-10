@@ -7,7 +7,7 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import PrivateRoute from "./components/PrivateRoute";
 import Header from './components/Header';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import CreateListing from "./pages/CreateListing";
@@ -15,8 +15,15 @@ import EditListing from "./pages/EditListing";
 import Listing from "./pages/Listing";
 import Category from "./pages/Category";
 import Read from "./pages/Read";
+import Landing from "./pages/Landing";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import FAQ from "./pages/FAQ";
+import SupportUs from "./pages/SupportUs";
+
 
 function App() {
+
+
   return (
     <div>
       <div className="min-h-screen min-w-full">
@@ -24,6 +31,10 @@ function App() {
       <Router>
         <Header />
         <Routes>
+          <Route path="/landing" element={<Landing/>} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy/>} />
+          <Route path="/faq" element={<FAQ/>} />
+          <Route path="/support-us" element={<SupportUs/>} />
           <Route path="/" element={<Home/>} />
           <Route path="/profile" element={<PrivateRoute />}>
             <Route path="/profile" element={<Profile/>} />

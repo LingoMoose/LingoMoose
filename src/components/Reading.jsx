@@ -104,8 +104,8 @@ const Reader = ({ text, audioUrl, translation }) => {
         {text.split(/(?<=[.?!])/).map((sentence, index) => (
             <p 
                 key={index}
-                className="inline text-base leading-loose cursor-pointer hover:underline
-                font-serif  text-gray-700 pt-4 pb-4 "
+                className="inline text-base sm:text-lg sm:leading-10 leading-loose cursor-pointer hover:underline
+                font-serif  text-gray-700 pt-4 pb-4"
                 onClick={() => handleSentenceClick(sentence)}
 
                 onMouseOver={() => handleWordHover(sentence)}

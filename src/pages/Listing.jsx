@@ -12,7 +12,7 @@ import SwiperCore, {
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import dateFormat, { masks } from "dateformat";
+import dateFormat from "dateformat";
 import { FaHeadphones, FaShare } from "react-icons/fa";
 import { HiBookOpen } from "react-icons/hi"
 
@@ -199,14 +199,15 @@ console.log(listing)
                     </div>
                     
                 
-                    <div className="mt-4 mb-40  w-[95%] text-xl">
+                    <div className="mt-6 mb-40  w-[95%] text-xl">
                         <span className="font-semibold block pb-2 pt-4">Summary</span>
-                        <span className="pl-0 ml-0">{listing.storySummary.replace(/^\s+/, '')}</span>
+                        <span className="pl-0 ml-0 leading-8">{listing.storySummary.replace(/^\s+/, '')}</span>
                     </div>
 
                     <div className=" text-xl absolute bottom-6 left-6">
                         <p><span className="font-semibold pb-2 pt-4 inline-block">Author </span> {listing.author}</p>
-                        <p><span className="font-semibold pb-2 pt-4 inline-block">Published by </span> {publisher.name}</p>
+                        <p className="capitalize"><span className="font-semibold pb-2 pt-2 inline-block">Dialect </span> {listing.dialect}</p>
+                        <p><span className="font-semibold pb-2 pt-2 inline-block">Published by </span> {publisher.name}</p>
                        <p>{publishedDate}</p>
                     </div>
                     

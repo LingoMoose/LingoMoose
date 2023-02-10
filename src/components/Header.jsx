@@ -41,10 +41,10 @@ const Header = () => {
                     <ul className="flex flex-row space-x-10">
 
                         <li onClick={() => navigate("/")} className={`${styles.listItem}
-                        ${pathMatchRoute("/") && styles.listItemCurrent}`}>Home</li>
+                        ${pathMatchRoute("/") && styles.listItemCurrent}`}>Lessons</li>
 
-                        <li onClick={() => navigate("/offers")} className={`${styles.listItem}
-                        ${pathMatchRoute("/offers") && styles.listItemCurrent}`} >Series</li>
+                        <li onClick={() => navigate("/support-us")} className={`${styles.listItem}
+                        ${pathMatchRoute("/supprt-us") && styles.listItemCurrent}`} >Support</li>
 
                         <li onClick={() => navigate("/profile")}  className={`${styles.listItem}
                         ${(pathMatchRoute("/sign-in") || pathMatchRoute("/profile")) && styles.listItemCurrent}`}>{pageState}</li>

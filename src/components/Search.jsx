@@ -25,7 +25,7 @@ const Filter = () => {
     <div className="mt-16">
     <div className="relative">
     <div className={`flex md:grid grid-rows-1 md:grid-cols-3 md:gap-0 xl:grid-cols-6 md:max-w-2xl xl:max-w-6xl mx-auto`}>
-        <label className="flex min-w-[170px] items-center border-[1px] pl-2 pt-[2px] pb-[2px] col-start-1 xl:col-start-4 border-b-0 border-r-0 rounded-tl-xl">
+        <label className="flex min-w-[170px] items-center border-[1px] pl-2 pt-[2px] pb-[2px] col-start-1 xl:col-start-4 border-b-0 border-r-0 sm:rounded-tl-xl">
             <input
             type="checkbox"
             className="form-checkbox"
@@ -34,7 +34,7 @@ const Filter = () => {
             />
             <span className="ml-2">Hide studied</span>
         </label>
-        <label className=" relative flex items-center border-[1px] pr-2 pl-2 pt-[2px] pb-[2px] col-span-2 w-full border-b-0 rounded-tr-xl">
+        <label className=" relative flex items-center border-[1px] pr-2 pl-2 pt-[2px] pb-[2px] col-span-2 w-full border-b-0 sm:rounded-tr-xl">
             <input
             type="text"
             className="form-text w-full p-1 m-1 pr-3 ml-2 md:ml-10 pl-2 rounded-md"
