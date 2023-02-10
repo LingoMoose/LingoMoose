@@ -4,14 +4,14 @@ import Footer from '../components/Footer';
 const PrivacyPolicy = () => {
   return (
     <div>
-    <div className="flex flex-col justify-center items-flexstart p-10 max-w-4xl mx-auto">
+    <div className="flex flex-col justify-center items-flexstart p-10 max-w-3xl mx-auto  text-center">
       <h1 className="text-3xl font-bold w-full text-center">Privacy Policy</h1>
       <p className="text-xl mt-5">
         Our Privacy Policy explains how we collect, use, disclose, and protect
         your information when you use our website or services.
       </p>
       <p className="text-xl mt-5 ">
-    <span className='underline'>Information Collection and Use</span> 
+    <span className='font-semibold'>Information Collection and Use</span> 
         <br />
         We collect information from you in a few different ways:
       </p>
@@ -29,19 +29,19 @@ const PrivacyPolicy = () => {
         </li>
       </ul>
       <p className="text-xl mt-5">
-      <span className='underline'>Information Sharing and Disclosure</span>
+      <span className='font-semibold'>Information Sharing and Disclosure</span>
         <br />
         We do not sell, rent, or share your information with third parties
         except as described in this Privacy Policy.
       </p>
       <p className="text-xl mt-5">
-      <span className='underline'>Changes to Our Privacy Policy</span>
+      <span className='font-semibold'>Changes to Our Privacy Policy</span>
         <br />
         We may update our Privacy Policy from time to time. We will notify you
         of any changes by posting the new Privacy Policy on our website.
       </p>
       <p className="text-xl mt-5">
-      <span className='underline'>Contact Us</span>
+      <span className='font-semibold'>Contact Us</span>
         <br />
         If you have any questions about our Privacy Policy, please contact us.
       </p>

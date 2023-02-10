@@ -24,8 +24,8 @@ const Filter = () => {
   return (
     <div className="mt-16">
     <div className="relative">
-    <div className={`flex md:grid grid-rows-1 md:grid-cols-3 md:gap-0 xl:grid-cols-6 md:max-w-2xl xl:max-w-6xl mx-auto`}>
-        <label className="flex min-w-[170px] items-center border-[1px] pl-2 pt-[2px] pb-[2px] col-start-1 xl:col-start-4 border-b-0 border-r-0 sm:rounded-tl-xl">
+    <div className={`grid grid-rows-2 md:grid-rows-1 md:grid-cols-3 md:gap-0 xl:grid-cols-6 md:max-w-2xl xl:max-w-6xl mx-auto`}>
+        <label className="flex min-w-[170px] border-0 items-center md:border-[1px]  pl-6 md:pl-2 pt-[2px] pb-[2px] col-start-1 xl:col-start-4 md:border-b-0 md:border-r-0 sm:rounded-tl-xl">
             <input
             type="checkbox"
             className="form-checkbox"

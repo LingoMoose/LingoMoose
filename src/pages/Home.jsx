@@ -1,5 +1,5 @@
 import PreviewSectionTemplate from "../components/PreviewSectionTemplate";
-import Filter from "../components/Search";
+import Filter from "../components/Filter";
 import Slider from "../components/Slider";
 
 const Home = () => {
