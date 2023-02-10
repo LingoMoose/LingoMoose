@@ -9,7 +9,7 @@ const Home = () => {
         <div>
             <Slider />
             <Filter />
-            <div className="max-6-xl mx-auto pt-4 space-y-6">
+            <div className="max-w-7xl  mx-auto pt-4 space-y-6">
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "everydaylife"]}
                  caption={"Everyday Life"}
