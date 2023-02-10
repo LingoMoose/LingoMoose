@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { AiOutlineUndo } from 'react-icons/ai';
 import { FaPlay, FaPause, FaRedo } from 'react-icons/fa';
+import { HiOutlineRefresh } from 'react-icons/hi';
 import { ImBackward } from 'react-icons/im';
 
 
@@ -114,57 +116,54 @@ const Reader = ({ text, audioUrl, translation }) => {
             </p>
         ))}
         </div>
-        <div className='mt-4 flex justify-center flex-col items-center'>
-        <div>
-        <div className="flex justify-center">
+        <div className='mt-4 flex justify-center flex-col items-center w-full'>
+        <div className="relative flex justify-center w-full">
+            <button onClick={() => changeRate(playbackRate)} 
+            className="flex absolute ml-64 top-0 bottom-0 justify-center items-center  px-2 py-1 text-sm rounded-lg hover:bg-gray-200 focus:outline-none focus:shadow-outline">
+                <div className="h-8 w-8 flex items-center justify-center font-semibold">
+                  {playbackRate === 1? "1.0" : playbackRate}x  
+                </div>
+            </button>
+
             <button
             className="px-2 py-1 text-lg rounded-lg hover:bg-gray-200 focus:outline-none focus:shadow-outline"
-            onClick={rewind}
+            onClick={() => rewind(5)}
             >
-            <div className='h-8 w-8 relative flex justify-flexend items-center bg-sky-700 p-2 rounded-full shadow-md hover:shadow-lg active:shahow-lg focus:shadow-lg'>
-                <ImBackward className="absolute text-white left-[7px] text-md" />  
-            </div>
-      
-            
-            {t('')}
+                <div className='h-6 w-6 relative flex justify-center items-center rounded-full rotate-90'>
+                    <AiOutlineUndo className="absolute text-3xl font-light" />  
+                    <p className='absolute rotate-[-90deg] text-[9px]'>5</p>
+                </div>
             </button>
             <button
             className="px-2 py-1 text-lg rounded-lg hover:bg-gray-200 focus:outline-none focus:shadow-outline"
             onClick={togglePlay}
             >
-            {isPlaying ? (
-                <>
-                <div className='h-10 w-10 relative flex justify-flexend items-center bg-sky-700 p-2 rounded-full shadow-md hover:shadow-lg active:shahow-lg focus:shadow-lg'>
-                    <FaPause className=" absolute text-2xl text-white  left-2" />
-                </div>
-                {t('')}
-                </>
-            ) : (
-                <>
-                <div className='h-10 w-10 relative flex justify-flexend items-center bg-sky-700 p-2 rounded-full shadow-md hover:shadow-lg active:shahow-lg focus:shadow-lg'>
-                    <FaPlay className=" absolute text-2xl text-white  left-[10px]" />
-                </div>
-                
-                {t('')}
-                </>
-            )}
+                {isPlaying ? (
+                    <>
+                    <div className='h-12 w-12 relative flex justify-flexend items-center bg-sky-700 p-2 rounded-full shadow-md hover:shadow-lg active:shahow-lg focus:shadow-lg'>
+                        <FaPause className="absolute text-2xl text-white  left-[12px]" />
+                    </div>
+                    {t('')}
+                    </>
+                ) : (
+                    <>
+                    <div className='h-12 w-12 relative flex justify-flexend items-center bg-sky-700 p-2 rounded-full shadow-md hover:shadow-lg active:shahow-lg focus:shadow-lg'>
+                        <FaPlay className=" absolute text-2xl text-white  left-[14px]" />
+                    </div>
+                    
+                    {t('')}
+                    </>
+                )}
             </button>
             <button
-            className="px-2 py-1 text-lg rounded-lg hover:bg-gray-200 focus:outline-none focus:shadow-outline"
-            onClick={restart}
-            >
-            <div className='h-8 w-8 relative flex justify-flexend items-center bg-red-500 p-2 rounded-full shadow-md hover:shadow-lg active:shahow-lg focus:shadow-lg'>
-                <FaRedo className="absolute text-white left-2 text-sm" />  
-            </div>
-            {t('')}
-            </button>
+              className="relative px-2 py-1 text-lg rounded-lg hover:bg-gray-200 focus:outline-none focus:shadow-outline"
+              onClick={restart}
+              >
+                  <div className='h-8 w-8 relative flex justify-flexend items-center bg-red-500 p-2 rounded-full shadow-md hover:shadow-lg active:shahow-lg focus:shadow-lg'>
+                      <HiOutlineRefresh className="absolute text-white left-[6px] text-xl" />   
+                  </div>
+              </button>
         </div>
-        </div>
-  
-          <button onClick={() => changeRate(playbackRate)}>
-            {playbackRate}x
-          </button>
-
         </div>
     </div>
   );

@@ -15,7 +15,7 @@ const Footer = () => {
             <div className='relative flex text-center justify-center'>
                 <ul className="list-reset absolute left-0 text-left">
                     <li>
-                    <a className="text-white hover:text-gray-300 mr-4" href="/supportius">Support Us</a>
+                    <a className="text-white hover:text-gray-300 mr-4" href="/support-us">Support Us</a>
                     </li>
                     <li>
                     <a className="text-white hover:text-gray-300 mr-4" href="/FAQ">FAQ</a>

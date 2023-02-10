@@ -19,6 +19,7 @@ import Landing from "./pages/Landing";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import FAQ from "./pages/FAQ";
 import SupportUs from "./pages/SupportUs";
+import Listen from "./pages/Listen";
 
 
 function App() {
@@ -45,7 +46,7 @@ function App() {
           <Route path="/sign-up" element={<SignUp/>} />
           <Route path="/forgot-password" element={<ForgotPassword/>} />
 
-          <Route path="/category/:categoryName/:listingId" element={<Listing/>} />
+          <Route path="/category/:categoryName/:storyId" element={<Listing/>} />
           <Route path="/offers" element={<Offers/>} />
           <Route path="/category/:categoryName" element={<Category/>} />  
           <Route path="/create-listing" element={<CreateListing />}>
@@ -56,7 +57,10 @@ function App() {
           </Route>
           <Route path="/read" element={<PrivateRoute />}>
             <Route path="/read/:storyId" element={<Read/>} />
-          </Route>  
+          </Route>
+          <Route path="/listen" element={<PrivateRoute />}>
+            <Route path="/listen/:storyId" element={<Listen/>} />
+          </Route>    
 
         </Routes>
       </Router>

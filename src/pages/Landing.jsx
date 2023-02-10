@@ -3,9 +3,8 @@ import Footer from '../components/Footer';
 
 function Landing() {
   return (
-    <div>
+    <div className='mt-[-40px]'>
     <div className="flex flex-col h-screen">
-      <header className="h-10" />
       <div className="flex flex-col items-center justify-center h-full">
         <h1 className="text-4xl font-bold text-gray-900 text-center">
           The free, fun, and effective way to learn Vietnamese!
