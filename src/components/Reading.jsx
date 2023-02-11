@@ -22,6 +22,7 @@ const Reader = ({ text, audioUrl, translation }) => {
   const [isHidden, setIsHidden] = useState(true);
   const [isShown, setIsShown] = useState("hidden");
   const [translationDisplay, setTranslationDisplay] = useState("min-h-[48px]")
+  const [hoverEffect, setHoverEffect] = useState("hover:bg-[#d9d9d9]")
 
   useEffect(()=>{
     if(isHidden){
@@ -31,6 +32,15 @@ const Reader = ({ text, audioUrl, translation }) => {
     }
   },[isHidden])
 
+  
+
+  function lightModeToggle(){
+    if(document.body.className === "light-mode"){
+      setHoverEffect("hover:bg-[#4d4d4d]")
+    } else {
+      setHoverEffect("hover:bg-[#d9d9d9]")
+    }
+  }
 
   
   useEffect(()=>{
@@ -138,16 +148,15 @@ const Reader = ({ text, audioUrl, translation }) => {
 
         </div>
         )}
-  
-    
+
         <div className='p-4 px-6 shadow-sm z-10'
         style={{ backgroundColor: 'var(--background-color4)'}}
         >
         {text.split(/(?<=[.?!])/).map((sentence, index) => (
             <p 
                 key={index}
-                className={`inline  leading-loose cursor-pointer hover:rounded-lg hover:bg-gray-300
-                ${fontFamily} ${displaySize}   pt-4 pb-4`}
+                className={`inline  leading-loose cursor-pointer hover:rounded-lg ${hoverEffect}
+                ${fontFamily} ${displaySize}   pt-3 pb-3`}
                 onClick={() => handleSentenceClick(sentence)}
 
                 onMouseOver={() => handleWordHover(sentence)}
@@ -222,7 +231,7 @@ const Reader = ({ text, audioUrl, translation }) => {
               <div className="flex relative items-center justify-between px-4 py-3 border-b border-gray-200">
                 <div className='flex flex-row items-center justify-centerp-0'>
                   <h3 className="text-lg font-medium">Settings</h3>
-                  <div className='max-h-[25px] pl-2 mt-[2px]'><DarkModeToggle/></div>
+                  <div className='max-h-[25px] pl-2 mt-[2px]' onClick={lightModeToggle}><DarkModeToggle /></div>
                   
                 </div>
                 

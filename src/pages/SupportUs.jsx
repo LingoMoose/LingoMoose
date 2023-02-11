@@ -3,6 +3,7 @@ import { FaPaypal, FaPatreon } from "react-icons/fa";
 import Footer from '../components/Footer';
 
 const SupportUs = () => {
+
   return (
     
     <div className="w-full"
@@ -21,19 +22,22 @@ const SupportUs = () => {
         Running and maintaining a website requires time, effort, and resources. Your financial support can help us keep the lights on and continue to bring new and improved content to our users. Any amount, big or small, is greatly appreciated and goes directly towards supporting our mission.
       </p>
       <div className="flex mb-5 ">
+    
         
         <a
           href="https://www.paypal.com"
-          className=" py-3 px-5 rounded-lg mr-5 flex flex-col justify-center items-center bg-red-20"
+          className=" py-3 px-5 rounded-lg mr-5 flex flex-col justify-center items-center bg-red-20 hover:opacity-80"
           style={{ backgroundColor: 'var(--background-color2)'}}
         >
           <FaPaypal />
          <p>Donate with PayPal</p> 
         </a>
+        
         <a
           href="https://www.patreon.com"
-          className=" py-3 px-5 rounded-lg flex flex-col justify-center items-center"
+          
           style={{ backgroundColor: 'var(--background-color2)'}}
+          className={`py-3 px-5 rounded-lg flex flex-col justify-center items-center hover:opacity-80`}
         >
           <FaPatreon className="mr-2" />
           Support on Patreon
