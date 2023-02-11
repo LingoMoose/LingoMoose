@@ -6,14 +6,30 @@
   box-shadow: none !important;
 }
 
-
 *[data-focus] {
   box-shadow: none !important;
 }
 
-body{
-    background-color: rgb(240, 253, 244);
+body.light-mode {
+  --background-color: #f2f2f2;
+  --background-color2: #d9d9d9;
+  --background-color3:  #e6e6e6;
+  --background-color4: #f0f0f0;
+  --text-color: #0e0e0e;
+  --border-color: #d9d9d9;
 }
+
+body.dark-mode {
+  --background-color: #0e0e0e;
+  --background-color2: #333333;
+  --background-color3:  #4d4d4d;
+  --background-color4: #666666;
+  --text-color: #f2f2f2;
+  --border-color: #333333;
+}
+
+
+
 
 .swiper-button-next::after,
 .swiper-button-prev::after {

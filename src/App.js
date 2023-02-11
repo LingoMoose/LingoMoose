@@ -20,14 +20,22 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import FAQ from "./pages/FAQ";
 import SupportUs from "./pages/SupportUs";
 import Listen from "./pages/Listen";
+import { useEffect } from "react";
 
 
 function App() {
 
+  useEffect(()=>{
+    if(!(document.body.className === "light-mode" || document.body.className === "light-dark")){
+        document.body.className = "light-mode";
+    }
+  }, [])
 
+  
   return (
     <div>
-      <div className="min-h-screen min-w-full">
+      <div className="min-h-screen min-w-full"
+      style={{ backgroundColor: 'var(--background-color)', color: 'var(--text-color)', borderColor: `var(--border-color)` }}>
       
       <Router>
         <Header />

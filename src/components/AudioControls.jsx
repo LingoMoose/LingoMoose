@@ -74,8 +74,6 @@ const AudioControls = ({ audioUrl }) => {
   
     const restart = () => {
       audio.currentTime = 0;
-      audio.play();
-      setIsPlaying(true);
     };
 
     const nextLesson = () => {
@@ -111,7 +109,9 @@ const AudioControls = ({ audioUrl }) => {
 
 
   return (
-    <div className='flex flex-col justify-between h-full min-h-full'>
+    <div className='flex flex-col justify-between h-full min-h-full'
+      style={{ backgroundColor: 'var(--background-color2)', color: 'var(--text-color)'}}
+    >
      
      {/* audio control bar */}
         <div className="h-full flex items-center justify-between p-4">
@@ -139,7 +139,7 @@ const AudioControls = ({ audioUrl }) => {
                 {/* refresh, speed next, prev controls */}
                 <div className="flex justify-around mb-6 w-50">
                     <button
-                    className="relative px-2 py-1 text-lg rounded-lg hover:bg-gray-200 focus:outline-none focus:shadow-outline"
+                    className="relative px-2 py-1 text-lg rounded-lg"
                     onClick={prevLesson}
                     >
                         <div className='h-6 w-6 relative flex justify-center items-center rounded-full'>
@@ -149,7 +149,7 @@ const AudioControls = ({ audioUrl }) => {
                     </button>
 
                     <button
-                    className="relative px-2 py-1 text-lg rounded-lg hover:bg-gray-200 focus:outline-none focus:shadow-outline"
+                    className="relative px-2 py-1 text-lg rounded-lg"
                     onClick={restart}
                     >
                         <div className='h-8 w-8 relative flex justify-flexend items-center bg-red-500 p-2 rounded-full shadow-md hover:shadow-lg active:shahow-lg focus:shadow-lg'>
@@ -158,14 +158,14 @@ const AudioControls = ({ audioUrl }) => {
                         <p className='absolute text-[10px] top-8 left-[9px]'>Repeat</p>
                     </button>
                     <button onClick={() => changeRate(playbackRate)} 
-                    className="flex relative justify-center items-center  px-2 py-1 text-sm rounded-lg hover:bg-gray-200 focus:outline-none focus:shadow-outline">
+                    className="flex relative justify-center items-center  px-2 py-1 text-sm rounded-lg">
                         <div className="h-8 w-8 flex items-center justify-center font-semibold">
                           {playbackRate === 1? "1.0" : playbackRate}x  
                         </div>
                         <p className='absolute text-[10px] top-[36px] left-[10px]'>Speed</p>
                     </button>
                     <button
-                    className="relative px-2 py-1 text-lg rounded-lg hover:bg-gray-200 focus:outline-none focus:shadow-outline"
+                    className="relative px-2 py-1 text-lg rounded-lg"
                     onClick={nextLesson}
                     >
                         <div className='h-6 w-6 relative flex justify-center items-center rounded-full'>
@@ -180,7 +180,7 @@ const AudioControls = ({ audioUrl }) => {
                 {/* bottom controls rewind, play, forward */}
                 <div className="flex justify-center">
                     <button
-                    className="px-2 py-1 text-lg rounded-lg hover:bg-gray-200 focus:outline-none focus:shadow-outline"
+                    className="px-2 py-1 text-lg rounded-lg"
                     onClick={() => rewind(30)}
                     >
                         <div className='h-6 w-6 relative flex justify-center items-center rounded-full rotate-90'>
@@ -190,7 +190,7 @@ const AudioControls = ({ audioUrl }) => {
                         {t('')}
                     </button>
                     <button
-                    className="px-2 py-1 text-lg rounded-lg hover:bg-gray-200 focus:outline-none focus:shadow-outline"
+                    className="px-2 py-1 text-lg rounded-lg"
                     onClick={() => rewind(5)}
                     >
                         <div className='h-6 w-6 relative flex justify-center items-center rounded-full rotate-90'>
@@ -200,7 +200,7 @@ const AudioControls = ({ audioUrl }) => {
                         {t('')}
                     </button>
                     <button
-                    className="px-2 py-1 text-lg rounded-lg hover:bg-gray-200 focus:outline-none focus:shadow-outline"
+                    className="px-2 py-1 text-lg rounded-lg"
                     onClick={togglePlay}
                     >
                         {isPlaying ? (
@@ -222,7 +222,7 @@ const AudioControls = ({ audioUrl }) => {
                     </button>
                     
                     <button
-                    className="px-2 py-1 text-lg rounded-lg hover:bg-gray-200 focus:outline-none focus:shadow-outline"
+                    className="px-2 py-1 text-lg rounded-lg"
                     onClick={() => forward(5)}
                     >
                         <div className='h-6 w-6 relative flex justify-center items-center rounded-full rotate-[-90deg]'>
@@ -232,7 +232,7 @@ const AudioControls = ({ audioUrl }) => {
                         {t('')}
                     </button>
                     <button
-                    className="px-2 py-1 text-lg rounded-lg hover:bg-gray-200 focus:outline-none focus:shadow-outline"
+                    className="px-2 py-1 text-lg rounded-lg"
                     onClick={() => forward(30)}
                     >
                         <div className='h-6 w-6 relative flex justify-center items-center rounded-full rotate-[-90deg]'>

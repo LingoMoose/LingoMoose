@@ -104,10 +104,10 @@ const StoryImage = ({level, title, image, storyId}) => {
                 )}
             </div>}
             <div className={`absolute w-full flex flex-col justify-center bottom-0 pl-6  pb-1 z-50`}>
-                <p className="text-3xl font-normal text-white pb-1">
+                <p className="text-xl sm:text-3xl font-normal text-white pb-1 truncate max-w-[80%]">
                     {title}                    
                 </p>
-                <p className={`relative text-xl font-normal uppercase ${textLevelColor} z-50`}>
+                <p className={`relative text-sm sm:text-xl font-normal uppercase ${textLevelColor} z-50`}>
                     {level === "upperintermediate" ? "upper intermediate" : level}          
                 </p>
                 {storyId && 

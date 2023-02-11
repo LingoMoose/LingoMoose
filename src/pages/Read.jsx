@@ -36,7 +36,6 @@ const Read = () => {
          audioUrl={story.audioUrls[0]}
          text={story.storyBody}
          translation={story.storyBodyTranslation}
-         
          />
         </div>
          ) : (

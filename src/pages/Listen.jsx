@@ -5,11 +5,12 @@ import { useState } from 'react';
 import { getDoc, doc } from 'firebase/firestore';
 import AudioControls from '../components/AudioControls';
 import StoryImage from '../components/StoryImage';
+import Spinner from '../components/Spinner';
 
 const Listen = () => {
     const { storyId } = useParams();
     const [story, setStory] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [ loading, setLoading] = useState(true);
 
     console.log(storyId)
     useEffect(() => {
@@ -22,7 +23,7 @@ const Listen = () => {
           }
         }
         fetchStory();
-
+        setLoading(false);
       }, [storyId]);
 
       console.log(storyId)
@@ -31,9 +32,10 @@ const Listen = () => {
     return ( 
         <div>
 
-         {story ? (
+         {(!loading && story) ? (
             
-        <div className='max-w-2xl mx-auto min-h-[90vh] flex flex-col justify-between p-4 bg-gray-200 rounded-lg'>
+        <div className='max-w-2xl mx-auto min-h-[90vh] flex flex-col justify-between p-6 mt-6 rounded-lg shadow-md '
+        style={{ backgroundColor: 'var(--background-color2)'}}>
          <StoryImage 
          level={story.level}
          title={story.title}
@@ -44,7 +46,10 @@ const Listen = () => {
          audioUrl={story.audioUrls[0]}         />
         </div>
          ) : (
-         <div>Loading</div>)}
+         <div>
+          <Spinner />
+         </div>
+         )}
         </div>
      );
 }

@@ -25,26 +25,28 @@ const Header = () => {
     }
 
     const styles = {
-        listItem: `cursor-pointer py-3 text-sm font-semibold 
-        text-gray-400 border-b-[3px] border-b-transparent`,
-        listItemCurrent: "text-black border-b-red-500"
+        listItem: `cursor-pointer py-3 text-md font-semibold 
+        border-b-[3px] border-b-transparent`,
+        listItemCurrent: "text-red-500 border-b-red-500"
     }
 
     return ( 
-        <div className="bg-white border-b shadow-sm sticky top-0 z-40">
+        <div className=" shadow-lg sticky top-0 z-40"
+        style={{ backgroundColor: 'var(--background-color2)', color: 'var(--text-color)'}}
+        >
             <header className="flex justify-between items-center max-w-6xl mx-auto pr-4 pl-4">
                 <div onClick={() => navigate("/")} className="cursor-pointer">
                     <img src="/logo.png" alt="" className="h-10 cursor-pointer inline" />
                     <h1 className="inline pl-1 text-sm font-semibold ">LingoMoose</h1>
                 </div>
                 <div>
-                    <ul className="flex flex-row space-x-10">
+                    <ul className="flex flex-row space-x-4 sm:space-x-10">
 
                         <li onClick={() => navigate("/")} className={`${styles.listItem}
                         ${pathMatchRoute("/") && styles.listItemCurrent}`}>Lessons</li>
 
                         <li onClick={() => navigate("/support-us")} className={`${styles.listItem}
-                        ${pathMatchRoute("/supprt-us") && styles.listItemCurrent}`} >Support</li>
+                        ${pathMatchRoute("/support-us") && styles.listItemCurrent}`} >Support</li>
 
                         <li onClick={() => navigate("/profile")}  className={`${styles.listItem}
                         ${(pathMatchRoute("/sign-in") || pathMatchRoute("/profile")) && styles.listItemCurrent}`}>{pageState}</li>

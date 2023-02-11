@@ -52,7 +52,9 @@ const Listings = () => {
     return ( 
         <main>
 
-            <div className="relative m-4 flex flex-col md:flex-row max-w-4xl lg:mx-auto p-4 rounded-lg shadow-lg bg-white lg:space-x-5">
+            <div className="relative m-4 flex flex-col md:flex-row max-w-4xl lg:mx-auto p-4 rounded-lg shadow-lg  lg:space-x-5"
+            style={{ backgroundColor: 'var(--background-color4)'}}
+            >
                 <div className="relative w-full flex flex-col justify-center items-center">
                     
                     <StoryImage 
@@ -75,7 +77,7 @@ const Listings = () => {
                     
                     <ul className="w-full flex justify-end items-end space-x-2 sm:space-x-10 text-sm font-semibold mb-6 mr-10">
                         <Link className="contents" to={`/listen/${storyId}`}>
-                          <li className="flex flex-col items-center whitespace-nowrap cursor-pointer "><FaHeadphones className="text-5xl p-2 mb-3 text-neutral-500 border rounded-full shadow-md hover:shadow-lg active:shahow-lg focus:shadow-lg" />Listen</li>
+                          <li className="flex flex-col items-center whitespace-nowrap cursor-pointer "><FaHeadphones className="text-5xl p-2 mb-3 text-neutral-500 bg-white border rounded-full shadow-md hover:shadow-lg active:shahow-lg focus:shadow-lg" />Listen</li>
                         </Link>
                         <Link className="contents" to={`/read/${storyId}`}>
                           <li className="flex pl-4 flex-col items-center whitespace-nowrap cursor-pointer "><HiBookOpen className="text-6xl p-2 mb-2 bg-sky-700 text-white rounded-full  shadow-md hover:shadow-lg active:shahow-lg focus:shadow-lg" />Study Now</li>
