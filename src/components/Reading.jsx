@@ -19,7 +19,7 @@ const Reader = ({ text, audioUrl, translation }) => {
 
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [fontFamily, setFontFamily] = useState('font-sans');
-  const [fontSize, setFontSize] = useState(14);
+  const [fontSize, setFontSize] = useState(24);
   const [displaySize, setDisplaySize] = useState()
 
   
@@ -112,17 +112,17 @@ const Reader = ({ text, audioUrl, translation }) => {
   };
 
   return (
-    <div className="pt-10 flex flex-col items-center justify-center max-w-4xl mx-auto">
+    <div className="mt-10 flex flex-col items-center justify-center max-w-4xl mx-auto bg-gray-100">
         {!loading && (
-        <div className="relative top-0 left-0 w-full pt-5 pb-5 p-2 text-white font-medium bg-gray-900 flex items-center justify-center">
+        <div className="relative top-0 left-0 w-full pt-5 pb-5 p-2  bg-white shadow-md flex items-center justify-center">
             <div className="flex justify-center cursor-pointer" onClick={toggleTranslation}>
-            <div className={`${fontFamily} ${displaySize} text-center justify-center cursor-pointer`}>{showTranslation ? selectedTranslation : 'Show Translation'}</div>
+            <div className={`${fontFamily} ${displaySize} text-center justify-center cursor-pointer`}>{!showTranslation ? 'Show Translation' : selectedTranslation ? selectedTranslation : "click sentence to translate"}</div>
             </div>
         </div>
         )}
   
     
-        <div className='p-4 bg-gray-200 rounded-lg'>
+        <div className='p-4 bg-gray-200'>
         {text.split(/(?<=[.?!])/).map((sentence, index) => (
             <p 
                 key={index}
@@ -136,8 +136,8 @@ const Reader = ({ text, audioUrl, translation }) => {
             </p>
         ))}
         </div>
-        <div className='relative mt-4 flex justify-center flex-col items-center w-full'>
-        <div className="relative flex justify-center w-full">
+        <div className='relative flex justify-center flex-col items-center w-full'>
+        <div className="relative flex justify-center items-center w-full pt-4 pb-4 ">
             <button onClick={() => changeRate(playbackRate)} 
             className="flex absolute ml-64 top-0 bottom-0 justify-center items-center  px-2 py-1 text-sm rounded-lg hover:bg-gray-200 focus:outline-none focus:shadow-outline">
                 <div className="h-8 w-8 flex items-center justify-center font-semibold">
@@ -248,8 +248,7 @@ const Reader = ({ text, audioUrl, translation }) => {
             </div>
           )}
         </div>
-        </div>
-        
+        </div>        
     </div>
   );
 };

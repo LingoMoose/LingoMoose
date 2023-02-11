@@ -10,7 +10,7 @@ import { GiPerspectiveDiceSixFacesRandom } from "react-icons/gi";
 import { GiBookmarklet } from 'react-icons/gi';
 import { Link } from "react-router-dom";
 import ListingItem from "../components/ListingItem";
-
+import DarkModeToggle from "../components/DarkModeToggle"
 
 
 const Profile = () => {
@@ -124,6 +124,7 @@ const Profile = () => {
                 <h1 className="text-3xl text-center mt-6 font-bold">My Profile</h1>
               
                 <div className="w-full md:w-[50%] mt-6 px-3">
+                <DarkModeToggle />
                     <form>
                         <div className="relative">
                             <div disabled={!changeDetail} className={`absolute right-3 top-3 text-xl cursor-pointer ${changeDetail ? "Block" : "hidden"}  `}>
