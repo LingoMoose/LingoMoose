@@ -31,11 +31,12 @@ const Listen = () => {
 
     return ( 
         <>
-          <div>
+          <div className=' w-full min-h-[90vh] mt-8  border-box flex flex-col items-center justify-center'>
+    
 
           {(!loading && story) ? (
               
-          <div className='max-w-2xl mx-auto min-h-[90vh] flex flex-col justify-between p-6 mt-6 rounded-lg shadow-md '
+          <div className='max-w-2xl flex flex-col justify-between p-6  rounded-lg shadow-md relative'
           style={{ backgroundColor: 'var(--background-color2)'}}>
           <StoryImage 
           level={story.level}
@@ -43,9 +44,13 @@ const Listen = () => {
           image={story.imgUrls[0]}
           storyId={storyId}
           />
-          <AudioControls 
-          audioUrl={story.audioUrls[0]}         
-          />
+       
+            <AudioControls 
+            audioUrl={story.audioUrls[0]} 
+               
+            />
+       
+          
           </div>
           ) : (
           <div>

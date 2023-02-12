@@ -84,7 +84,7 @@ const StoryImage = ({level, title, image, storyId}) => {
             <img 
                 src={image} 
                 alt="" 
-                className={`w-full max-h-[400px] cover shadow-md ${shadowLevelColor}`}
+                className={`w-full max-h-[400px] h-[400px] cover shadow-md ${shadowLevelColor}`}
             />
             {!storyId && 
             <div className="absolute top-8 right-8 flex flex-col items-end" >
@@ -103,11 +103,11 @@ const StoryImage = ({level, title, image, storyId}) => {
                     <p className=" font-semibold border-2 border-gray-400 rounded-md bg-white py-1 px-2">Link copied</p>
                 )}
             </div>}
-            <div className={`absolute w-full flex flex-col justify-center bottom-0 pl-6  pb-1 z-50`}>
+            <div className={`absolute w-full flex flex-col justify-center bottom-0 pl-6  pb-1 z-20`}>
                 <p className="text-xl sm:text-3xl font-normal text-white pb-1 truncate max-w-[80%]">
                     {title}                    
                 </p>
-                <p className={`relative text-sm sm:text-xl font-normal uppercase ${textLevelColor} z-50`}>
+                <p className={`relative text-sm sm:text-xl font-normal uppercase ${textLevelColor} z-20`}>
                     {level === "upperintermediate" ? "upper intermediate" : level}          
                 </p>
                 {storyId && 
@@ -124,7 +124,7 @@ const StoryImage = ({level, title, image, storyId}) => {
 
                 
             </div>
-            <div className={`absolute bottom-0 pl-6 inset-x-0 h-20 bg-black opacity-75 z-10`}>
+            <div className={`absolute bottom-0 pl-6 inset-x-0 h-20 bg-black opacity-75 `}>
                 
             </div>
         </div>

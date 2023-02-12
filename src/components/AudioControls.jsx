@@ -114,12 +114,12 @@ const AudioControls = ({ audioUrl }) => {
 
 
   return (
-    <div className='flex flex-col justify-between h-full min-h-full'
-      style={{ backgroundColor: 'var(--background-color2)', color: 'var(--text-color)'}}
+    <div className='min-h-[400px] flex flex-col justify-between'
+      // style={{ backgroundColor: 'var(--background-color2)', color: 'var(--text-color)'}}
     >
      
      {/* audio control bar */}
-        <div className="h-full flex items-center justify-between p-4">
+        <div className="h-full flex items-center justify-between p-4 pt-6">
         <div className="text-sm font-medium pr-2 mb-1">
             {formatTime(currentTime)} 
         </div>
