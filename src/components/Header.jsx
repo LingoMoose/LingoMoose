@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Header = () => {
-    const [pageState, setPageState] = useState("Sign in");
+    const [pageState, setPageState] = useState(["Sign in", "Home"]);
+    const [user, setUser] = useState(null);
     const location = useLocation();
     const navigate = useNavigate();
     const auth = getAuth();
@@ -11,9 +12,10 @@ const Header = () => {
     useEffect(()=>{
         onAuthStateChanged(auth, user => {
             if(user){
-                setPageState("Profile");
+                setPageState(["Profile", "Lessons"]);
+                setUser(user);
             } else {
-                setPageState("Sign in"); 
+                setPageState(["Sign in", "Home"]); 
             }
         })
     }, [auth])
@@ -43,13 +45,13 @@ const Header = () => {
                     <ul className="flex flex-row space-x-4 sm:space-x-10">
 
                         <li onClick={() => navigate("/")} className={`${styles.listItem}
-                        ${pathMatchRoute("/") && styles.listItemCurrent}`}>Lessons</li>
+                        ${pathMatchRoute("/") && styles.listItemCurrent}`}>{pageState[1]}</li>
 
                         <li onClick={() => navigate("/support-us")} className={`${styles.listItem}
                         ${pathMatchRoute("/support-us") && styles.listItemCurrent}`} >Support</li>
 
-                        <li onClick={() => navigate("/profile")}  className={`${styles.listItem}
-                        ${(pathMatchRoute("/sign-in") || pathMatchRoute("/profile")) && styles.listItemCurrent}`}>{pageState}</li>
+                        <li onClick={() => navigate(`${user? "/profile" : "/sign-in"}`)}  className={`${styles.listItem}
+                        ${(pathMatchRoute("/sign-in") || pathMatchRoute("/profile")) && styles.listItemCurrent}`}>{pageState[0]}</li>
 
                     </ul>
                 </div>

@@ -241,7 +241,7 @@ const CreateListing = () => {
 
                 <div>
                     <p className={`${style.label} mt-0`}>Story (Vietnamese)</p>
-                    <p>Each sentence should end with either '<strong>.</strong>' , '<strong>!</strong>' or '<strong>?</strong>'</p>
+                    <p>Each sentence must end with either '<strong>.</strong>' , '<strong>!</strong>' or '<strong>?</strong>'</p>
                     <textarea type="text" id="storyBody" value={storyBody} onChange={onChange} placeholder="Write the story here (in Vietnamese)! Character limit of 4000. If longer, please make a series with multiple parts. (see send of form)" maxLength="4000" minLength="20" required 
                          style={{ minHeight: "300px" }} className="w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-out duration-150 focus:text-gray-700 focus:bg-white focus:border-slate-600 mb-6"
                     />
@@ -249,8 +249,8 @@ const CreateListing = () => {
 
                 <div>
                     <p className={`${style.label} mt-0`}>Story (English translation)</p>
-                    <p>Each sentence should end with either '<strong>.</strong>' , '<strong>!</strong>' or '<strong>?</strong>' and correspond with the above text. (for example, the 6th sentence here should match the 6th sentence above)  </p>
-                    <textarea type="text" id="storyBodyTranslation" value={storyBodyTranslation} onChange={onChange} placeholder="Write the story here (in English)! This will serve as a translation (max 4000 characters)" maxLength="4000" minLength="20" required 
+                    <p>Each sentence must end with either '<strong>.</strong>' , '<strong>!</strong>' or '<strong>?</strong>' and correspond with the above text. (for example, the 6th sentence here should match the 6th sentence above)  </p>
+                    <textarea type="text" id="storyBodyTranslation" value={storyBodyTranslation} onChange={onChange} placeholder="Write the story here (in English)! This will serve as a translation (max 4000 characters). Please include proper punctuation to ensure accurate sentence alignment." maxLength="4000" minLength="20" required 
                          style={{ minHeight: "300px" }} className="w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-out duration-150 focus:text-gray-700 focus:bg-white focus:border-slate-600 mb-6"
                     />
                 </div>

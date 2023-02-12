@@ -68,7 +68,7 @@ const Slider = () => {
                         {data.title}
                     </p>
                     <p className={`uppercase text-white absolute left-1 bottom-1 font-semibold max-w-[90%] bg-[#e63946] shadow-lg opacity-90 p-2 pr-4 rounded-tr-3xl`}>
-                        {data.level}
+                        {data.level === "upperintermediate" ? "Upper Intermediate" : data.level}
                     </p>
                 </SwiperSlide>
             ))}

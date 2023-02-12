@@ -50,9 +50,10 @@ const Listings = () => {
       }
 
     return ( 
-        <main>
-
-            <div className="relative m-4 flex flex-col md:flex-row max-w-4xl lg:mx-auto p-4 rounded-lg shadow-lg  lg:space-x-5"
+        <>
+          
+            
+            <div className=" m-10 flex flex-col justify-center md:flex-row max-w-4xl lg:mx-auto p-4 rounded-lg shadow-lg  lg:space-x-5 border-4"
             style={{ backgroundColor: 'var(--background-color4)'}}
             >
                 <div className="relative w-full flex flex-col justify-center items-center">
@@ -86,8 +87,8 @@ const Listings = () => {
          
                 </div>
             </div>
-
-        </main>
+          
+        </>
      );
 }
  

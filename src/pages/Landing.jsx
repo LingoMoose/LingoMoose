@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Footer from '../components/Footer';
 
 function Landing() {
@@ -10,19 +11,23 @@ function Landing() {
           The free, fun, and effective way to learn Vietnamese!
         </h1>
         <div className="mt-10">
+          <Link to={"../sign-up"}>
           <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
             Get Started
           </button>
+          </Link>  
+          <Link to={"../sign-in"}>
           <button className="bg-white hover:bg-gray-100 text-gray-800 font-bold py-2 px-4 rounded-full ml-4">
             I Already Have an Account
           </button>
+          </Link>
         </div>
       </div>
       </div>
       <div className="relative flex flex-col items-center justify-center min-h-screen color-1">
       <h3 className="landing-figs text-center font-bold text-2xl mb-12">Why you'll love learning with us!</h3>
       <div className="flex flex-wrap w-[380px] sm:w-[800px]">
-      <div className="w-full md:w-1/2 rounded-lg transition-background ease-in-out duration-300 hover:bg-gray-300 opacity-75 cursor-pointer p-12">
+      <div className="w-full md:w-1/2  rounded-lg transition-background ease-in-out duration-300 hover:bg-gray-300 opacity-75 p-12">
           <figure className="landing-figs text-center">
             <img
               className="landing-figs transition-opacity duration-300"
@@ -36,7 +41,7 @@ function Landing() {
             </p>
           </figure>
         </div>
-        <div className="w-full md:w-1/2 rounded-lg transition-background ease-in-out duration-300 hover:bg-gray-300 opacity-75 cursor-pointer p-12">
+        <div className="w-full md:w-1/2 rounded-lg transition-background ease-in-out duration-300 hover:bg-gray-300 opacity-75  p-12">
         <figure className="landing-figs text-center">
             <img
             className="landing-figs transition-opacity duration-300"
@@ -49,7 +54,7 @@ function Landing() {
             </p>
         </figure>
         </div>
-        <div className="w-full md:w-1/2 rounded-lg transition-background ease-in-out duration-300 hover:bg-gray-300 opacity-75 cursor-pointer p-12">
+        <div className="w-full md:w-1/2 rounded-lg transition-background ease-in-out duration-300 hover:bg-gray-300 opacity-75  p-12">
           <figure className="landing-figs text-center">
             <img
               className="landing-figs transition-opacity duration-300"
@@ -62,7 +67,7 @@ function Landing() {
             </p>
           </figure>
         </div>
-        <div className="w-full md:w-1/2 rounded-lg transition-background ease-in-out duration-300 hover:bg-gray-300 opacity-75 cursor-pointer p-12">
+        <div className="w-full md:w-1/2 rounded-lg transition-background ease-in-out duration-300 hover:bg-gray-300 opacity-75  p-12">
           <figure className="landing-figs text-center">
             <img
               className="landing-figs transition-opacity duration-300"

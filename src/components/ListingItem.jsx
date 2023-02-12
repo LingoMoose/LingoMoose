@@ -57,7 +57,7 @@ const ListingItem = ({listing, id, onEdit, onDelete}) => {
     return ( 
         
             <li className="relative flex flex-col justify-between items-center shadow-lg hover:shadow-xl rounded-md overflow-hidden transition-shadow duration-150 m-[10px]"
-            style={{ backgroundColor: 'var(--background-color4)'}}
+            style={{ backgroundColor: 'var(--background-cards)'}}
             >
                 <Link className="contents" to={`/category/${listing.type}/${id}`}>
                   <div>

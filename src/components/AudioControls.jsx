@@ -6,6 +6,7 @@ import { FaPlay, FaPause } from 'react-icons/fa';
 import { HiOutlineRefresh } from 'react-icons/hi';
 import { TbPlayerTrackNext, TbPlayerTrackPrev } from 'react-icons/tb';
 
+
 const AudioControls = ({ audioUrl }) => {
 
     const [audio] = useState(new Audio(audioUrl));
@@ -14,14 +15,18 @@ const AudioControls = ({ audioUrl }) => {
     const [playbackRate, setPlaybackRate] = useState(1);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
+
+    
   
     useEffect(() => {
       audio.addEventListener('loadedmetadata', () => {
         setDuration(audio.duration);
       });
+
       audio.addEventListener('timeupdate', () => {
         setCurrentTime(audio.currentTime);
       });
+
   
       return () => {
         audio.removeEventListener('loadedmetadata', () => {

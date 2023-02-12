@@ -30,27 +30,30 @@ const Listen = () => {
 
 
     return ( 
-        <div>
+        <>
+          <div>
 
-         {(!loading && story) ? (
-            
-        <div className='max-w-2xl mx-auto min-h-[90vh] flex flex-col justify-between p-6 mt-6 rounded-lg shadow-md '
-        style={{ backgroundColor: 'var(--background-color2)'}}>
-         <StoryImage 
-         level={story.level}
-         title={story.title}
-         image={story.imgUrls[0]}
-         storyId={storyId}
-         />
-         <AudioControls 
-         audioUrl={story.audioUrls[0]}         />
-        </div>
-         ) : (
-         <div>
-          <Spinner />
-         </div>
-         )}
-        </div>
+          {(!loading && story) ? (
+              
+          <div className='max-w-2xl mx-auto min-h-[90vh] flex flex-col justify-between p-6 mt-6 rounded-lg shadow-md '
+          style={{ backgroundColor: 'var(--background-color2)'}}>
+          <StoryImage 
+          level={story.level}
+          title={story.title}
+          image={story.imgUrls[0]}
+          storyId={storyId}
+          />
+          <AudioControls 
+          audioUrl={story.audioUrls[0]}         
+          />
+          </div>
+          ) : (
+          <div>
+            <Spinner />
+          </div>
+          )}
+          </div>
+        </>
      );
 }
  

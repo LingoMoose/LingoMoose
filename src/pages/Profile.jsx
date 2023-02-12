@@ -27,7 +27,7 @@ const Profile = () => {
 
     function onLogout(){
         auth.signOut();
-        navigate('/');
+        navigate('/landing');
     }
 
     function onChange(e){

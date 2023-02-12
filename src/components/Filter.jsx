@@ -26,7 +26,7 @@ const Filter = () => {
     <div className="relative">
     <div className={`grid grid-rows-2 grid-cols-1 md:grid-rows-1 md:grid-cols-3 md:gap-0 xl:grid-cols-6 md:max-w-2xl xl:max-w-6xl mx-auto`}>
         <label className="flex w-full border-0 items-center md:border-[2px]  pl-6 md:pl-2 pt-[2px] pb-[2px] col-start-1 xl:col-start-4 md:border-b-0  sm:rounded-tl-xl" 
-          style={{ backgroundColor: 'var(--background-color4)'}}
+          style={{ backgroundColor: 'var(--background-cards)'}}
         >
             <input
             type="checkbox"
@@ -37,7 +37,7 @@ const Filter = () => {
             <span className="ml-2">Hide studied</span>
         </label>
         <label className="md:border-l-0 relative flex items-center border-l-0 border-t sm:border-[2px] sm:border-b-0 pr-2 pl-2 pt-[2px] pb-[2px] col-span-2 w-full border-b-0 sm:rounded-tr-xl"
-          style={{ backgroundColor: 'var(--background-color4)'}}
+          style={{ backgroundColor: 'var(--background-cards)'}}
         >
             <input
             type="text"
@@ -52,7 +52,7 @@ const Filter = () => {
       <button
         className="block w-full md:hidden bg-white border border-gray-300 p-2 focus:outline-none focus:bg-gray-200"
         onClick={handleToggle}
-        style={{ backgroundColor: 'var(--background-color4)'}}
+        style={{ backgroundColor: 'var(--background-cards)'}}
       > 
         {isHidden ? (
           <div >
@@ -69,7 +69,7 @@ const Filter = () => {
         className={`${
           isHidden ? "hidden" : "block"
         }  md:grid md:grid-cols-3 md:gap-0 xl:grid-cols-6 md:max-w-2xl xl:max-w-6xl mx-auto `}
-        style={{ backgroundColor: 'var(--background-color4)'}}
+        style={{ backgroundColor: 'var(--background-cards)'}}
       >
         <label className="flex items-center border-t-none sm:border-[2px] pl-2 pt-[2px] pb-[2px] border-b-green-400 border-b-[3px] border-r-0">
           <input
