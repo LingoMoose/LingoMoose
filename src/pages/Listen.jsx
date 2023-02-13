@@ -12,7 +12,6 @@ const Listen = () => {
     const [story, setStory] = useState(null);
     const [ loading, setLoading] = useState(true);
 
-    console.log(storyId)
     useEffect(() => {
         async function fetchStory() {
           const docRef = doc(db, "vietnamese", storyId);
@@ -26,7 +25,6 @@ const Listen = () => {
         setLoading(false);
       }, [storyId]);
 
-      console.log(storyId)
 
 
     return ( 

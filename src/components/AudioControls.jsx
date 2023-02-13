@@ -16,6 +16,13 @@ const AudioControls = ({ audioUrl }) => {
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
 
+    useEffect(() => {
+      return () => {
+          audio.pause()
+          audio.currentTime = 0;
+          console.log("in cleanup")
+      }
+    }, [audio])
     
   
     useEffect(() => {

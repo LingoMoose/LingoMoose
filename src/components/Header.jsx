@@ -34,7 +34,7 @@ const Header = () => {
 
     return ( 
         <div className=" shadow-lg sticky top-0 z-40"
-        style={{ backgroundColor: 'var(--background-color2)', color: 'var(--text-color)'}}
+        style={{ backgroundColor: 'var(--background-color4)', color: 'var(--text-color)'}}
         >
             <header className="flex justify-between items-center max-w-6xl mx-auto pr-4 pl-4">
                 <div onClick={() => navigate("/")} className="cursor-pointer">

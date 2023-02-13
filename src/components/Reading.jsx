@@ -21,8 +21,9 @@ const Reader = ({ text, audioUrl, translation }) => {
   const [displaySize, setDisplaySize] = useState()
   const [isHidden, setIsHidden] = useState(true);
   const [isShown, setIsShown] = useState("hidden");
-  const [translationDisplay, setTranslationDisplay] = useState("min-h-[48px]")
-  const [hoverEffect, setHoverEffect] = useState("hover:bg-[#d9d9d9]")
+  const [translationDisplay, setTranslationDisplay] = useState("min-h-[48px]");
+  const [hoverEffect, setHoverEffect] = useState("hover:bg-[#d9d9d9]");
+  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(()=>{
     if(isHidden){
@@ -31,6 +32,14 @@ const Reader = ({ text, audioUrl, translation }) => {
       setIsShown("visible")
     }
   },[isHidden])
+
+  useEffect(() => {
+    return () => {
+        audio.pause()
+        audio.currentTime = 0;
+        console.log("in cleanup")
+    }
+  }, [audio])
 
   
 
@@ -137,17 +146,27 @@ const Reader = ({ text, audioUrl, translation }) => {
       audio.playbackRate = playbackRate;
   };
 
+  function toggleVisible(){
+    setIsVisible(!isVisible);
+  }
+
   return (
-    <div className="mt-10 flex flex-col items-center justify-center max-w-4xl mx-auto shadow-md ">
-        {!loading && (
+    <div className="relative mt-10 flex flex-col items-center justify-center max-w-4xl mx-auto shadow-md ">
+      <div className='realtive w-full'>
+        
+        {!loading  && (
         <div className={`relative top-0 left-0 w-full  ${translationDisplay}  pt-5 pb-5 p-2 z-20 shadow-sm flex items-center justify-center rounded-tl-lg rounded-tr-lg`}
         style={{ backgroundColor: 'var(--background-color4)'}}>
-            <div className="flex justify-center cursor-pointer" onClick={toggleTranslation}>
-            <div className={`${fontFamily} ${displaySize} text-center justify-center cursor-pointer`}>{!showTranslation ? 'Show Translation' : selectedTranslation ? selectedTranslation : "click sentence to translate"}</div>
+            <p className='absolute top-2 right-4 text-[10px] cursor-pointer z-10' onClick={toggleVisible}>{isVisible? "Hide" : "Show"}</p>
+             
+            <p className={`absolute top-2 left-4 text-[10px] ${isVisible? "" : "hidden"}`}>Sentence meaning</p>
+            <div className={`flex justify-center cursor-pointer ${isVisible? "" : "hidden"}`} onClick={toggleTranslation}>
+            <div className={`${fontFamily} ${displaySize} text-center justify-center cursor-pointer`}>{selectedTranslation ? selectedTranslation : "click sentence to translate"}</div>
+            
             </div>
 
         </div>
-        )}
+        )}</div>
 
         <div className='p-4 px-6 shadow-sm z-10'
         style={{ backgroundColor: 'var(--background-color4)'}}
