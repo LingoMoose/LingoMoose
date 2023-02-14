@@ -10,7 +10,7 @@ const Read = () => {
     const [story, setStory] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    console.log(storyId)
+  
     useEffect(() => {
         async function fetchStory() {
           const docRef = doc(db, "vietnamese", storyId);
@@ -23,9 +23,6 @@ const Read = () => {
         fetchStory();
 
       }, [storyId]);
-
-      console.log(story)
-
 
     return ( 
         <div className='min-h-[90vh] flex items-center justify-center'>

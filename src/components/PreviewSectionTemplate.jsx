@@ -4,13 +4,14 @@ import { Link } from "react-router-dom";
 import ListingItem from "./ListingItem";
 import { db } from "../Firebase";
 
-const PreviewSectionTemplate = ({whereInfo, caption, link, linkText}) => {
+const PreviewSectionTemplate = ({whereInfo, caption, link, linkText, levels}) => {
     let operand1 = whereInfo[0];
     let condition = whereInfo[1];
     let operand2 = whereInfo[2];
 
     
     const [listings, setListings] = useState(null);
+
     useEffect(()=>{
         async function fetchListings(){
             try {
@@ -20,6 +21,7 @@ const PreviewSectionTemplate = ({whereInfo, caption, link, linkText}) => {
                 const q = query(
                   listingsRef,
                   where(operand1, condition, operand2),
+                  where('level', "in", levels.length === 0? ["newbie","elementary","intermediate","upperintermediate", "advanced","master"] : levels), 
                   orderBy("timestamp", "desc"),
                   limit(4)
                   
@@ -39,13 +41,14 @@ const PreviewSectionTemplate = ({whereInfo, caption, link, linkText}) => {
               }
             }
             fetchListings();
-          }, [operand1, condition, operand2]);
+          }, [operand1, condition, operand2, levels]);
     
     
     return ( 
         <div>
             {listings && listings.length > 0 && (
-                <div className="m-2 mb-6">
+                <div className="m-2 mb-6 "
+                >
                     <h2 className="px-3 text-2xl mt-6 font-semibold">{caption}</h2>
                     <Link to={link} >
                         <p className="px-3 text-sm text-blue-600 hover:text-blue-800 transition duration-150 ease-in-out">Show more {linkText}</p>

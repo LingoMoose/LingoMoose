@@ -5,7 +5,7 @@ import ListingItem from "../components/ListingItem";
 import Spinner from "../components/Spinner";
 import { db } from "../Firebase";
 
-const CategoryPageTemplate = ({title, whereInfo}) => {
+const CategoryPageTemplate = ({title, whereInfo, levels}) => {
     let operand1 = whereInfo[0];
     let condition = whereInfo[1];
     let operand2 = whereInfo[2];
@@ -20,7 +20,8 @@ const CategoryPageTemplate = ({title, whereInfo}) => {
             try {
                 const listingRef = collection(db, "vietnamese");
                 const q = query(listingRef, 
-                    where(operand1, condition, operand2), 
+                    where(operand1, condition, operand2),
+                    where('level', "in", levels.length === 0? ["newbie","elementary","intermediate","upperintermediate", "advanced","master"] : levels ), 
                     orderBy("timestamp", "desc"), 
                     limit(8));
                 const querySnap = await getDocs(q);
@@ -43,13 +44,14 @@ const CategoryPageTemplate = ({title, whereInfo}) => {
         };
 
         fetchListings();
-    },[operand1, condition, operand2])
+    },[operand1, condition, operand2, levels])
 
     async function onFetchMoreListings(){
         try {
             const listingRef = collection(db, "vietnamese");
             const q = query(listingRef, 
-                where(operand1, condition, operand2), 
+                where(operand1, condition, operand2),
+                where('level', "in", levels),
                 orderBy("timestamp", "desc"),
                 startAfter(lastFetchedListing),
                 limit(4));
@@ -74,7 +76,7 @@ const CategoryPageTemplate = ({title, whereInfo}) => {
 
     return ( 
         <div className="max-w-6xl mx-auto px-3">
-            <h1 className="text-center text-3xl mt-6 mb-6 font-bold capitalize">{title}</h1>
+            <h1 className="text-center text-3xl mt-6 mb-6 font-bold capitalize">{title === "everydaylife"? "Everyday Life" : title === 'funny'? "Funny Stories" : title }</h1>
             {loading ? (
                 <Spinner />
             ) : (listings && listings.length) > 0 ? (
@@ -100,7 +102,7 @@ const CategoryPageTemplate = ({title, whereInfo}) => {
                     )}
                 </div>
             ) : (
-                <p> No current {title.toLowerCase()}</p>
+                <p> No {title.toLowerCase() === "everydaylife" ? "everyday life" : title ==="funny"? "funny stories" : title.toLowerCase()}</p>
             )}
         </div>
      );

@@ -57,11 +57,11 @@ const ListingItem = ({listing, id, onEdit, onDelete}) => {
     return ( 
         
             <li className="relative flex flex-col justify-between items-center shadow-lg hover:shadow-xl rounded-md overflow-hidden transition-shadow duration-150 m-[10px]"
-            style={{ backgroundColor: 'var(--background-cards)'}}
+            style={{ backgroundColor: 'var(--background-color5)'}}
             >
                 <Link className="contents" to={`/category/${listing.type}/${id}`}>
                   <div>
-                    <img className={`h-[170px] w-full object-cover hover:scale-110  transition-scale duration-200 ease-in`} loading="lazy" src={listing.imgUrls[0]} alt="listing" />
+                    <img className={`h-[170px] w-full object-cover  transition-scale duration-200 ease-in`} loading="lazy" src={listing.imgUrls[0]} alt="listing" />
                   </div>
                     <Moment className="absolute top-2 left-2 bg-[#3377cc] text-white uppercase text-xs font-semibold rounded-md px-2 py-1 shadow-lg" fromNow>{listing.timestamp?.toDate()}</Moment>
                     <div className={`w-full p-[10px]  border-b-[6px] ${borderLevelColor}`}>

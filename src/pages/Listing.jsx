@@ -70,9 +70,9 @@ const Listings = () => {
                     </div>
 
                     <div className=" text-xl absolute bottom-6 left-6">
-                        <p><span className="font-semibold pb-2 pt-4 inline-block">Author </span> {story.author}</p>
+                        <p><span className="font-semibold pb-2 pt-4 inline-block">Author </span><span className="capitalize"> {story.author}</span> </p>
                         <p className="capitalize"><span className="font-semibold pb-2 pt-2 inline-block"> </span>{story.dialect} dialect</p>
-                        <p><span className="font-semibold pb-2 pt-2 inline-block">Published by </span> {publisher.name}</p>
+                        <p><span className="font-semibold pb-2 pt-2 inline-block ">Published by </span> {publisher.name}</p>
                        <p>{publishedDate}</p>
                     </div>
                     

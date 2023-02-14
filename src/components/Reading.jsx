@@ -151,8 +151,8 @@ const Reader = ({ text, audioUrl, translation }) => {
   }
 
   return (
-    <div className="relative mt-10 flex flex-col items-center justify-center max-w-4xl mx-auto shadow-md ">
-      <div className='realtive w-full'>
+    <div className="relative mt-10 flex flex-col items-center justify-center max-w-4xl mx-auto shadow-md w-full h-full">
+      <div className='realtive w-full '>
         
         {!loading  && (
         <div className={`relative top-0 left-0 w-full  ${translationDisplay}  pt-5 pb-5 p-2 z-20 shadow-sm flex items-center justify-center rounded-tl-lg rounded-tr-lg`}
