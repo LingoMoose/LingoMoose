@@ -4,6 +4,7 @@ import { db } from '../Firebase';
 import { useState } from 'react';
 import { getDoc, doc } from 'firebase/firestore';
 import Reader from '../components/Reading';
+import Spinner from '../components/Spinner';
 
 const Read = () => {
     const { storyId } = useParams();
@@ -23,6 +24,10 @@ const Read = () => {
         fetchStory();
 
       }, [storyId]);
+
+    if(loading){
+      return <Spinner />
+    }
 
     return ( 
         <div className='min-h-[90vh] flex items-center justify-center'>

@@ -205,7 +205,7 @@ const Reader = ({ text, audioUrl, translation }) => {
                 </div>
             </button>
             <button
-            className="px-2 py-1 text-lg rounded-lg"
+            className="px-2 py-1 text-lg rounded-lg z-50"
             onClick={togglePlay}
             >
                 {isPlaying ? (

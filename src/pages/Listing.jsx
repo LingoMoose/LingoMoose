@@ -49,6 +49,9 @@ const Listings = () => {
         return <Spinner />;
       }
 
+      console.log(story);
+      console.log("story")
+
     return ( 
         <>
           

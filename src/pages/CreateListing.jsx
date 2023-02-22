@@ -79,7 +79,13 @@ const CreateListing = () => {
               return;
             }
           }
-        
+
+        // strictly 1 audio file
+        if(audio.length > 1){
+            setLoading(false);
+            toast.error("Maximum 1 audio file allowed")
+            return;
+        }
         
         let imgFileNames = [];
         

@@ -43,16 +43,9 @@ const EditListing = () => {
 
     const { listingId } = useParams();
 
-    const existingAudioFileNames = audioFileNames;
-    const existingImgFileNames = imgFileNames;
-
     console.log(formData);
-    console.log(existingAudioFileNames)
-    console.log(existingImgFileNames)
-    console.log("existing")
-
-    console.log(audio)
-    console.log(images)
+    console.log(audioFileNames)
+    console.log(imgFileNames)
 
 
     useEffect(() => {
@@ -112,173 +105,15 @@ const EditListing = () => {
             }))
         }
     }
+
     async function onSubmit(e){
         const auth = getAuth();
         e.preventDefault();
         setLoading(true);
 
-        console.log("images: "+images)
-        if(images !== undefined){
-        if(images.length > 6){
-            setLoading(false);
-            toast.error("Maximum 6 images are allowed")
-            return;
-        }
-
-        for (let i = 0; i < images.length; i++) {
-            if (images[i].size > 2000000) {
-              toast.error(
-                `${images.length > 1 ? "Each image" : "Image"} must not exceed 2MB`
-              );
-              return;
-            }
-          }
-        }
-        
-        
-        async function storeImage(image) {
-            return new Promise((resolve, reject) => {
-              const storage = getStorage();
-              const filename = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`;
-              imgFileNames.push(filename);
-              const storageRef = ref(storage, filename);
-              const uploadTask = uploadBytesResumable(storageRef, image);
-              uploadTask.on(
-                "state_changed",
-                (snapshot) => {
-                  // Observe state change events such as progress, pause, and resume
-                  // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-                  const progress =
-                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                  console.log("Upload is " + progress + "% done");
-                  switch (snapshot.state) {
-                    case "paused":
-                      console.log("Upload is paused");
-                      break;
-                    case "running":
-                      console.log("Upload is running");
-                      break;
-                    default:
-                  }
-                },
-                (error) => {
-                  // Handle unsuccessful uploads
-                  reject(error);
-                },
-                () => {
-                  // Handle successful uploads on complete
-                  // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-                  getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    resolve(downloadURL);
-                  });
-                }
-              );
-            });
-          }
-        
-          if(images !== undefined && images.length !== 0){
-            setFormData((prevState)=>({
-                ...prevState,
-                imgUrls: [],
-                imgFileNames: []
-            }))
-            console.log("inside updating images")
-
-            imgUrls = await Promise.all(
-            [...images].map((image) => storeImage(image))
-          ).catch((error) => {
-            setLoading(false);
-            toast.error("Images not uploaded");
-            console.log("error message: " + error);
-            return;
-          });
-        } 
-
-          async function storeAudio(audio) {
-            return new Promise((resolve, reject) => {
-              const storage = getStorage();
-              const filename = `${auth.currentUser.uid}-${audio.name}-${uuidv4()}`;
-              audioFileNames.push(filename);
-              const storageRef = ref(storage, filename);
-              const uploadTask = uploadBytesResumable(storageRef, audio);
-              uploadTask.on(
-                "state_changed",
-                (snapshot) => {
-                  // Observe state change events such as progress, pause, and resume
-                  // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-                  const progress =
-                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                  console.log("Upload is " + progress + "% done");
-                  switch (snapshot.state) {
-                    case "paused":
-                      console.log("Upload is paused");
-                      break;
-                    case "running":
-                      console.log("Upload is running");
-                      break;
-                    default:
-                  }
-                },
-                (error) => {
-                  // Handle unsuccessful uploads
-                  reject(error);
-                },
-                () => {
-                  // Handle successful uploads on complete
-                  // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-                  getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    resolve(downloadURL);
-                  });
-                }
-              );
-            });
-          }
-
-          if(audio !== undefined && audio.length !== 0){
-            
-            setFormData((prevState)=>({
-                ...prevState,
-                audioUrls: [],
-                audioFileNames: []
-            }))
-            
-            console.log("inside updating audio")
-            audioUrls = await Promise.all(
-                [...audio].map((audio) => storeAudio(audio))
-            ).catch((error) => {
-                setLoading(false);
-                toast.error("Audio not uploaded");
-                return;
-            });
-
-
-            
-          } 
-          
-
-
-          const formDataCopy = {
-            ...formData,
-            imgUrls,
-            audioUrls,
-            imgFileNames,
-            audioFileNames,
-            timestamp: serverTimestamp(),
-            userRef: auth.currentUser.uid,
-          };
-
-          console.log("formdataCopy");
-          console.log(formDataCopy);
-
-          delete formDataCopy.images;
-          delete formDataCopy.audio;
-
-          console.log(language)
-
-
-        function deleteExistingFiles(existingImgFileNames){
-            existingImgFileNames.forEach(fileName => {
-                // code to delete the file with the given file name
+        // used to delete existing audio and files if the user uploads new ones
+        function deleteExistingFiles(existingFiles){
+            existingFiles.forEach(fileName => {
 
                 // Create a reference to the file to delete
                 const desertRef = ref(storage, fileName);
@@ -293,15 +128,196 @@ const EditListing = () => {
               });
         }
 
+        
+        // only run this entire section IF there are new images
         if(images !== undefined){
-            deleteExistingFiles(existingImgFileNames); 
-        }
-        if(audio !== undefined){
-            deleteExistingFiles(existingAudioFileNames);  
+        if(images.length > 0){
+
+            // check for too many images
+            if(images.length > 6){
+                setLoading(false);
+                toast.error("Maximum 6 images are allowed")
+                return;
+            }
+            // check for too large of images
+            for(let i = 0; i < images.length; i++) {
+                if (images[i].size > 2000000) {
+                toast.error(
+                    `${images.length > 1 ? "Each image" : "Image"} must not exceed 2MB`
+                );
+                return;
+                }
+            }
+
+            // DELETE THE EXISTING FROM FIREBASE STORAGE
+            deleteExistingFiles(imgFileNames); 
+
+            // RESET 
+            setFormData((prevState)=>({
+                ...prevState,
+                imgUrls: [],
+                imgFileNames: []
+            }))
+       
+            // UPLOAD NEW IMAGES TO FIREBASE STORAGE
+            async function storeImage(image) {
+                return await new Promise((resolve, reject) => {
+                const storage = getStorage();
+                const filename = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`;
+                imgFileNames.push(filename);
+                const storageRef = ref(storage, filename);
+                const uploadTask = uploadBytesResumable(storageRef, image);
+                uploadTask.on(
+                    "state_changed",
+                    (snapshot) => {
+                    // Observe state change events such as progress, pause, and resume
+                    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                    const progress =
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log("Upload is " + progress + "% done");
+                    switch (snapshot.state) {
+                        case "paused":
+                        console.log("Upload is paused");
+                        break;
+                        case "running":
+                        console.log("Upload is running");
+                        break;
+                        default:
+                    }
+                    },
+                    (error) => {
+                    // Handle unsuccessful uploads
+                    reject(error);
+                    },
+                    () => {
+                    // Handle successful uploads on complete
+                    // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                        resolve(downloadURL);
+                    });
+                    }
+                );
+                });
+            }
+
+            // URLS OF THE NEW IMAGES
+            const tempImgUrls = await Promise.all(
+                [...images].map((image) => storeImage(image))
+            ).catch((error) => {
+                setLoading(false);
+                toast.error("Images not uploaded");
+                console.log("error message: " + error);
+                return;
+            });
+
+            setFormData((prevState)=>({
+                ...prevState,
+                imgUrls: [...tempImgUrls],
+                imgFileNames
+            }))
+
+            }
         }
 
-        
- const docRef = doc(db, language, listingId);
+
+        //only run this entire section IF there is new audio
+        if(audio !== undefined){
+            if(audio.length > 0){
+
+                // strictly 1 audio file
+                if(audio.length > 1){
+                    setLoading(false);
+                    toast.error("Maximum 1 audio file allowed")
+                    return;
+                }
+
+                // DELETE THE EXISTING FROM FIREBASE STORAGE
+                deleteExistingFiles(audioFileNames);  
+
+                setFormData((prevState)=>({
+                    ...prevState,
+                    audioUrls: [],
+                    audioFileNames: []
+                }))
+
+   
+            // UPLOAD NEW AUDIO TO FIREBASE STORAGE
+            async function storeAudio(audio) {
+                return new Promise((resolve, reject) => {
+                const storage = getStorage();
+                const filename = `${auth.currentUser.uid}-${audio.name}-${uuidv4()}`;
+                audioFileNames.push(filename);
+                const storageRef = ref(storage, filename);
+                const uploadTask = uploadBytesResumable(storageRef, audio);
+                uploadTask.on(
+                    "state_changed",
+                    (snapshot) => {
+                    // Observe state change events such as progress, pause, and resume
+                    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                    const progress =
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log("Upload is " + progress + "% done");
+                    switch (snapshot.state) {
+                        case "paused":
+                        console.log("Upload is paused");
+                        break;
+                        case "running":
+                        console.log("Upload is running");
+                        break;
+                        default:
+                    }
+                    },
+                    (error) => {
+                    // Handle unsuccessful uploads
+                    reject(error);
+                    },
+                    () => {
+                    // Handle successful uploads on complete
+                    // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                        resolve(downloadURL);
+                    });
+                    }
+                );
+                });
+            }
+ 
+            const tempAudioUrls = await Promise.all(
+                [...audio].map((audio) => storeAudio(audio))
+            ).catch((error) => {
+                setLoading(false);
+                toast.error("Audio not uploaded");
+                return;
+            });
+
+            setFormData((prevState)=>({
+                ...prevState,
+                audioUrls: [...tempAudioUrls],
+                audioFileNames
+            }))
+
+            }
+        }
+          
+        const formDataCopy = {
+        ...formData,
+        imgUrls,
+        audioUrls,
+        imgFileNames,
+        audioFileNames,
+        timestamp: serverTimestamp(),
+        userRef: auth.currentUser.uid,
+        };
+
+        console.log("formdataCopy");
+        console.log(formDataCopy);
+
+        delete formDataCopy.images;
+        delete formDataCopy.audio;
+
+        console.log(language)
+
+        const docRef = doc(db, language, listingId);
 
         await updateDoc(docRef, formDataCopy);
         setLoading(false);
