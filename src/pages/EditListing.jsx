@@ -153,7 +153,8 @@ const EditListing = () => {
             deleteExistingFiles(imgFileNames); 
 
             // RESET 
-            setFormData((prevState)=>({
+            
+            setFormData((prevState) => ({
                 ...prevState,
                 imgUrls: [],
                 imgFileNames: []
