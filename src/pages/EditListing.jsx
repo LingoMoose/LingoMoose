@@ -106,6 +106,14 @@ const EditListing = () => {
         }
     }
 
+
+    /*
+
+    I'M NOT SURE IF THIS ASYNC IS CAUSING ISSUES, i tried adding lots of awaits, didn't seem to make a difference
+
+
+    */
+
     async function onSubmit(e){
         const auth = getAuth();
         e.preventDefault();
@@ -153,19 +161,26 @@ const EditListing = () => {
             deleteExistingFiles(imgFileNames); 
 
             // RESET 
-            
             setFormData((prevState) => ({
                 ...prevState,
                 imgUrls: [],
                 imgFileNames: []
             }))
+
+            /*
+
+                I WOULD EXPECT THIS setFormData TO RESET THE STATE, BUT IT DOESN'T APPEAR TO BE WORKING
+
+            */
+
+            const tempImgFileNames = [];
        
             // UPLOAD NEW IMAGES TO FIREBASE STORAGE
             async function storeImage(image) {
                 return await new Promise((resolve, reject) => {
                 const storage = getStorage();
                 const filename = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`;
-                imgFileNames.push(filename);
+                tempImgFileNames.push(filename);
                 const storageRef = ref(storage, filename);
                 const uploadTask = uploadBytesResumable(storageRef, image);
                 uploadTask.on(
@@ -214,8 +229,17 @@ const EditListing = () => {
             setFormData((prevState)=>({
                 ...prevState,
                 imgUrls: [...tempImgUrls],
-                imgFileNames
+                imgFileNames: [...tempImgFileNames]
             }))
+
+            /*
+
+                I WOULD EXPECT THIS setFormData TO SET THE NEW STATE, BUT IT DOESN'T APPEAR TO BE WORKING
+
+
+            */
+
+
 
             }
         }
@@ -241,13 +265,21 @@ const EditListing = () => {
                     audioFileNames: []
                 }))
 
+                /*
+
+                I WOULD EXPECT THIS setFormData TO RESET THE STATE, BUT IT DOESN'T APPEAR TO BE WORKING
+
+
+                */
+            
+            const tempAudioFileNames = [];
    
             // UPLOAD NEW AUDIO TO FIREBASE STORAGE
             async function storeAudio(audio) {
                 return new Promise((resolve, reject) => {
                 const storage = getStorage();
                 const filename = `${auth.currentUser.uid}-${audio.name}-${uuidv4()}`;
-                audioFileNames.push(filename);
+                tempAudioFileNames.push(filename);
                 const storageRef = ref(storage, filename);
                 const uploadTask = uploadBytesResumable(storageRef, audio);
                 uploadTask.on(
@@ -294,8 +326,17 @@ const EditListing = () => {
             setFormData((prevState)=>({
                 ...prevState,
                 audioUrls: [...tempAudioUrls],
-                audioFileNames
+                audioFileNames: [...tempAudioFileNames]
             }))
+
+            /*
+
+                I WOULD EXPECT THIS  setFormData TO SET THE NEW STATE, BUT IT DOESN'T APPEAR TO BE WORKING
+
+
+
+            */
+
 
             }
         }
@@ -309,6 +350,26 @@ const EditListing = () => {
         timestamp: serverTimestamp(),
         userRef: auth.currentUser.uid,
         };
+
+        /*
+
+            IF EVERYTHING IS WORKING. I SHOULD BE ABLE TO REMOVE 
+
+            imgUrls,
+            audioUrls,
+            imgFileNames,
+            audioFileNames,
+
+            from formDataCopy
+
+            if you remove them, it gives the following errors.
+
+            Line 42:195:  'audioUrls' is assigned a value but never used  no-unused-vars
+            Line 42:206:  'imgUrls' is assigned a value but never used    no-unused-vars
+
+           I haven't been able to figure out the issue why.
+
+        */
 
         console.log("formdataCopy");
         console.log(formDataCopy);
