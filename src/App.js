@@ -5,11 +5,10 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import PrivateRoute from "./components/PrivateRoute";
 import Header from './components/Header';
-import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import CreateListing from "./pages/CreateListing";
-import EditListing from "./pages/EditListing";
 import Listing from "./pages/Listing";
 import Category from "./pages/Category";
 import Read from "./pages/Read";
@@ -23,71 +22,69 @@ import { useEffect } from "react";
 
 function App() {
 
-  useEffect(()=>{
-    if(!(document.body.className === "light-mode" || document.body.className === "light-dark")){
-        document.body.className = "light-mode";
-    }
-  }, [])
+    useEffect(() => {
+        if (!(document.body.className === "light-mode" || document.body.className === "light-dark")) {
+            document.body.className = "light-mode";
+        }
+    }, [])
 
-  
-  return (
-    <div>
-      <div className="min-h-screen min-w-full"
-      style={{ backgroundColor: 'var(--background-color)', color: 'var(--text-color)', borderColor: `var(--border-color)` }}>
-      
-      <Router>
-        <Header />
-        <Routes>
-          <Route path="/landing" element={<Landing/>} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy/>} />
-          <Route path="/faq" element={<FAQ/>} />
-          <Route path="/support-us" element={<SupportUs/>} />
-          <Route path="/sign-in" element={<SignIn/>} />
-          <Route path="/sign-up" element={<SignUp/>} />
-          <Route path="/forgot-password" element={<ForgotPassword/>} />
 
-          <Route path="/" element={<PrivateRoute />}>
-            <Route path="/" element={<Home/>} />
-          </Route>
-       
-          <Route path="/profile" element={<PrivateRoute />}>
-            <Route path="/profile" element={<Profile/>} />
-          </Route>
+    return (
+        <div>
+            <div
+                className="min-h-screen min-w-full"
+                style={{ backgroundColor: 'var(--background-color)', color: 'var(--text-color)', borderColor: `var(--border-color)` }}
+            >
+                <Router>
+                    <Header />
+                    <Routes>
+                        <Route path="/landing" element={<Landing />} />
+                        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                        <Route path="/faq" element={<FAQ />} />
+                        <Route path="/support-us" element={<SupportUs />} />
+                        <Route path="/sign-in" element={<SignIn />} />
+                        <Route path="/sign-up" element={<SignUp />} />
+                        <Route path="/forgot-password" element={<ForgotPassword />} />
+                        <Route path="/" element={<PrivateRoute />}>
+                            <Route path="/" element={<Home />} />
+                        </Route>
+                        <Route path="/profile" element={<PrivateRoute />}>
+                            <Route path="/profile" element={<Profile />} />
+                        </Route>
+                        <Route path="/category/" element={<PrivateRoute />}>
+                            <Route path="/category/:categoryName/:storyId" element={<Listing />} />
+                            <Route path="/category/:categoryName" element={<Category />} />
+                        </Route>
+                        <Route path="/create-listing" element={<PrivateRoute />}>
+                            <Route path="/create-listing" element={<CreateListing />} />
+                        </Route>
+                        <Route path="/edit-listing" element={<PrivateRoute />}>
+                            <Route path="/edit-listing/:listingId" element={<CreateListing />} />
+                        </Route>
+                        <Route path="/read" element={<PrivateRoute />}>
+                            <Route path="/read/:storyId" element={<Read />} />
+                        </Route>
+                        <Route path="/listen" element={<PrivateRoute />}>
+                            <Route path="/listen/:storyId" element={<Listen />} />
+                        </Route>
 
-          <Route path="/category/" element={<PrivateRoute />}>
-            <Route path="/category/:categoryName/:storyId" element={<Listing/>} />
-            <Route path="/category/:categoryName" element={<Category/>} />  
-          </Route>
-          <Route path="/create-listing" element={<PrivateRoute />}>
-            <Route path="/create-listing" element={<CreateListing/>} />
-          </Route>
-          <Route path="/edit-listing" element={<PrivateRoute />}>
-            <Route path="/edit-listing/:listingId" element={<EditListing/>} />
-          </Route>
-          <Route path="/read" element={<PrivateRoute />}>
-            <Route path="/read/:storyId" element={<Read/>} />
-          </Route>
-          <Route path="/listen" element={<PrivateRoute />}>
-            <Route path="/listen/:storyId" element={<Listen/>} />
-          </Route>    
-
-        </Routes>
-      </Router>
-      <ToastContainer
-          position="bottom-center"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="dark"
-      />
-      </div>
-    </div>
-  );
+                    </Routes>
+                </Router>
+                <ToastContainer
+                    position="bottom-center"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="dark"
+                />
+            </div>
+        </div>
+    );
 }
 
 export default App;
