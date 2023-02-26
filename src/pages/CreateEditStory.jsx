@@ -13,8 +13,8 @@ const style = {
     label: `text-lg mt-6 font-semibold`
 };
 
-const CreateListing = () => {
-    const { listingId } = useParams();
+const CreateStory = () => {
+    const { storyId } = useParams();
     const navigate = useNavigate();
     const auth = getAuth();
     const storage = getStorage();
@@ -40,7 +40,7 @@ const CreateListing = () => {
 
     const fetchListing = async () => {
         setLoading(true);
-        const docRef = doc(db, formData.language, listingId);
+        const docRef = doc(db, formData.language, storyId);
         const docSnap = await getDoc(docRef);
         setLoading(false);
 
@@ -75,11 +75,11 @@ const CreateListing = () => {
     };
 
     useEffect(() => {
-        if (listingId && auth.currentUser) {
+        if (storyId && auth.currentUser) {
             fetchListing();
         };
     // eslint-disable-next-line
-    }, [formData.language, listingId, navigate, auth.currentUser]);
+    }, [formData.language, storyId, navigate, auth.currentUser]);
 
     const onChange = (e) => {
         let boolean = null;
@@ -227,9 +227,9 @@ const CreateListing = () => {
         delete dbData.images;
         delete dbData.audio;
 
-        if (listingId) {
+        if (storyId) {
             // editing story
-            const docRef = doc(db, formData.language, listingId);
+            const docRef = doc(db, formData.language, storyId);
             await updateDoc(docRef, dbData);
         } else {
             // new story 
@@ -247,7 +247,7 @@ const CreateListing = () => {
 
     return (
         <main className="max-w-md md:max-w-3xl lg:max-w-6xl px-2 mx-auto">
-            <h1 className="text-3xl text-center mt-6 font-bold">{listingId ? 'Edit Story' : 'Create a Story'}</h1>
+            <h1 className="text-3xl text-center mt-6 font-bold">{storyId ? 'Edit Story' : 'Create a Story'}</h1>
             <form onSubmit={onSubmit}>
                 <p className={style.label}>Title</p>
                 <input type="text" value={formData.title} id="title" onChange={onChange} placeholder="Title of the story" maxLength="50" minLength="10" required
@@ -404,7 +404,7 @@ const CreateListing = () => {
                 </div>
                 <div className="mb-6">
                     <p className={`${style.label} mt-0`}>Images</p>
-                    {listingId && (
+                    {storyId && (
                         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                             <p>Any new uploads will replace existing images.</p>
                         </div>
@@ -412,20 +412,20 @@ const CreateListing = () => {
                     <p>The first image will be the cover (max 6)</p>
                     <input type="file" id="images" onChange={onChange} accept=".jpg,.png,.jpeg" multiple
                         // required only if there aren't already images uploaded
-                        required={!listingId}
+                        required={!storyId}
                         className="w-full px-3 py-1.5 text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-out focus:bg-white focus:border-slate-600"
                     />
                 </div>
                 <div className="mb-6">
                     <p className={`${style.label} mt-0`}>Audio</p>
-                    {listingId && (
+                    {storyId && (
                         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                             <p>Any new uploads will replace existing audio.</p>
                         </div>
                     )}
                     <p>Audio file should match the body section exactly (Vietnamese only)</p>
                     <input type="file" id="audio" onChange={onChange} accept=".mp3, .wav, .aac, .ogg"
-                        required={!listingId}
+                        required={!storyId}
                         className="w-full px-3 py-1.5 text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-out focus:bg-white focus:border-slate-600"
                     />
                 </div>
@@ -455,4 +455,4 @@ const CreateListing = () => {
     );
 }
 
-export default CreateListing;
+export default CreateStory;

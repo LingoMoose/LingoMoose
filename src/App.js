@@ -8,7 +8,7 @@ import Header from './components/Header';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-import CreateListing from "./pages/CreateListing";
+import CreateEditStory from "./pages/CreateEditStory";
 import Listing from "./pages/Listing";
 import Category from "./pages/Category";
 import Read from "./pages/Read";
@@ -56,10 +56,10 @@ function App() {
                             <Route path="/category/:categoryName" element={<Category />} />
                         </Route>
                         <Route path="/create-listing" element={<PrivateRoute />}>
-                            <Route path="/create-listing" element={<CreateListing />} />
+                            <Route path="/create-listing" element={<CreateEditStory />} />
                         </Route>
-                        <Route path="/edit-listing" element={<PrivateRoute />}>
-                            <Route path="/edit-listing/:listingId" element={<CreateListing />} />
+                        <Route path="/edit-story" element={<PrivateRoute />}>
+                            <Route path="/edit-story/:storyId" element={<CreateEditStory />} />
                         </Route>
                         <Route path="/read" element={<PrivateRoute />}>
                             <Route path="/read/:storyId" element={<Read />} />

@@ -1,4 +1,5 @@
 import { FaFacebook, FaInstagram, FaReddit, FaTwitter } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
     return ( 
@@ -15,13 +16,13 @@ const Footer = () => {
             <div className='relative flex text-center justify-center'>
                 <ul className="list-reset absolute left-0 text-left">
                     <li>
-                    <a className="text-white hover:text-gray-300 mr-4" href="/support-us">Support Us</a>
+                    <Link className="text-white hover:text-gray-300 mr-4" to="/support-us">Support Us</Link>
                     </li>
                     <li>
-                    <a className="text-white hover:text-gray-300 mr-4" href="/FAQ">FAQ</a>
+                    <Link className="text-white hover:text-gray-300 mr-4" to="/FAQ">FAQ</Link>
                     </li>
                     <li className='z-10'>
-                    <a className="text-white hover:text-gray-300" href="/privacy-policy">Privacy Policy</a>
+                    <Link className="text-white hover:text-gray-300" to="/privacy-policy">Privacy Policy</Link>
                     </li>
                 </ul>
                 <div className="flex justify-center items-center py-6">

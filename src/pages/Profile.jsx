@@ -82,7 +82,7 @@ const Profile = () => {
     }
 
     useEffect(() => {
-        async function fetchUserListings() {
+        async function fetchUserStories() {
           const listingRef = collection(db, "vietnamese");
           const q = query(
             listingRef,
@@ -100,21 +100,21 @@ const Profile = () => {
           setListings(listings);
           setLoading(false);
         }
-        fetchUserListings();
+        fetchUserStories();
       }, [auth.currentUser.uid]);
 
-      async function onDelete(listingID){
+      async function onDelete(storyID){
         if(window.confirm("Are you sure you want to DELETE?")){
-            await deleteDoc(doc(db, "vietnamese", listingID))
+            await deleteDoc(doc(db, "vietnamese", storyID))
             const updatedListings = listings.filter(
-                (listing) => listing.id !== listingID
+                (story) => story.id !== storyID
             );
             setListings(updatedListings);
-            toast.success("Successfully deleted the listing")
+            toast.success("Successfully deleted the story")
         }
       }
-      function onEdit(listingID){
-        navigate(`/edit-listing/${listingID}`)
+      function onEdit(storyID){
+        navigate(`/edit-story/${storyID}`)
       }
 
     return ( 
