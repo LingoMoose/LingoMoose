@@ -78,6 +78,7 @@ const CreateListing = () => {
         if (listingId && auth.currentUser) {
             fetchListing();
         };
+    // eslint-disable-next-line
     }, [formData.language, listingId, navigate, auth.currentUser]);
 
     const onChange = (e) => {
