@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 
 const StoryImage = ({level, title, image, storyId}) => {
 
-
     const [borderLevelColor, setBorderLevelColor] = useState("");
     const [textLevelColor, setTextLevelColor] = useState("");
     const [shadowLevelColor, setShadowLevelColor] = useState("");
@@ -80,12 +79,14 @@ const StoryImage = ({level, title, image, storyId}) => {
 
     return ( 
         <div className={`${borderLevelColor} border-b-[6px] relative w-full flex flex-col items-center justify-center`}>
-    
-            <img 
-                src={image} 
-                alt="" 
-                className={`w-full max-h-[400px] h-[400px] cover shadow-md ${shadowLevelColor}`}
-            />
+            <div className={`w-full h-400px max-h-[400px] shadow-md ${shadowLevelColor}`}>
+              <img 
+                  src={image} 
+                  alt={title} 
+                  className={`object-cover w-full h-full`}
+              />  
+            </div>
+            
             {!storyId && 
             <div className="absolute top-8 right-8 flex flex-col items-end" >
                 <div className="  mb-2 bg-white cursor-pointer rounded-full border-[2px] border-gray-400 w-12 h-12 flex justify-center items-center">
