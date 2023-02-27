@@ -54,6 +54,9 @@ const ListingItem = ({listing, id, onEdit, onDelete}) => {
         }
       }
 
+      console.log(listing)
+      console.log(listing.audioUrls)
+
     return ( 
         
             <li className="relative flex flex-col justify-between items-center shadow-lg hover:shadow-xl rounded-md overflow-hidden transition-shadow duration-150 m-[10px]"
@@ -88,7 +91,7 @@ const ListingItem = ({listing, id, onEdit, onDelete}) => {
                 </Link>
                 {onDelete && (
                     <FaTrash className="absolute bottom-2 right-2 h-[14px] cursor-pointer text-red-500"
-                        onClick={() => onDelete(listing.id)}
+                        onClick={() => onDelete(listing)}
                     />
                 )}
                 {onEdit && (
