@@ -1,5 +1,6 @@
 import { getAuth, updateProfile } from "firebase/auth";
 import { updateDoc, doc, collection, orderBy, query, where, getDocs, deleteDoc } from "firebase/firestore";
+import { getStorage, ref, deleteObject } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
@@ -14,6 +15,7 @@ import ListingItem from "../components/ListingItem";
 
 const Profile = () => {
     const auth = getAuth();
+    const storage = getStorage();
     const navigate = useNavigate();
     const [changeDetail, setChangeDetail] = useState(false);
     const [listings, setListings] = useState(null);
@@ -24,6 +26,7 @@ const Profile = () => {
     })
 
     const {name, email} = formData;
+    
 
     function onLogout(){
         auth.signOut();
@@ -82,7 +85,7 @@ const Profile = () => {
     }
 
     useEffect(() => {
-        async function fetchUserListings() {
+        async function fetchUserStories() {
           const listingRef = collection(db, "vietnamese");
           const q = query(
             listingRef,
@@ -100,21 +103,53 @@ const Profile = () => {
           setListings(listings);
           setLoading(false);
         }
-        fetchUserListings();
+        fetchUserStories();
       }, [auth.currentUser.uid]);
 
-      async function onDelete(listingID){
+
+      const deleteFiles = (files) => {
+        files.forEach(fileName => {
+            // Create a reference to the file to delete
+            const desertRef = ref(storage, fileName);
+
+            // Delete the file
+            deleteObject(desertRef).then(() => {
+                // File deleted successfully
+            }).catch((error) => {
+                console.error('Error deleting files', error);
+            });
+
+        });
+    };
+
+
+      async function onDelete(story){
+        const storyID = story.id
+        const imgUrls = story.data.imgUrls
+        const audioUrls = story.data.audioUrls
         if(window.confirm("Are you sure you want to DELETE?")){
-            await deleteDoc(doc(db, "vietnamese", listingID))
+            await deleteDoc(doc(db, "vietnamese", storyID))
             const updatedListings = listings.filter(
-                (listing) => listing.id !== listingID
+                (story) => story.id !== storyID
             );
+            // delete from firebase database
             setListings(updatedListings);
-            toast.success("Successfully deleted the listing")
+
+            // delete from firebase storage
+            deleteFiles(imgUrls)
+            deleteFiles(audioUrls)
+            
+            toast.success("Successfully deleted the story")
         }
+        console.log("delete")
+        console.log(storyID)
+        // console.log(images)
+        // console.log(audio)
+
       }
-      function onEdit(listingID){
-        navigate(`/edit-listing/${listingID}`)
+
+      function onEdit(storyID){
+        navigate(`/edit-story/${storyID}`)
       }
 
     return ( 
@@ -180,8 +215,8 @@ const Profile = () => {
                             key={listing.id}
                             id={listing.id}
                             listing={listing.data}
-                            onDelete={() => onDelete(listing.id)}
-                            onEdit={() => onEdit(listing.id)}
+                            onDelete={() => onDelete(listing)}
+                            onEdit={() => onEdit(listing.id )}
                             />
                         ))}
                         </ul>
