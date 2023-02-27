@@ -36,12 +36,15 @@ const Listen = () => {
               
           <div className='max-w-2xl flex flex-col justify-between p-6  rounded-lg shadow-md relative'
           style={{ backgroundColor: 'var(--background-color2)'}}>
-          <StoryImage 
-          level={story.level}
-          title={story.title}
-          image={story.imgUrls[0]}
-          storyId={storyId}
-          />
+     
+            <StoryImage 
+            level={story.level}
+            title={story.title}
+            image={story.imgUrls[0]}
+            storyId={storyId}
+            />  
+      
+          
        
             <AudioControls 
             audioUrl={story.audioUrls[0]} 
