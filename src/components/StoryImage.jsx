@@ -79,13 +79,12 @@ const StoryImage = ({level, title, image, storyId}) => {
 
     return ( 
         <div className={`${borderLevelColor} border-b-[6px] relative w-full flex flex-col items-center justify-center`}>
-            <div className={`w-full h-400px max-h-[400px] shadow-md ${shadowLevelColor}`}>
+          
               <img 
                   src={image} 
                   alt={title} 
-                  className={`object-cover w-full h-full`}
+                  className={`w-full h-400px max-h-[400px] shadow-md ${shadowLevelColor} object-cover w-full h-full`}
               />  
-            </div>
             
             {!storyId && 
             <div className="absolute top-8 right-8 flex flex-col items-end" >
