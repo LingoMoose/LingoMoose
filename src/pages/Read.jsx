@@ -10,7 +10,6 @@ const Read = () => {
     const { storyId } = useParams();
     const [story, setStory] = useState(null);
     const [loading, setLoading] = useState(true);
-
   
     useEffect(() => {
         async function fetchStory() {

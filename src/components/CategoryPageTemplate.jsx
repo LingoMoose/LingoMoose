@@ -1,7 +1,7 @@
 import { collection, limit, orderBy, query, where, getDocs, startAfter } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import ListingItem from "../components/ListingItem";
+import StoryItem from "../components/StoryItem";
 import Spinner from "../components/Spinner";
 import { db } from "../Firebase";
 
@@ -84,7 +84,7 @@ const CategoryPageTemplate = ({title, whereInfo, levels}) => {
                     <main>
                         <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
                             {listings.map((listing) => (
-                                <ListingItem 
+                                <StoryItem 
                                     key={listing.id}
                                     id={listing.id}
                                     listing={listing.data}

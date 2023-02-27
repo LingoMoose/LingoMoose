@@ -4,17 +4,17 @@ import { FaBookReader, FaTrash } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { useEffect, useState } from "react";
 
-const ListingItem = ({listing, id, onEdit, onDelete}) => {
+const StoryItem = ({story, id, onEdit, onDelete}) => {
 
     const [borderLevelColor, setBorderLevelColor] = useState("");
     const [textLevelColor, setTextLevelColor] = useState("");
 
     useEffect(()=>{
-        if(listing !== null){
-            setBorderLevelColor(getBorderLevelColor(listing.level));
-            setTextLevelColor(getTextColorLevel(listing.level))
+        if(story !== null){
+            setBorderLevelColor(getBorderLevelColor(story.level));
+            setTextLevelColor(getTextColorLevel(story.level))
           }
-      },[listing])
+      },[story])
 
       function getBorderLevelColor(level) {
         switch (level) {
@@ -54,31 +54,31 @@ const ListingItem = ({listing, id, onEdit, onDelete}) => {
         }
       }
 
-      console.log(listing)
-      console.log(listing.audioUrls)
+      console.log(story)
+      console.log(story.audioUrls)
 
     return ( 
         
             <li className="relative flex flex-col justify-between items-center shadow-lg hover:shadow-xl rounded-md overflow-hidden transition-shadow duration-150 m-[10px]"
             style={{ backgroundColor: 'var(--background-color5)'}}
             >
-                <Link className="contents" to={`/category/${listing.type}/${id}`}>
+                <Link className="contents" to={`/category/${story.type}/${id}`}>
                   <div>
-                    <img className={`h-[170px] w-full object-cover  transition-scale duration-200 ease-in`} loading="lazy" src={listing.imgUrls[0]} alt="listing" />
+                    <img className={`h-[170px] w-full object-cover  transition-scale duration-200 ease-in`} loading="lazy" src={story.imgUrls[0]} alt="story" />
                   </div>
-                    <Moment className="absolute top-2 left-2 bg-[#3377cc] text-white uppercase text-xs font-semibold rounded-md px-2 py-1 shadow-lg" fromNow>{listing.timestamp?.toDate()}</Moment>
+                    <Moment className="absolute top-2 left-2 bg-[#3377cc] text-white uppercase text-xs font-semibold rounded-md px-2 py-1 shadow-lg" fromNow>{story.timestamp?.toDate()}</Moment>
                     <div className={`w-full p-[10px]  border-b-[6px] ${borderLevelColor}`}>
                             <div className="flex items-center space-x-1">
-                                <p className="font-semibold text-sm mb-[2px] text-gray-600 truncate">{listing.address}</p> 
+                                <p className="font-semibold text-sm mb-[2px] text-gray-600 truncate">{story.address}</p> 
                             </div>
-                        <p className="font-semibold m-0 text-xl truncate text-[#457b9d] capitalize ">{listing.title}</p>
+                        <p className="font-semibold m-0 text-xl truncate text-[#457b9d] capitalize ">{story.title}</p>
                         <p className=" mt-1 font-semibold text-sm capitalize ">
-                            {listing.author}
+                            {story.author}
                         </p>
                         <div className="flex items-center mt-[10px] space-x-3">
                             <div className="w-full flex justify-between items-center space-x-1 pr-1">
                                 <p className={`font-bold text-xs ${textLevelColor} uppercase mb-[-10px]`}>
-                                    {listing.level === "upperintermediate" ? "upper intermediate" : listing.level}
+                                    {story.level === "upperintermediate" ? "upper intermediate" : story.level}
                                 </p>
                                 {!onDelete && (
                                   <FaBookReader className="h-4 w-4" />
@@ -91,12 +91,12 @@ const ListingItem = ({listing, id, onEdit, onDelete}) => {
                 </Link>
                 {onDelete && (
                     <FaTrash className="absolute bottom-2 right-2 h-[14px] cursor-pointer text-red-500"
-                        onClick={() => onDelete(listing)}
+                        onClick={() => onDelete(story)}
                     />
                 )}
                 {onEdit && (
                     <MdEdit className="absolute bottom-2 right-7 h-4 cursor-pointer"
-                        onClick={() => onEdit(listing.id)}
+                        onClick={() => onEdit(story.id)}
                     />
                 )}
                 
@@ -106,4 +106,4 @@ const ListingItem = ({listing, id, onEdit, onDelete}) => {
      );
 }
  
-export default ListingItem;
+export default StoryItem;

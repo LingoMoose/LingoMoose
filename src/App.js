@@ -9,7 +9,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import CreateEditStory from "./pages/CreateEditStory";
-import Listing from "./pages/Listing";
+import StoryPreview from "./pages/StoryPreview";
 import Category from "./pages/Category";
 import Read from "./pages/Read";
 import Landing from "./pages/Landing";
@@ -52,11 +52,11 @@ function App() {
                             <Route path="/profile" element={<Profile />} />
                         </Route>
                         <Route path="/category/" element={<PrivateRoute />}>
-                            <Route path="/category/:categoryName/:storyId" element={<Listing />} />
+                            <Route path="/category/:categoryName/:storyId" element={<StoryPreview />} />
                             <Route path="/category/:categoryName" element={<Category />} />
                         </Route>
-                        <Route path="/create-listing" element={<PrivateRoute />}>
-                            <Route path="/create-listing" element={<CreateEditStory />} />
+                        <Route path="/create-story" element={<PrivateRoute />}>
+                            <Route path="/create-story" element={<CreateEditStory />} />
                         </Route>
                         <Route path="/edit-story" element={<PrivateRoute />}>
                             <Route path="/edit-story/:storyId" element={<CreateEditStory />} />
