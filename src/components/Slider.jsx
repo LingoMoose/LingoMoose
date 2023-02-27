@@ -11,7 +11,7 @@ import { useNavigate } from "react-router";
 
 const Slider = () => {
 
-    const [listings, setListings] = useState(null);
+    const [stories, setStories] = useState(null);
     const [loading, setLoading] = useState(true);
 
     SwiperCore.use([Autoplay, Navigation, Pagination]);
@@ -19,21 +19,21 @@ const Slider = () => {
 
     useEffect(()=>{
 
-        async function fetchListings(){
-            const listingsRef = collection(db, "vietnamese");
-            const q = query(listingsRef, orderBy("timestamp", "desc"), limit(5));
+        async function fetchStories(){
+            const storiesRef = collection(db, "vietnamese");
+            const q = query(storiesRef, orderBy("timestamp", "desc"), limit(5));
             const querySnap = await getDocs(q);
-            let listings = [];
+            let stories = [];
             querySnap.forEach((doc)=>{
-                return listings.push({
+                return stories.push({
                     id: doc.id,
                     data: doc.data(),
                 })
             })
-            setListings(listings);
+            setStories(stories);
             setLoading(false);
         };
-        fetchListings();
+        fetchStories();
 
         },[])
 
@@ -41,13 +41,13 @@ const Slider = () => {
         if(loading){
             return <Spinner />;
         }
-        if(listings.length === 0){
+        if(stories.length === 0){
             return <div></div>;
         }
     
     
 
-    return ( listings &&
+    return ( stories &&
         <div>
             <Swiper
                 slidesPerView={1}
@@ -59,7 +59,7 @@ const Slider = () => {
                 className="mySwiper"
             >
 
-            {listings.map(({data, id})=>(
+            {stories.map(({data, id})=>(
                 <SwiperSlide key={id} onClick={() => navigate(`/category/${data.type}/${id}`)}>
                     <div className="w-full h-[300px] overflow-hidden cursor-pointer" 
                         style={{background: `url(${data.imgUrls[0]}) center, no-repeat`, backgroundSize: "cover"}}>

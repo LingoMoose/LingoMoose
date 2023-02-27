@@ -1,7 +1,7 @@
 import { collection, query, where, orderBy, getDocs, limit } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import ListingItem from "./ListingItem";
+import StoryItem from "./StoryItem";
 import { db } from "../Firebase";
 
 const PreviewSectionTemplate = ({whereInfo, caption, link, linkText, levels}) => {
@@ -10,16 +10,16 @@ const PreviewSectionTemplate = ({whereInfo, caption, link, linkText, levels}) =>
     let operand2 = whereInfo[2];
 
     
-    const [listings, setListings] = useState(null);
+    const [stories, setStories] = useState(null);
 
     useEffect(()=>{
-        async function fetchListings(){
+        async function fetchStories(){
             try {
                 // get reference
-                const listingsRef = collection(db, "vietnamese");
+                const storiesRef = collection(db, "vietnamese");
                 // create the query
                 const q = query(
-                  listingsRef,
+                  storiesRef,
                   where(operand1, condition, operand2),
                   where('level', "in", levels.length === 0? ["newbie","elementary","intermediate","upperintermediate", "advanced","master"] : levels), 
                   orderBy("timestamp", "desc"),
@@ -28,25 +28,25 @@ const PreviewSectionTemplate = ({whereInfo, caption, link, linkText, levels}) =>
                 );
                 // execute the query
                 const querySnap = await getDocs(q);
-                const listings = [];
+                const stories = [];
                 querySnap.forEach((doc) => {
-                  return listings.push({
+                  return stories.push({
                     id: doc.id,
                     data: doc.data(),
                   });
                 });
-                setListings(listings);
+                setStories(stories);
               } catch (error) {
                 console.log(error);
               }
             }
-            fetchListings();
+            fetchStories();
           }, [operand1, condition, operand2, levels]);
     
     
     return ( 
         <div>
-            {listings && listings.length > 0 && (
+            {stories && stories.length > 0 && (
                 <div className="m-2 mb-6 "
                 >
                     <h2 className="px-3 text-2xl mt-6 font-semibold">{caption}</h2>
@@ -54,11 +54,11 @@ const PreviewSectionTemplate = ({whereInfo, caption, link, linkText, levels}) =>
                         <p className="px-3 text-sm text-blue-600 hover:text-blue-800 transition duration-150 ease-in-out">Show more {linkText}</p>
                     </Link>
                     <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                        {listings.map((listing)=>(
-                            <ListingItem
-                                key={listing.id}
-                                listing={listing.data}
-                                id={listing.id}
+                        {stories.map((story)=>(
+                            <StoryItem
+                                key={story.id}
+                                story={story.data}
+                                id={story.id}
                             />
                         ))}
                     </ul>

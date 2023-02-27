@@ -38,34 +38,34 @@ const CreateStory = () => {
         dialect: "northern",
     });
 
-    const fetchListing = async () => {
+    const fetchStory = async () => {
         setLoading(true);
         const docRef = doc(db, formData.language, storyId);
         const docSnap = await getDoc(docRef);
         setLoading(false);
 
         if (docSnap.exists()) {
-            const listingData = docSnap.data();
-            if (listingData.userRef !== auth.currentUser.uid) {
-                toast.error("You are not authorized to edit this listing");
+            const storyData = docSnap.data();
+            if (storyData.userRef !== auth.currentUser.uid) {
+                toast.error("You are not authorized to edit this story");
                 navigate("/");
             } else {
                 setFormData({
-                    language: listingData.language,
-                    title: listingData.title,
-                    author: listingData.author,
-                    storySummary: listingData.storySummary,
-                    storyBody: listingData.storyBody,
-                    storyBodyTranslation: listingData.storyBodyTranslation,
-                    level: listingData.level,
-                    type: listingData.type,
-                    isSeries: listingData.isSeries,
-                    seriesTitle: listingData.seriesTitle,
-                    part: listingData.part,
-                    seriesSummary: listingData.seriesSummary,
-                    dialect: listingData.dialect,
-                    imgUrls: listingData.imgUrls,
-                    audioUrls: listingData.audioUrls,
+                    language: storyData.language,
+                    title: storyData.title,
+                    author: storyData.author,
+                    storySummary: storyData.storySummary,
+                    storyBody: storyData.storyBody,
+                    storyBodyTranslation: storyData.storyBodyTranslation,
+                    level: storyData.level,
+                    type: storyData.type,
+                    isSeries: storyData.isSeries,
+                    seriesTitle: storyData.seriesTitle,
+                    part: storyData.part,
+                    seriesSummary: storyData.seriesSummary,
+                    dialect: storyData.dialect,
+                    imgUrls: storyData.imgUrls,
+                    audioUrls: storyData.audioUrls,
                 });
             }
         } else {
@@ -76,7 +76,7 @@ const CreateStory = () => {
 
     useEffect(() => {
         if (storyId && auth.currentUser) {
-            fetchListing();
+            fetchStory();
         };
     // eslint-disable-next-line
     }, [formData.language, storyId, navigate, auth.currentUser]);
