@@ -10,13 +10,12 @@ const CategoryPageTemplate = ({title, whereInfo, levels}) => {
     let condition = whereInfo[1];
     let operand2 = whereInfo[2];
 
-
-    const [listings, setListings] = useState(null);
+    const [stories, setStories] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [lastFetchedListing, setLastFetchedListing] = useState(null);
+    const [lastFetchedStories, setLastFetchedStories] = useState(null);
 
     useEffect(()=>{
-        async function fetchListings(){
+        async function fetchStories(){
             try {
                 const listingRef = collection(db, "vietnamese");
                 const q = query(listingRef, 
@@ -26,15 +25,15 @@ const CategoryPageTemplate = ({title, whereInfo, levels}) => {
                     limit(8));
                 const querySnap = await getDocs(q);
                 const lastVisible = querySnap.docs[querySnap.docs.length -1];
-                setLastFetchedListing(lastVisible);
-                const listings = [];
+                setLastFetchedStories(lastVisible);
+                const stories = [];
                 querySnap.forEach((doc)=>{
-                    return listings.push({
+                    return stories.push({
                         id: doc.id,
                         data: doc.data(),
                     })
                 })
-                setListings(listings);
+                setStories(stories);
                 setLoading(false);
 
             } catch(error) {
@@ -43,29 +42,29 @@ const CategoryPageTemplate = ({title, whereInfo, levels}) => {
             }
         };
 
-        fetchListings();
+        fetchStories();
     },[operand1, condition, operand2, levels])
 
-    async function onFetchMoreListings(){
+    async function onFetchMoreStories(){
         try {
             const listingRef = collection(db, "vietnamese");
             const q = query(listingRef, 
                 where(operand1, condition, operand2),
                 where('level', "in", levels),
                 orderBy("timestamp", "desc"),
-                startAfter(lastFetchedListing),
+                startAfter(lastFetchedStories),
                 limit(4));
             const querySnap = await getDocs(q);
             const lastVisible = querySnap.docs[querySnap.docs.length -1];
-            setLastFetchedListing(lastVisible);
-            const listings = [];
+            setLastFetchedStories(lastVisible);
+            const stories = [];
             querySnap.forEach((doc)=>{
-                return listings.push({
+                return stories.push({
                     id: doc.id,
                     data: doc.data(),
                 })
             })
-            setListings((prevState) => [...prevState, ...listings]);
+            setStories((prevState) => [...prevState, ...stories]);
             setLoading(false);
 
         } catch(error) {
@@ -74,28 +73,29 @@ const CategoryPageTemplate = ({title, whereInfo, levels}) => {
         }
     }
 
+
     return ( 
         <div className="max-w-6xl mx-auto px-3">
             <h1 className="text-center text-3xl mt-6 mb-6 font-bold capitalize">{title === "everydaylife"? "Everyday Life" : title === 'funny'? "Funny Stories" : title }</h1>
             {loading ? (
                 <Spinner />
-            ) : (listings && listings.length) > 0 ? (
+            ) : (stories && stories.length) > 0 ? (
                 <div>
                     <main>
                         <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-                            {listings.map((listing) => (
+                            {stories.map((story) => (
                                 <StoryItem 
-                                    key={listing.id}
-                                    id={listing.id}
-                                    listing={listing.data}
+                                    key={story.id}
+                                    id={story.id}
+                                    story={story.data}
                                 />
                             ))}
                         </ul>
                     </main>
-                    {lastFetchedListing && (
+                    {lastFetchedStories && (
                         <div className="flex justify-center items-center">
                             <button 
-                                onClick={onFetchMoreListings}
+                                onClick={onFetchMoreStories}
                                 className="bg-white px-3 py-1.5 text-gray-700 border border-gray-300 mb-6 mt-6 hover:border-slate-600 transition rounded duration-150 ease-in-out"
                             >Load more</button>
                         </div>

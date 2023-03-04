@@ -59,6 +59,7 @@ const StoryItem = ({story, id, onEdit, onDelete}) => {
             <li className="relative flex flex-col justify-between items-center shadow-lg hover:shadow-xl rounded-md overflow-hidden transition-shadow duration-150 m-[10px]"
               style={{ backgroundColor: 'var(--background-color5)'}}
             >
+                {story && (
                 <Link className="contents" to={`/category/${story.type}/${id}`}>
                   <div className="w-full h-[170px] max-h-[170px] px-6 mt-2">
                     <img className={`h-full w-full object-cover`} loading="lazy" src={story.imgUrls[0]} alt="story" />
@@ -83,9 +84,10 @@ const StoryItem = ({story, id, onEdit, onDelete}) => {
                             </div>
                         </div>
                     </div>
-                    
-                    
+                  
                 </Link>
+                )}
+
                 {onDelete && (
                     <FaTrash className="absolute bottom-2 right-2 h-[14px] cursor-pointer text-red-500"
                         onClick={() => onDelete(story)}
