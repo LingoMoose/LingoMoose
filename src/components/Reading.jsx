@@ -79,8 +79,8 @@ const Reader = ({ text, audioUrl, translation }) => {
   },[fontSize])
 
   const handleSentenceClick = (sentence) => {
-    const sentenceIndex = text.split(/(?<=[.?!])/).indexOf(sentence);
-    const selectedSentenceTranslation = translation.split(/(?<=[.?!])/)[sentenceIndex];
+    const sentenceIndex = text.split(/[.?!]/).indexOf(sentence);
+    const selectedSentenceTranslation = translation.split(/[.?!]/)[sentenceIndex];
     setSelectedTranslation(selectedSentenceTranslation);
   };
 
@@ -171,7 +171,7 @@ const Reader = ({ text, audioUrl, translation }) => {
         <div className='p-4 px-6 shadow-sm z-10'
         style={{ backgroundColor: 'var(--background-color4)'}}
         >
-        {text.split(/(?<=[.?!])/).map((sentence, index) => (
+        {text.split(/[.?!]/).map((sentence, index) => (
             <p 
                 key={index}
                 className={`inline  leading-loose cursor-pointer hover:rounded-lg ${hoverEffect}
