@@ -79,8 +79,8 @@ const Reader = ({ text, audioUrl, translation }) => {
   },[fontSize])
 
   const handleSentenceClick = (sentence) => {
-    const sentenceIndex = text.split(/(?<=[.!?])\s/g).indexOf(sentence);
-    const selectedSentenceTranslation = translation.split(/(?<=[.!?])\s/g)[sentenceIndex];
+    const sentenceIndex = text.split(/(?<=[.?!]['"’”]?)(?=(?:\s*(?:[A-ZĐ]|I(?=\s+[A-Z]))|[“"‘'‘“”'”'’]))(\s+|$)(?:(?<=["'‘“])|(?<!["'‘“]))(?!["'‘“])/).indexOf(sentence);
+    const selectedSentenceTranslation = translation.split(/(?<=[.?!]['"’”]?)(?=(?:\s*(?:[A-ZĐ]|I(?=\s+[A-Z]))|[“"‘'‘“”'”'’]))(\s+|$)(?:(?<=["'‘“])|(?<!["'‘“]))(?!["'‘“])/)[sentenceIndex];
     setSelectedTranslation(selectedSentenceTranslation);
   };
 
@@ -171,10 +171,10 @@ const Reader = ({ text, audioUrl, translation }) => {
         <div className='p-4 px-6 shadow-sm z-10'
         style={{ backgroundColor: 'var(--background-color4)'}}
         >
-        {text.split(/(?<=[.!?])\s/g).map((sentence, index) => (
+        {text.split(/(?<=[.?!]['"’”]?)(?=(?:\s*(?:[A-ZĐ]|I(?=\s+[A-Z]))|[“"‘'‘“”'”'’]))(\s+|$)(?:(?<=["'‘“])|(?<!["'‘“]))(?!["'‘“])/).map((sentence, index) => (
             <p 
                 key={index}
-                className={`inline mr-1 leading-loose cursor-pointer hover:rounded-lg ${hoverEffect}
+                className={`inline mr-[2px] leading-loose cursor-pointer hover:rounded-lg ${hoverEffect}
                 ${fontFamily} ${displaySize}   pt-2 pb-2`}
                 onClick={() => handleSentenceClick(sentence)}
 
