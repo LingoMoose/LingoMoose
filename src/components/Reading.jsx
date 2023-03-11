@@ -155,13 +155,13 @@ const Reader = ({ text, audioUrl, translation }) => {
       <div className='realtive w-full '>
         
         {!loading  && (
-        <div className={`relative top-0 left-0 w-full  ${translationDisplay}  pt-5 pb-5 p-2 z-20 shadow-sm flex items-center justify-center rounded-tl-lg rounded-tr-lg`}
+        <div className={`relative top-0 left-0 w-full  ${translationDisplay}  pt-5 p-2 z-20 shadow-sm flex items-center justify-center rounded-tl-lg rounded-tr-lg`}
         style={{ backgroundColor: 'var(--background-color4)'}}>
             <p className='absolute top-2 right-4 text-[10px] cursor-pointer z-10' onClick={toggleVisible}>{isVisible? "Hide" : "Show"}</p>
              
             <p className={`absolute top-2 left-4 text-[10px] ${isVisible? "" : "hidden"}`}>Sentence meaning</p>
             <div className={`flex justify-center cursor-pointer ${isVisible? "" : "hidden"}`} onClick={toggleTranslation}>
-            <div className={`${fontFamily} ${displaySize} text-center justify-center cursor-pointer`}>{selectedTranslation ? selectedTranslation : "click sentence to translate"}</div>
+            <div className={`${fontFamily} ${displaySize} text-center justify-center cursor-pointer my-4 mx-16`}>{selectedTranslation ? selectedTranslation : "click sentence to translate"}</div>
             
             </div>
 
