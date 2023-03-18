@@ -7,11 +7,8 @@ import { db } from "../../firebase";
 import { UseAuthStatus } from "../../hooks/UseAuthStatus";
 import { getAuth } from "firebase/auth";
 
-const CategoryPageTemplate = ({title, whereInfo, levels, hideStudied}) => {
-    
-    let operand1 = whereInfo[0];
-    let condition = whereInfo[1];
-    let operand2 = whereInfo[2];
+const SearchResults = ({param, levels, hideStudied}) => {
+
 
     const [userSelections, setUserSelections] = useState(null);
     const [stories, setStories] = useState(null);
@@ -21,12 +18,15 @@ const CategoryPageTemplate = ({title, whereInfo, levels, hideStudied}) => {
     const { loggedIn } = UseAuthStatus();
     const auth = getAuth();
 
+    console.log(stories)
+    console.log("hello")
+
     useEffect(()=>{
-        if (loggedIn) {
+        if (loggedIn && param) {
             fetchSelectionList();
         } 
         // eslint-disable-next-line
-    },[loggedIn])
+    },[loggedIn, param])
 
     useEffect(()=>{
         async function fetchStories(){
@@ -35,11 +35,14 @@ const CategoryPageTemplate = ({title, whereInfo, levels, hideStudied}) => {
                 const listingRef = collection(db, "vietnamese");
 
                 // create the query
-                const q = query(listingRef, 
-                where(operand1, condition, operand2),
-                where('level', "in", levels.length === 0? ["newbie","elementary","intermediate","upperintermediate", "advanced","master"] : levels ), 
-                orderBy("timestamp", "desc"), 
-                limit(8));
+                const q = query(listingRef,
+                    orderBy('title'), 
+                    where('title', '>=', param),
+                    where('title', '<=', param + '\uf8ff'),
+                    orderBy('timestamp', 'desc'),
+                    where('level', 'in', levels.length === 0 ? ["newbie", "elementary", "intermediate", "upperintermediate", "advanced", "master"] : levels),
+                    limit(8)
+                  );
       
 
                 // execute the query
@@ -78,7 +81,7 @@ const CategoryPageTemplate = ({title, whereInfo, levels, hideStudied}) => {
         };
 
         fetchStories();
-    },[operand1, condition, operand2, levels, hideStudied, userSelections])
+    },[ levels, hideStudied, userSelections, param])
 
     async function fetchSelectionList() {
         const docRef = doc(db, "vietnameseUserSelections", auth.currentUser.uid);
@@ -105,8 +108,6 @@ const CategoryPageTemplate = ({title, whereInfo, levels, hideStudied}) => {
         try {
             const listingRef = collection(db, "vietnamese");
             const q = query(listingRef, 
-                where(operand1, condition, operand2),
-                where('level', "in", levels),
                 orderBy("timestamp", "desc"),
                 startAfter(lastFetchedStories),
                 limit(4));
@@ -132,7 +133,7 @@ const CategoryPageTemplate = ({title, whereInfo, levels, hideStudied}) => {
 
     return ( 
         <div className="max-w-6xl mx-auto px-3">
-            <h1 className="text-center text-3xl mt-6 mb-6 font-bold capitalize">{title === "everydaylife"? "Everyday Life" : title === 'funny'? "Funny Stories" : title }</h1>
+            <h1 className="text-center text-3xl mt-6 mb-6 font-bold capitalize">{param}</h1>
             {loading ? (
                 <Spinner />
             ) : (stories && stories.length) > 0 ? (
@@ -158,10 +159,10 @@ const CategoryPageTemplate = ({title, whereInfo, levels, hideStudied}) => {
                     )}
                 </div>
             ) : (
-                <p> No {title.toLowerCase() === "everydaylife" ? "everyday life" : title ==="funny"? "funny stories" : title.toLowerCase()}</p>
+                <p> no results</p>
             )}
         </div>
      );
 }
  
-export default CategoryPageTemplate;
+export default SearchResults;

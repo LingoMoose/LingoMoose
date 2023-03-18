@@ -27,7 +27,6 @@ const Profile = () => {
 
     const {name, email} = formData;
     
-
     function onLogout(){
         auth.signOut();
         navigate('/landing');
@@ -77,7 +76,6 @@ const Profile = () => {
         }
     }
 
-
     const style = {
         email: `w-full mb-6 px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-in-out`,
         edit: `text-red-600 pr-3 hover:text-red-700 transition ease-in-out duration-200 cursor-pointer ml-1`,
@@ -121,7 +119,6 @@ const Profile = () => {
 
         });
     };
-
 
       async function onDelete(story){
         const storyID = story.id

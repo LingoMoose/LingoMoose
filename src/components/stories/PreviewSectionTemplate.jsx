@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import StoryItem from "./StoryItem";
 import { db } from "../../firebase";
 import { getAuth } from "firebase/auth";
+import { UseAuthStatus } from "../../hooks/UseAuthStatus";
 
 const PreviewSectionTemplate = ({whereInfo, caption, link, linkText, levels, hideStudied}) => {
     let operand1 = whereInfo[0];
@@ -11,19 +12,17 @@ const PreviewSectionTemplate = ({whereInfo, caption, link, linkText, levels, hid
     let operand2 = whereInfo[2];
     const [userSelections, setUserSelections] = useState(null);
     const [stories, setStories] = useState(null);
+  
 
     const auth = getAuth();
-
-    console.log(userSelections)
-    console.log(stories)
+    const { LoggedIn } = UseAuthStatus;
 
     useEffect(()=>{
-        const user = auth.currentUser;
-        if (user !== null) {
+        if (LoggedIn) {
             fetchSelectionList();
         } 
         // eslint-disable-next-line
-    },[auth.currentUser])
+    },[LoggedIn])
 
     useEffect(()=>{
         async function fetchStories(){
