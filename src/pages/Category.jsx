@@ -15,11 +15,11 @@ const Category = () => {
     const [master, setMaster] = useState(false);
     const [hideStudied, setHideStudied] = useState(false);
     const [isHidden, setIsHidden] = useState(true);
-    const [searchBar, setSearchBar] = useState('');
+    const [searchValue, setSearchValue] = useState('');
     const [checked, setChecked] = useState([]);
 
     function onChange(e){
-      setSearchBar(e.target.value);
+      setSearchValue(e.target.value);
     }
 
     const handleToggle = () => {
@@ -63,7 +63,7 @@ const Category = () => {
               <input
               type="text"
               className="form-text w-full p-1 m-1 pr-3 ml-2 md:ml-10 pl-2 rounded-md"
-              value={searchBar}
+              value={searchValue}
               onChange={onChange}
               placeholder="Search for lesson..."
               />
@@ -153,6 +153,8 @@ const Category = () => {
                 title={name}
                 whereInfo={["type", "==", name]}
                 levels={checked}
+                hideStudied={hideStudied}
+                searchValue={searchValue}
             />
         </div>
      );

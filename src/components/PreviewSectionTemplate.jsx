@@ -1,22 +1,36 @@
-import { collection, query, where, orderBy, getDocs, limit } from "firebase/firestore";
+import { collection, query, where, orderBy, getDocs, limit, doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import StoryItem from "./StoryItem";
 import { db } from "../Firebase";
+import { getAuth } from "firebase/auth";
 
-const PreviewSectionTemplate = ({whereInfo, caption, link, linkText, levels}) => {
+const PreviewSectionTemplate = ({whereInfo, caption, link, linkText, levels, hideStudied, searchValue}) => {
     let operand1 = whereInfo[0];
     let condition = whereInfo[1];
     let operand2 = whereInfo[2];
-
-    
+    const [userSelections, setUserSelections] = useState(null);
     const [stories, setStories] = useState(null);
+
+    const auth = getAuth();
+
+    console.log(userSelections)
+    console.log(stories)
+
+    useEffect(()=>{
+        const user = auth.currentUser;
+        if (user !== null) {
+            fetchSelectionList();
+        } 
+        // eslint-disable-next-line
+    },[auth.currentUser])
 
     useEffect(()=>{
         async function fetchStories(){
             try {
                 // get reference
                 const storiesRef = collection(db, "vietnamese");
+
                 // create the query
                 const q = query(
                   storiesRef,
@@ -29,19 +43,61 @@ const PreviewSectionTemplate = ({whereInfo, caption, link, linkText, levels}) =>
                 // execute the query
                 const querySnap = await getDocs(q);
                 const stories = [];
+
+                // filter out stories based on the user's selections
                 querySnap.forEach((doc) => {
-                  return stories.push({
-                    id: doc.id,
-                    data: doc.data(),
-                  });
+                  const storyId = doc.id;
+                  const storyData = doc.data();
+                  const title = storyData.title;
+                  
+                  if(userSelections && hideStudied && userSelections.studied.includes(storyId)) {
+                      return;
+                  }
+                  
+                  if(userSelections && false && userSelections.favorites.length > 0) {
+                      if(!userSelections.favorites.includes(storyId)) {
+                          return;
+                      }
+                  }
+                  
+                  if (title.toLowerCase().includes(searchValue.toLowerCase())) {
+                    stories.push({
+                      id: doc.id,
+                      data: storyData,
+                    });
+                  }
+
+
                 });
+      
                 setStories(stories);
               } catch (error) {
                 console.log(error);
               }
             }
+            
             fetchStories();
-          }, [operand1, condition, operand2, levels]);
+          }, [operand1, condition, operand2, levels, userSelections, hideStudied, searchValue]);
+
+
+          async function fetchSelectionList() {
+            const docRef = doc(db, "vietnameseUserSelections", auth.currentUser.uid);
+            const docSnap = await getDoc(docRef);
+          
+            if (docSnap.exists()) {
+              const selectionListData = docSnap.data();
+              setUserSelections({
+                favorites: selectionListData.hasOwnProperty("favorites") ? selectionListData["favorites"] : [],
+                studied: selectionListData.hasOwnProperty("studied") ? selectionListData["studied"] : [],
+              });
+
+            } else {
+              setUserSelections({
+                favorites: [],
+                studied: [],
+              });
+            }
+          };
     
     
     return ( 

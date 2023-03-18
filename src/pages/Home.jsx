@@ -14,11 +14,11 @@ const Home = () => {
     const [master, setMaster] = useState(false);
     const [hideStudied, setHideStudied] = useState(false);
     const [isHidden, setIsHidden] = useState(true);
-    const [searchBar, setSearchBar] = useState('');
+    const [searchValue, setSearchValue] = useState('');
     const [checked, setChecked] = useState([]);
 
     function onChange(e){
-      setSearchBar(e.target.value);
+      setSearchValue(e.target.value);
     }
 
     const handleToggle = () => {
@@ -66,7 +66,7 @@ const Home = () => {
                         <input
                         type="text"
                         className="form-text w-full p-1 m-1 pr-3 ml-2 md:ml-10 pl-2 rounded-md"
-                        value={searchBar}
+                        value={searchValue}
                         onChange={onChange}
                         placeholder="Search for lesson..."
                         />
@@ -159,6 +159,8 @@ const Home = () => {
                  link={"category/everydaylife"}
                  linkText={"everyday life"}
                  levels={checked}
+                 hideStudied={hideStudied}
+                 searchValue={searchValue}
                 />
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "business"]}
@@ -166,6 +168,8 @@ const Home = () => {
                  link={"category/business"}
                  linkText={"business"}
                  levels={checked}
+                 hideStudied={hideStudied}
+                 searchValue={searchValue}
                 />
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "funny"]}
@@ -173,6 +177,8 @@ const Home = () => {
                  link={"category/funny"}
                  linkText={"funny stories"}
                  levels={checked}
+                 hideStudied={hideStudied}
+                 searchValue={searchValue}
                 />
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "history"]}
@@ -180,6 +186,8 @@ const Home = () => {
                  link={"category/history"}
                  linkText={"history"}
                  levels={checked}
+                 hideStudied={hideStudied}
+                 searchValue={searchValue}
                 />
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "culture"]}
@@ -187,6 +195,8 @@ const Home = () => {
                  link={"category/culture"}
                  linkText={"culture"}
                  levels={checked}
+                 hideStudied={hideStudied}
+                 searchValue={searchValue}
                 />
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "currentevents"]}
@@ -194,6 +204,8 @@ const Home = () => {
                  link={"category/currentevents"}
                  linkText={"current events"}
                  levels={checked}
+                 hideStudied={hideStudied}
+                 searchValue={searchValue}
                 />
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "food"]}
@@ -201,6 +213,8 @@ const Home = () => {
                  link={"category/food"}
                  linkText={"food"}
                  levels={checked}
+                 hideStudied={hideStudied}
+                 searchValue={searchValue}
                 />
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "dialogue"]}
@@ -208,6 +222,8 @@ const Home = () => {
                  link={"category/dialogue"}
                  linkText={"dialogue"}
                  levels={checked}
+                 hideStudied={hideStudied}
+                 searchValue={searchValue}
                 />
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "language"]}
@@ -215,6 +231,8 @@ const Home = () => {
                  link={"category/language"}
                  linkText={"language"}
                  levels={checked}
+                 hideStudied={hideStudied}
+                 searchValue={searchValue}
                 />
             </div>
         </div>

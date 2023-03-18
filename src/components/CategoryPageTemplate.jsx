@@ -1,38 +1,79 @@
-import { collection, limit, orderBy, query, where, getDocs, startAfter } from "firebase/firestore";
+import { collection, limit, orderBy, query, where, getDocs, startAfter, getDoc, doc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import StoryItem from "../components/StoryItem";
 import Spinner from "../components/Spinner";
 import { db } from "../Firebase";
+import { getAuth } from "firebase/auth";
 
-const CategoryPageTemplate = ({title, whereInfo, levels}) => {
+const CategoryPageTemplate = ({title, whereInfo, levels, hideStudied, searchValue}) => {
     let operand1 = whereInfo[0];
     let condition = whereInfo[1];
     let operand2 = whereInfo[2];
 
+    const [userSelections, setUserSelections] = useState(null);
     const [stories, setStories] = useState(null);
     const [loading, setLoading] = useState(true);
     const [lastFetchedStories, setLastFetchedStories] = useState(null);
 
+    const auth = getAuth();
+
+    useEffect(()=>{
+        const user = auth.currentUser;
+        if (user !== null) {
+            fetchSelectionList();
+        } 
+        // eslint-disable-next-line
+    },[auth.currentUser])
+
+    console.log(userSelections)
+    console.log(stories)
+
     useEffect(()=>{
         async function fetchStories(){
             try {
+                // get reference
                 const listingRef = collection(db, "vietnamese");
+
+                // create the query
                 const q = query(listingRef, 
                     where(operand1, condition, operand2),
                     where('level', "in", levels.length === 0? ["newbie","elementary","intermediate","upperintermediate", "advanced","master"] : levels ), 
                     orderBy("timestamp", "desc"), 
                     limit(8));
+
+                // execute the query
                 const querySnap = await getDocs(q);
+
                 const lastVisible = querySnap.docs[querySnap.docs.length -1];
                 setLastFetchedStories(lastVisible);
                 const stories = [];
-                querySnap.forEach((doc)=>{
-                    return stories.push({
+
+                // filter out stories based on the user's selections
+                querySnap.forEach((doc) => {
+                    const storyId = doc.id;
+                    const storyData = doc.data();
+                    const title = storyData.title;
+                    
+                    if(userSelections && hideStudied && userSelections.studied.includes(storyId)) {
+                        return;
+                    }
+                    
+                    if(userSelections && false && userSelections.favorites.length > 0) {
+                        if(!userSelections.favorites.includes(storyId)) {
+                            return;
+                        }
+                    }
+                    
+                    if (title.toLowerCase().includes(searchValue.toLowerCase())) {
+                      stories.push({
                         id: doc.id,
-                        data: doc.data(),
-                    })
-                })
+                        data: storyData,
+                      });
+                    }
+  
+  
+                  });
                 setStories(stories);
                 setLoading(false);
 
@@ -43,7 +84,28 @@ const CategoryPageTemplate = ({title, whereInfo, levels}) => {
         };
 
         fetchStories();
-    },[operand1, condition, operand2, levels])
+    },[operand1, condition, operand2, levels, searchValue, hideStudied, userSelections])
+
+    async function fetchSelectionList() {
+        const docRef = doc(db, "vietnameseUserSelections", auth.currentUser.uid);
+        const docSnap = await getDoc(docRef);
+      
+        if (docSnap.exists()) {
+          const selectionListData = docSnap.data();
+          setUserSelections({
+            favorites: selectionListData.hasOwnProperty("favorites") ? selectionListData["favorites"] : [],
+            studied: selectionListData.hasOwnProperty("studied") ? selectionListData["studied"] : [],
+          });
+
+        } else {
+          setUserSelections({
+            favorites: [],
+            studied: [],
+          });
+        }
+      };
+
+
 
     async function onFetchMoreStories(){
         try {
@@ -82,7 +144,7 @@ const CategoryPageTemplate = ({title, whereInfo, levels}) => {
             ) : (stories && stories.length) > 0 ? (
                 <div>
                     <main>
-                        <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+                        <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
                             {stories.map((story) => (
                                 <StoryItem 
                                     key={story.id}
