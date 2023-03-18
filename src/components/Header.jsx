@@ -12,7 +12,7 @@ const Header = () => {
     useEffect(()=>{
         onAuthStateChanged(auth, user => {
             if(user){
-                setPageState(["Profile", "Lessons"]);
+                setPageState(["Profile", "Stories"]);
                 setUser(user);
             } else {
                 setPageState(["Sign in", "Home"]); 

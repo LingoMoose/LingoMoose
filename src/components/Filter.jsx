@@ -3,42 +3,35 @@ import { useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
 import { MdExpandLess, MdExpandMore } from "react-icons/md";
 
-const Filter = () => {
-    const [newbie, setNewbie] = useState(false);
-    const [elementary, setElementary] = useState(false);
-    const [intermediate, setIntermediate] = useState(false);
-    const [upperIntermediate, setUpperIntermediate] = useState(false);
-    const [advanced, setAdvanced] = useState(false);
-    const [master, setMaster] = useState(false);
-    const [hideStudied, setHideStudied] = useState(false);
+const Filter = ({hideStudied, setHideStudied, levels, setLevels, searchValue, setSearchValue, setChecked }) => {
     const [isHidden, setIsHidden] = useState(true);
-    const [searchBar, setSearchBar] = useState('');
-    const [checked, setChecked] = useState([]);
-
-    function onChange(e){
-      setSearchBar(e.target.value);
-    }
 
     const handleToggle = () => {
       setIsHidden(!isHidden);
     };
 
-  useEffect(()=>{
-      let array = []; 
-      if(newbie) array.push("newbie");
-      if(elementary) array.push("elementary");
-      if(intermediate) array.push("intermediate");
-      if(upperIntermediate) array.push("upperIntermediate");
-      if(advanced) array.push("advanced");
-      if(master) array.push("master");
-      setChecked(array);
-  },[newbie, elementary, intermediate, upperIntermediate, advanced, master])
+    function onChange(e){
+        setSearchValue(e.target.value);
+      }
 
-
+    useEffect(()=>{
+        let array = []; 
+        if(levels.newbie) array.push("newbie");
+        if(levels.elementary) array.push("elementary");
+        if(levels.intermediate) array.push("intermediate");
+        if(levels.upperIntermediate) array.push("upperintermediate");
+        if(levels.advanced) array.push("advanced");
+        if(levels.master) array.push("master");
+        if(array.length === 0){
+        array = ["newbie","elementary","intermediate","upperintermediate", "advanced","master"];
+        }
+        setChecked(array);
+        // eslint-disable-next-line
+    },[levels])
 
   return (
     <div className="mt-16">
-      {checked}
+ 
       <div className="relative">
       <div className={`grid grid-rows-2 grid-cols-1 md:grid-rows-1 md:grid-cols-3 md:gap-0 xl:grid-cols-6 md:max-w-2xl xl:max-w-6xl mx-auto`}>
           <label className="flex w-full border-0 items-center md:border-[2px]  pl-6 md:pl-2 pt-[2px] pb-[2px] col-start-1 xl:col-start-4 md:border-b-0  sm:rounded-tl-xl" 
@@ -58,7 +51,7 @@ const Filter = () => {
               <input
               type="text"
               className="form-text w-full p-1 m-1 pr-3 ml-2 md:ml-10 pl-2 rounded-md"
-              value={searchBar}
+              value={searchValue}
               onChange={onChange}
               placeholder="Search for lesson..."
               />
@@ -91,8 +84,8 @@ const Filter = () => {
           <input
               type="checkbox"
               className="form-checkbox"
-              checked={newbie}
-              onChange={() => setNewbie(!newbie)}
+              checked={levels.newbie}
+              onChange={(e) => setLevels({ ...levels, newbie: e.target.checked })}
           />
           <span className="ml-2">Newbie</span>
           </label>
@@ -100,8 +93,8 @@ const Filter = () => {
           <input
               type="checkbox"
               className="form-checkbox"
-              checked={elementary}
-              onChange={() => setElementary(!elementary)}
+              checked={levels.elementary}
+              onChange={(e) => setLevels({ ...levels, elementary: e.target.checked })}
           />
           <span className="ml-2">Elementary</span>
           </label>
@@ -109,8 +102,8 @@ const Filter = () => {
           <input
               type="checkbox"
               className="form-checkbox"
-              checked={intermediate}
-              onChange={() => setIntermediate(!intermediate)}
+              checked={levels.intermediate}
+              onChange={(e) => setLevels({ ...levels, intermediate: e.target.checked })}
           />
           <span className="ml-2">Intermediate</span>
           </label>
@@ -118,8 +111,8 @@ const Filter = () => {
           <input
               type="checkbox"
               className="form-checkbox"
-              checked={upperIntermediate}
-              onChange={() => setUpperIntermediate(!upperIntermediate)}
+              checked={levels.upperIntermediate}
+              onChange={(e) => setLevels({ ...levels, upperIntermediate: e.target.checked })}
           />
           <span className="ml-2">Upper Intermediate</span>
           </label>
@@ -127,8 +120,8 @@ const Filter = () => {
           <input
               type="checkbox"
               className="form-checkbox"
-              checked={advanced}
-              onChange={() => setAdvanced(!advanced)}
+              checked={levels.advanced}
+              onChange={(e) => setLevels({ ...levels, advanced: e.target.checked })}
           />
           <span className="ml-2">Advanced</span>
           </label>
@@ -136,8 +129,8 @@ const Filter = () => {
           <input
               type="checkbox"
               className="form-checkbox"
-              checked={master}
-              onChange={() => setMaster(!master)}
+              checked={levels.master}
+              onChange={(e) => setLevels({ ...levels, master: e.target.checked })}
           />
           <span className="ml-2 ">Master</span>
           </label>

@@ -1,4 +1,4 @@
-import Home from "./pages/Home";
+import Stories from "./pages/Stories";
 import ForgotPassword from "./pages/ForgotPassword";
 import Profile from "./pages/Profile";
 import SignIn from "./pages/SignIn";
@@ -46,7 +46,7 @@ function App() {
                         <Route path="/sign-up" element={<SignUp />} />
                         <Route path="/forgot-password" element={<ForgotPassword />} />
                         <Route path="/" element={<PrivateRoute />}>
-                            <Route path="/" element={<Home />} />
+                            <Route path="/" element={<Stories />} />
                         </Route>
                         <Route path="/profile" element={<PrivateRoute />}>
                             <Route path="/profile" element={<Profile />} />
