@@ -77,10 +77,8 @@ const Listings = () => {
                     
                     <MarkStory 
                       storyId={storyId} 
-                      className="mb-40 sm:mb-0 text-xl sm:absolute bottom-6 left-6"
                     />
-
-
+                    
                     <div className="mb-40 sm:mb-0 text-xl sm:absolute bottom-6 left-6">
                         <p><span className="font-semibold pb-2 pt-4 inline-block">Author </span><span className="capitalize"> {story.author}</span> </p>
                         <p className="capitalize"><span className="font-semibold pb-2 pt-2 inline-block"> </span>{story.dialect} dialect</p>
