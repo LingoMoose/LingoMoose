@@ -1,7 +1,7 @@
 import React from "react";
-import Footer from "../components/Footer";
-import data from '../data/FAQ';
-import SingleQuestion from '../components/FAQs';
+import Footer from "../../components/Footer";
+import data from '../../data/FAQ';
+import SingleQuestion from '../../components/static/FAQs';
 
 const FAQ = () => {
   return (

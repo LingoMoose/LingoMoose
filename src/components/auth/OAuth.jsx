@@ -2,7 +2,7 @@ import {FcGoogle} from 'react-icons/fc';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { toast } from 'react-toastify';
-import { db } from '../Firebase';
+import { db } from '../../firebase';
 import { useNavigate } from "react-router-dom";
 
 function OAuth() {

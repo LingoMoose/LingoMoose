@@ -1,9 +1,9 @@
 import { collection, limit, orderBy, query, where, getDocs, startAfter, getDoc, doc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import StoryItem from "../components/StoryItem";
-import Spinner from "../components/Spinner";
-import { db } from "../Firebase";
+import StoryItem from "./StoryItem";
+import Spinner from "../ui/Spinner";
+import { db } from "../../firebase";
 import { getAuth } from "firebase/auth";
 
 const CategoryPageTemplate = ({title, whereInfo, levels, hideStudied, searchValue}) => {

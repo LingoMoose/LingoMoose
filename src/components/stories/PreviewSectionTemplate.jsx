@@ -2,10 +2,10 @@ import { collection, query, where, orderBy, getDocs, limit, doc, getDoc } from "
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import StoryItem from "./StoryItem";
-import { db } from "../Firebase";
+import { db } from "../../firebase";
 import { getAuth } from "firebase/auth";
 
-const PreviewSectionTemplate = ({whereInfo, caption, link, linkText, levels, hideStudied, searchValue}) => {
+const PreviewSectionTemplate = ({whereInfo, caption, link, linkText, levels, hideStudied}) => {
     let operand1 = whereInfo[0];
     let condition = whereInfo[1];
     let operand2 = whereInfo[2];
@@ -48,7 +48,6 @@ const PreviewSectionTemplate = ({whereInfo, caption, link, linkText, levels, hid
                 querySnap.forEach((doc) => {
                   const storyId = doc.id;
                   const storyData = doc.data();
-                  const title = storyData.title;
                   
                   if(userSelections && hideStudied && userSelections.studied.includes(storyId)) {
                       return;
@@ -59,13 +58,12 @@ const PreviewSectionTemplate = ({whereInfo, caption, link, linkText, levels, hid
                           return;
                       }
                   }
-                  
-                  if (title.toLowerCase().includes(searchValue.toLowerCase())) {
+
                     stories.push({
                       id: doc.id,
                       data: storyData,
                     });
-                  }
+  
 
 
                 });
@@ -77,7 +75,7 @@ const PreviewSectionTemplate = ({whereInfo, caption, link, linkText, levels, hid
             }
             
             fetchStories();
-          }, [operand1, condition, operand2, levels, userSelections, hideStudied, searchValue]);
+          }, [operand1, condition, operand2, levels, userSelections, hideStudied]);
 
 
           async function fetchSelectionList() {

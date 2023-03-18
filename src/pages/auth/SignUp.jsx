@@ -2,9 +2,9 @@ import { useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai"
 import { GiPerspectiveDiceSixFacesRandom } from "react-icons/gi"
 import { Link } from "react-router-dom";
-import OAuth from "../components/OAuth";
+import OAuth from "../../components/auth/OAuth";
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { db } from '../Firebase'
+import { db } from '../../firebase'
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";

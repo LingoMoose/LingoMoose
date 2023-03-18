@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import Spinner from "../components/Spinner";
+import Spinner from "../../components/ui/Spinner";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 import { uuidv4 } from "@firebase/util";
 import { doc, getDoc, addDoc, collection, serverTimestamp, updateDoc } from "firebase/firestore";
-import { db } from "../Firebase";
+import { db } from "../../firebase";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 

@@ -4,7 +4,7 @@ import { AiOutlineUndo } from 'react-icons/ai';
 import { FaPlay, FaPause} from 'react-icons/fa';
 import { HiOutlineRefresh } from 'react-icons/hi';
 import { BiMenu } from 'react-icons/bi';
-import DarkModeToggle from './DarkModeToggle';
+import DarkModeToggle from '../DarkModeToggle';
 
 const Reader = ({ text, audioUrl, translation }) => {
 

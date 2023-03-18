@@ -5,12 +5,12 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { generateUsername } from 'username-generator';
-import { db } from "../Firebase";
+import { db } from "../firebase";
 import { ShakeLittle } from "reshake";
 import { GiPerspectiveDiceSixFacesRandom } from "react-icons/gi";
 import { GiBookmarklet } from 'react-icons/gi';
 import { Link } from "react-router-dom";
-import StoryItem from "../components/StoryItem";
+import StoryItem from "../components/stories/StoryItem";
 
 
 const Profile = () => {

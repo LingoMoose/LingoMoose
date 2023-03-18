@@ -1,23 +1,24 @@
-import Stories from "./pages/Stories";
-import ForgotPassword from "./pages/ForgotPassword";
+import Stories from "./pages/stories/Stories";
+import ForgotPassword from "./pages/auth/ForgotPassword";
 import Profile from "./pages/Profile";
-import SignIn from "./pages/SignIn";
-import SignUp from "./pages/SignUp";
-import PrivateRoute from "./components/PrivateRoute";
+import SignIn from "./pages/auth/SignIn";
+import SignUp from "./pages/auth/SignUp";
+import PrivateRoute from "./components/auth/PrivateRoute";
 import Header from './components/Header';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-import CreateEditStory from "./pages/CreateEditStory";
-import StoryPreview from "./pages/StoryPreview";
-import Category from "./pages/Category";
-import Read from "./pages/Read";
-import Landing from "./pages/Landing";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import FAQ from "./pages/FAQ";
-import SupportUs from "./pages/SupportUs";
-import Listen from "./pages/Listen";
+import CreateEditStory from "./pages/stories/CreateEditStory";
+import StoryPreview from "./pages/stories/StoryPreview";
+import Category from "./pages/stories/Category";
+import Read from "./pages/stories/Read";
+import Landing from "./pages/static/Landing";
+import PrivacyPolicy from "./pages/static/PrivacyPolicy";
+import FAQ from "./pages/static/FAQ";
+import SupportUs from "./pages/static/SupportUs";
+import Listen from "./pages/stories/Listen";
 import { useEffect } from "react";
+import Search from "./pages/stories/Search";
 
 
 function App() {
@@ -47,6 +48,9 @@ function App() {
                         <Route path="/forgot-password" element={<ForgotPassword />} />
                         <Route path="/" element={<PrivateRoute />}>
                             <Route path="/" element={<Stories />} />
+                        </Route>
+                        <Route path="/search" element={<PrivateRoute />}>
+                            <Route path="/search/:searchValue" element={<Search />} />
                         </Route>
                         <Route path="/profile" element={<PrivateRoute />}>
                             <Route path="/profile" element={<Profile />} />

@@ -1,7 +1,7 @@
 import { useParams } from "react-router";
-import CategoryPageTemplate from "../components/CategoryPageTemplate";
+import CategoryPageTemplate from "../../components/stories/CategoryPageTemplate";
 import { useState } from "react";
-import Filter from "../components/Filter";
+import Filter from "../../components/stories/Filter";
 
 const Category = () => {
     const params = useParams();

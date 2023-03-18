@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaPaypal, FaPatreon } from "react-icons/fa";
-import Footer from '../components/Footer';
+import Footer from '../../components/Footer';
 
 const SupportUs = () => {
 

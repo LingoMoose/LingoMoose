@@ -1,11 +1,11 @@
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import { db } from '../Firebase';
+import { db } from '../../firebase';
 import { useState } from 'react';
 import { getDoc, doc } from 'firebase/firestore';
-import AudioControls from '../components/AudioControls';
-import StoryImage from '../components/StoryImage';
-import Spinner from '../components/Spinner';
+import AudioControls from '../../components/stories/AudioControls';
+import StoryImage from '../../components/stories/StoryImage';
+import Spinner from '../../components/ui/Spinner';
 
 const Listen = () => {
     const { storyId } = useParams();

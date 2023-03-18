@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
 import { MdExpandLess, MdExpandMore } from "react-icons/md";
+import { useNavigate } from "react-router";
 
-const Filter = ({hideStudied, setHideStudied, levels, setLevels, searchValue, setSearchValue, setChecked }) => {
+const Filter = ({hideStudied, setHideStudied, levels, setLevels, setChecked }) => {
     const [isHidden, setIsHidden] = useState(true);
+    const [searchValue, setSearchValue] = useState('');
 
     const handleToggle = () => {
       setIsHidden(!isHidden);
@@ -28,6 +30,14 @@ const Filter = ({hideStudied, setHideStudied, levels, setLevels, searchValue, se
         setChecked(array);
         // eslint-disable-next-line
     },[levels])
+        const navigate = useNavigate();
+
+    function search(e){
+        e.preventDefault();
+        if(searchValue !== ""){
+            navigate(`/search/${searchValue}`)    
+        }
+    }
 
   return (
     <div className="mt-16">
@@ -45,18 +55,24 @@ const Filter = ({hideStudied, setHideStudied, levels, setLevels, searchValue, se
               />
               <span className="ml-2">Hide studied</span>
           </label>
-          <label className="md:border-l-0 relative flex items-center border-l-0 border-t sm:border-[2px] sm:border-b-0 pr-2 pl-2 pt-[2px] pb-[2px] col-span-2 w-full border-b-0 sm:rounded-tr-xl"
-          style={{ backgroundColor: 'var(--background-color5)'}}
+          <form 
+            className="md:border-l-0 relative flex items-center border-l-0 border-t sm:border-[2px] sm:border-b-0 pr-2 pl-2 pt-[2px] pb-[2px] col-span-2 w-full border-b-0 sm:rounded-tr-xl"
+            style={{ backgroundColor: 'var(--background-color5)'}}
+            onSubmit={search}
           >
               <input
-              type="text"
-              className="form-text w-full p-1 m-1 pr-3 ml-2 md:ml-10 pl-2 rounded-md"
-              value={searchValue}
-              onChange={onChange}
-              placeholder="Search for lesson..."
+                type="text"
+                className="form-text w-full p-1 m-1 pr-3 ml-2 md:ml-10 pl-2 rounded-md"
+                value={searchValue}
+                onChange={onChange}
+                placeholder="Search for lesson..."
               />
-              <FaSearch className="absolute right-5 cursor-pointer top-[15px] text-black"/>
-          </label>
+              <button type="submit">
+                <FaSearch className="absolute right-5 cursor-pointer top-[15px] text-black"/>
+              </button> 
+         
+              
+          </form>
       </div>
       <button
           className="block w-full md:hidden bg-white border border-gray-300 p-2 focus:outline-none focus:bg-gray-200"

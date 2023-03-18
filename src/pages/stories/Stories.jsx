@@ -1,8 +1,8 @@
 
-import PreviewSectionTemplate from "../components/PreviewSectionTemplate";
-import Slider from "../components/Slider";
+import PreviewSectionTemplate from "../../components/stories/PreviewSectionTemplate";
+import Slider from "../../components/ui/Slider";
 import { useState } from "react";
-import Filter from "../components/Filter";
+import Filter from "../../components/stories/Filter";
 
 const Stories = () => {
     const [levels, setLevels] = useState({
@@ -43,7 +43,6 @@ const Stories = () => {
                  linkText={"everyday life"}
                  levels={checked}
                  hideStudied={hideStudied}
-                 searchValue={searchValue}
                 />
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "business"]}
@@ -52,7 +51,6 @@ const Stories = () => {
                  linkText={"business"}
                  levels={checked}
                  hideStudied={hideStudied}
-                 searchValue={searchValue}
                 />
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "funny"]}
@@ -61,7 +59,6 @@ const Stories = () => {
                  linkText={"funny stories"}
                  levels={checked}
                  hideStudied={hideStudied}
-                 searchValue={searchValue}
                 />
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "history"]}
@@ -70,7 +67,6 @@ const Stories = () => {
                  linkText={"history"}
                  levels={checked}
                  hideStudied={hideStudied}
-                 searchValue={searchValue}
                 />
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "culture"]}
@@ -79,7 +75,6 @@ const Stories = () => {
                  linkText={"culture"}
                  levels={checked}
                  hideStudied={hideStudied}
-                 searchValue={searchValue}
                 />
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "currentevents"]}
@@ -88,7 +83,6 @@ const Stories = () => {
                  linkText={"current events"}
                  levels={checked}
                  hideStudied={hideStudied}
-                 searchValue={searchValue}
                 />
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "food"]}
@@ -97,7 +91,6 @@ const Stories = () => {
                  linkText={"food"}
                  levels={checked}
                  hideStudied={hideStudied}
-                 searchValue={searchValue}
                 />
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "dialogue"]}
@@ -106,7 +99,6 @@ const Stories = () => {
                  linkText={"dialogue"}
                  levels={checked}
                  hideStudied={hideStudied}
-                 searchValue={searchValue}
                 />
                 <PreviewSectionTemplate
                  whereInfo={["type", "==", "language"]}
@@ -115,7 +107,6 @@ const Stories = () => {
                  linkText={"language"}
                  levels={checked}
                  hideStudied={hideStudied}
-                 searchValue={searchValue}
                 />
             </div>
         </div>
