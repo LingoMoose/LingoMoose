@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import StoryItem from "./StoryItem";
 import { db } from "../../firebase";
 import { getAuth } from "firebase/auth";
-import { UseAuthStatus } from "../../hooks/UseAuthStatus";
 
 const PreviewSectionTemplate = ({whereInfo, caption, link, linkText, levels, hideStudied}) => {
     let operand1 = whereInfo[0];
@@ -13,16 +12,14 @@ const PreviewSectionTemplate = ({whereInfo, caption, link, linkText, levels, hid
     const [userSelections, setUserSelections] = useState(null);
     const [stories, setStories] = useState(null);
   
-
     const auth = getAuth();
-    const { LoggedIn } = UseAuthStatus;
 
     useEffect(()=>{
-        if (LoggedIn) {
-            fetchSelectionList();
-        } 
+      if(auth.uid){
+        fetchSelectionList();
+      }
         // eslint-disable-next-line
-    },[LoggedIn])
+    },[auth.uid])
 
     useEffect(()=>{
         async function fetchStories(){
@@ -45,29 +42,27 @@ const PreviewSectionTemplate = ({whereInfo, caption, link, linkText, levels, hid
 
                 // filter out stories based on the user's selections
                 querySnap.forEach((doc) => {
-                  const storyId = doc.id;
-                  const storyData = doc.data();
-                  
-                  if(userSelections && hideStudied && userSelections.studied.includes(storyId)) {
-                      return;
-                  }
-                  
-                  if(userSelections && false && userSelections.favorites.length > 0) {
-                      if(!userSelections.favorites.includes(storyId)) {
-                          return;
-                      }
-                  }
-
-                    stories.push({
-                      id: doc.id,
-                      data: storyData,
-                    });
-  
-
-
+                    const storyId = doc.id;
+                
+                    console.log(storyId)
+                    console.log(userSelections)
+                    if(userSelections && hideStudied && userSelections.studied.includes(storyId)) {
+                        return;
+                    }
+                    
+                    if(userSelections && false && userSelections.favorites.length > 0) {
+                        if(!userSelections.favorites.includes(storyId)) {
+                            return;
+                        }
+                    }
+                
+                    const storyData = doc.data();
+                    const story = { id: storyId, data: storyData };
+                    stories.push(story);
                 });
-      
+                
                 setStories(stories);
+
               } catch (error) {
                 console.log(error);
               }
