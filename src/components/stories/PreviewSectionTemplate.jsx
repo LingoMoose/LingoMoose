@@ -15,11 +15,14 @@ const PreviewSectionTemplate = ({whereInfo, caption, link, linkText, levels, hid
     const auth = getAuth();
 
     useEffect(()=>{
-      if(auth.uid){
-        fetchSelectionList();
-      }
-        // eslint-disable-next-line
-    },[auth.uid])
+      const user = auth.currentUser;
+      if (user !== null) {
+      // The user's ID, unique to the Firebase project.
+          fetchSelectionList();
+      } 
+      // eslint-disable-next-line
+  },[auth.currentUser])
+
 
     useEffect(()=>{
         async function fetchStories(){

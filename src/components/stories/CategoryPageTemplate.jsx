@@ -4,7 +4,6 @@ import { toast } from "react-toastify";
 import StoryItem from "./StoryItem";
 import Spinner from "../ui/Spinner";
 import { db } from "../../firebase";
-import { UseAuthStatus } from "../../hooks/UseAuthStatus";
 import { getAuth } from "firebase/auth";
 
 const CategoryPageTemplate = ({title, whereInfo, levels, hideStudied}) => {
@@ -18,15 +17,16 @@ const CategoryPageTemplate = ({title, whereInfo, levels, hideStudied}) => {
     const [loading, setLoading] = useState(true);
     const [lastFetchedStories, setLastFetchedStories] = useState(null);
 
-    const { loggedIn } = UseAuthStatus();
     const auth = getAuth();
 
     useEffect(()=>{
-        if (loggedIn) {
+        const user = auth.currentUser;
+        if (user !== null) {
+        // The user's ID, unique to the Firebase project.
             fetchSelectionList();
         } 
         // eslint-disable-next-line
-    },[loggedIn])
+    },[auth.currentUser])
 
     useEffect(()=>{
         async function fetchStories(){
@@ -76,7 +76,7 @@ const CategoryPageTemplate = ({title, whereInfo, levels, hideStudied}) => {
                 console.log(error);
             }
         };
-
+        console.log(userSelections)
         fetchStories();
     },[operand1, condition, operand2, levels, hideStudied, userSelections])
 
