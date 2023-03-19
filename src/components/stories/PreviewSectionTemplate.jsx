@@ -2,7 +2,7 @@ import { collection, query, where, orderBy, getDocs, limit, doc, getDoc } from "
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import StoryItem from "./StoryItem";
-import { db } from "../../ffirebase";
+import { db } from "../../firebase";
 import { getAuth } from "firebase/auth";
 
 const PreviewSectionTemplate = ({whereInfo, caption, link, linkText, levels, hideStudied}) => {

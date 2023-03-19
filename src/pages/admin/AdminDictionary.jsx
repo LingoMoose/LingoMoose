@@ -4,7 +4,7 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } f
 import { getAuth } from "firebase/auth";
 import { uuidv4 } from "@firebase/util";
 import { doc, getDoc, addDoc, serverTimestamp, updateDoc } from "firebase/firestore";
-import { db } from "../../ffirebase";
+import { db } from "../../firebase";
 
 const style = {
     label: `text-lg mt-6 font-semibold`
