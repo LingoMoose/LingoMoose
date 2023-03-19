@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import { db } from '../../Firebase';
+import { db } from '../../ffirebase';
 import { useState } from 'react';
 import { getDoc, doc } from 'firebase/firestore';
 import Reader from '../../components/stories/Reading';

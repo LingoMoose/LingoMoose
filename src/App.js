@@ -19,6 +19,7 @@ import SupportUs from "./pages/static/SupportUs";
 import Listen from "./pages/stories/Listen";
 import { useEffect } from "react";
 import Search from "./pages/stories/Search";
+import AdminDictionary from "./pages/admin/AdminDictionary";
 
 
 function App() {
@@ -70,6 +71,9 @@ function App() {
                         </Route>
                         <Route path="/listen" element={<PrivateRoute />}>
                             <Route path="/listen/:storyId" element={<Listen />} />
+                        </Route>
+                        <Route path="/admin" element={<PrivateRoute />}>
+                            <Route path="/admin/dictionary" element={<AdminDictionary />} />   
                         </Route>
 
                     </Routes>

@@ -2,7 +2,7 @@ import { doc, getDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Spinner from "../../components/ui/Spinner";
-import { db } from "../../Firebase";
+import { db } from "../../ffirebase";
 import dateFormat from "dateformat";
 import { FaHeadphones } from "react-icons/fa";
 import { HiBookOpen } from "react-icons/hi"

@@ -5,7 +5,7 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } f
 import { getAuth } from "firebase/auth";
 import { uuidv4 } from "@firebase/util";
 import { doc, getDoc, addDoc, collection, serverTimestamp, updateDoc } from "firebase/firestore";
-import { db } from "../../Firebase";
+import { db } from "../../ffirebase";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 
@@ -119,7 +119,10 @@ const CreateStory = () => {
     };
 
     const storeFile = async (file) => new Promise((resolve, reject) => {
-        const filename = `${auth.currentUser.uid}-${uuidv4()}-${file.name}`;
+        const languageStr = formData.language;
+        const capitalizedLanguageStr = languageStr.charAt(0).toUpperCase() + languageStr.slice(1);
+        let folderPath = `${capitalizedLanguageStr}/Stories/${formData.title}`;
+        const filename = `${folderPath}/${auth.currentUser.uid}-${uuidv4()}-${file.name}`;
         const storageRef = ref(storage, filename);
         const uploadTask = uploadBytesResumable(storageRef, file);
 
@@ -231,6 +234,7 @@ const CreateStory = () => {
             // editing story
             const docRef = doc(db, formData.language, storyId);
             await updateDoc(docRef, dbData);
+            navigate(`/category/${dbData.type}/${docRef.id}`);
         } else {
             // new story 
             const docRef = await addDoc(collection(db, formData.language), dbData);

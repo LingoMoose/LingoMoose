@@ -3,7 +3,7 @@ import { HiOutlineStar, HiStar } from "react-icons/hi";
 import { useEffect, useState } from "react";
 import { getAuth } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "../../Firebase";
+import { db } from "../../ffirebase";
 
 const MarkStory = ({storyId}) => {
     const [studied, setStudied] = useState(false);
