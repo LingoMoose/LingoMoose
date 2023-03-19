@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import StoryItem from "./StoryItem";
 import Spinner from "../ui/Spinner";
-import { db } from "../../firebase";
+import { db } from "../../Firebase";
 import { getAuth } from "firebase/auth";
 
 const CategoryPageTemplate = ({title, whereInfo, levels, hideStudied}) => {

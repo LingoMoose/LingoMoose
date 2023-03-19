@@ -1,7 +1,7 @@
 import { collection, getDocs, query, orderBy, limit } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import Spinner from "./Spinner";
-import { db } from "../../firebase";
+import { db } from "../../Firebase";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Autoplay, EffectFade, Navigation, Pagination } from "swiper";
 import "swiper/css";

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { generateUsername } from 'username-generator';
-import { db } from "../firebase";
+import { db } from "../Firebase";
 import { ShakeLittle } from "reshake";
 import { GiPerspectiveDiceSixFacesRandom } from "react-icons/gi";
 import { GiBookmarklet } from 'react-icons/gi';

@@ -5,7 +5,7 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } f
 import { getAuth } from "firebase/auth";
 import { uuidv4 } from "@firebase/util";
 import { doc, getDoc, addDoc, collection, serverTimestamp, updateDoc } from "firebase/firestore";
-import { db } from "../../firebase";
+import { db } from "../../Firebase";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 
