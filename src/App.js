@@ -73,7 +73,7 @@ function App() {
                             <Route path="/listen/:storyId" element={<Listen />} />
                         </Route>
                         <Route path="/admin" element={<PrivateRoute />}>
-                            <Route path="/admin/dictionary" element={<AdminDictionary />} />   
+                            <Route path="/admin/dictionary/:word" element={<AdminDictionary />} />   
                         </Route>
 
                     </Routes>

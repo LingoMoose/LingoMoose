@@ -179,6 +179,7 @@ const CreateStory = () => {
 
         const dbData = {
             ...formData,
+            title_lowercase: formData.title.toLowerCase(),
             timestamp: serverTimestamp(),
             userRef: auth.currentUser.uid,
         };

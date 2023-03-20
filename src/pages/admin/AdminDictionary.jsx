@@ -3,8 +3,11 @@ import { toast } from "react-toastify";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 import { uuidv4 } from "@firebase/util";
-import { doc, getDoc, addDoc, serverTimestamp, updateDoc } from "firebase/firestore";
+import { doc, getDoc, serverTimestamp, updateDoc, setDoc } from "firebase/firestore";
 import { db } from "../../firebase";
+import { FaVolumeUp } from "react-icons/fa"
+import { useNavigate, useParams } from "react-router";
+import { useEffect } from "react";
 
 const style = {
     label: `text-lg mt-6 font-semibold`
@@ -13,13 +16,17 @@ const style = {
 const AdminDictionary = () => {
     const [searchValue, setSearchValue] = useState("");
     
+    const param = useParams().word;
     const auth = getAuth();
     const storage = getStorage();
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         language: "vietnamese",
         english: "",
         vietnamese: "",
+        english_lowercase: "",
+        vietnamese_lowercase: "",
         definition: "",
         altTranslations: "",
         exampleSentence: "",
@@ -39,16 +46,27 @@ const AdminDictionary = () => {
             male: null
           }
         },
+        imgUrl: null,
         image: null,
       });
 
     console.log(formData)
 
+    useEffect(()=>{
+        setSearchValue(param)
+        fetchWord(searchValue)
+        // eslint-disable-next-line
+    },[param])
+
+    const playWord = (e, refWord) => {
+        e.preventDefault()
+        let audio = new Audio(refWord)
+        audio.play()
+      }
 
     function searchWord(e){
         e.preventDefault()
-        console.log(searchValue)
-        fetchWord(searchValue)
+        navigate(`/admin/dictionary/${searchValue}`)
     }
 
     const fetchWord = async (word) => {
@@ -58,24 +76,85 @@ const AdminDictionary = () => {
 
         if (docSnap.exists()) {
             const wordData = docSnap.data();
+            // user did not create the word, so they can not edit it, unless it's the admins account
             if ((wordData.userRef !== auth.currentUser.uid)&&("4xfyU4vrz2NYs9QVEjDfBDAxKTE2" !== auth.currentUser.uid)) {
-                toast.error("You are not authorized to edit this word");
+                toast.error(`You are not authorized to edit "${word}"`);
             } else {
                 setFormData({
                     language: wordData.language,
                     english: wordData.english,
                     vietnamese: wordData.vietnamese,
+                    english_lowercase: wordData.english_lowercase,
+                    vietnamese_lowercase: wordData.vietnamese_lowercase,
                     definition: wordData.definition,
                     altTranslations: wordData.altTranslations,
                     exampleSentence: wordData.exampleSentence,
                     partOfSpeech: wordData.partOfSpeech,
                     level: wordData.level,
-                    imgUrls: wordData.imgUrls,
+                    imgUrl: wordData.imgUrl,
                     audioUrls: wordData.audioUrls,
+                    audio: {
+                        southern: {
+                          female: null,
+                          male: null
+                        },
+                        central: {
+                          female: null,
+                          male: null
+                        },
+                        northern: {
+                          female: null,
+                          male: null
+                        }
+                      },
+                    image: null
                 });
+                toast.success(`found "${searchValue}"  in the dictionary`);
             }
         } else {
-            toast.error("Word not found");
+            setFormData({
+                language: "vietnamese",
+                english: word.charAt(0).toUpperCase() + word.slice(1),
+                vietnamese: "",
+                definition: "",
+                english_lowercase: "",
+                vietnamese_lowercase: "",
+                altTranslations: "",
+                exampleSentence: "",
+                partOfSpeech: "",
+                level: "newbie",
+                audio: {
+                southern: {
+                    female: null,
+                    male: null
+                },
+                central: {
+                    female: null,
+                    male: null
+                },
+                northern: {
+                    female: null,
+                    male: null
+                }
+                },
+                audioUrls: {
+                    southern: {
+                    female: null,
+                    male: null
+                    },
+                    central: {
+                    female: null,
+                    male: null
+                    },
+                    northern: {
+                    female: null,
+                    male: null
+                    }
+                },
+                imgUrl: null,
+                image: null
+            })
+            toast.success(`"${searchValue}" not yet defined`);
         }
     };
 
@@ -128,9 +207,14 @@ const AdminDictionary = () => {
     };
 
     const storeFile = async (file) => new Promise((resolve, reject) => {
+        console.log("file")
+        console.log(file)
         const languageStr = formData.language;
         const capitalizedLanguageStr = languageStr.charAt(0).toUpperCase() + languageStr.slice(1);
-        let folderPath = `${capitalizedLanguageStr}/Stories/${formData.title}`;
+        const wordStr = formData.english;
+        const capitalizedWordStr = wordStr.charAt(0).toUpperCase() + wordStr.slice(1);
+
+        let folderPath = `${capitalizedLanguageStr}/Dictionary/${capitalizedWordStr}`;
         const filename = `${folderPath}/${auth.currentUser.uid}-${uuidv4()}-${file.name}`;
         const storageRef = ref(storage, filename);
         const uploadTask = uploadBytesResumable(storageRef, file);
@@ -186,6 +270,8 @@ const AdminDictionary = () => {
         
         const dbData = {
             ...formData,
+            vietnamese_lowercase: formData.vietnamese.toLowerCase(),
+            english_lowercase: formData.english.toLowerCase(),
             timestamp: serverTimestamp(),
             userRef: auth.currentUser.uid,
         };
@@ -225,9 +311,9 @@ const AdminDictionary = () => {
             deleteFile(formData.audioUrls.northern.male);
         }
 
-        // up an image and create a reference
+        // upload an image and create a reference
         if (formData?.image) {
-            const imgUrl = await storeFile(formData.image).catch((error) => {
+            const imgUrl = await storeFile(formData.image[0]).catch((error) => {
               console.error(error);
               toast.error("Error uploading image");
               return;
@@ -237,23 +323,12 @@ const AdminDictionary = () => {
             }
           }
         
-        // up a southern vietnamese audio and create a reference
-        if (formData?.audio?.southern?.female) {
-        const audioUrl = await storeFile(formData.audio.southern.female).catch((error) => {
-            console.error(error);
-            toast.error("Error uploading image");
-            return;
-        });
-            if (audioUrl) {
-                dbData.audioUrls.central.female = audioUrl;
-            }
-        }
         
         // upload southern female audio and create a reference
         if (formData?.audio?.southern?.female) {
             const audioUrl = await storeFile(formData.audio.southern.female).catch((error) => {
                 console.error(error);
-                toast.error("Error uploading image");
+                toast.error("Error uploading southern female audio");
                 return;
             });
                 if (audioUrl) {
@@ -261,11 +336,12 @@ const AdminDictionary = () => {
                 }
             }
 
+
         // upload southern male audio and create a reference
         if (formData?.audio?.southern?.male) {
             const audioUrl = await storeFile(formData.audio.southern.male).catch((error) => {
                 console.error(error);
-                toast.error("Error uploading image");
+                toast.error("Error uploading southern male audio");
                 return;
             });
                 if (audioUrl) {
@@ -277,7 +353,7 @@ const AdminDictionary = () => {
         if (formData?.audio?.central?.female) {
             const audioUrl = await storeFile(formData.audio.central.female).catch((error) => {
                 console.error(error);
-                toast.error("Error uploading image");
+                toast.error("Error uploading central female audio");
                 return;
             });
                 if (audioUrl) {
@@ -289,7 +365,7 @@ const AdminDictionary = () => {
         if (formData?.audio?.central?.male) {
             const audioUrl = await storeFile(formData.audio.central.male).catch((error) => {
                 console.error(error);
-                toast.error("Error uploading image");
+                toast.error("Error uploading central male audio");
                 return;
             });
                 if (audioUrl) {
@@ -301,7 +377,7 @@ const AdminDictionary = () => {
         if (formData?.audio?.northern?.female) {
             const audioUrl = await storeFile(formData.audio.northern.female).catch((error) => {
                 console.error(error);
-                toast.error("Error uploading image");
+                toast.error("Error uploading northern female audio");
                 return;
             });
                 if (audioUrl) {
@@ -313,7 +389,7 @@ const AdminDictionary = () => {
         if (formData?.audio?.northern?.male) {
             const audioUrl = await storeFile(formData.audio.northern.male).catch((error) => {
                 console.error(error);
-                toast.error("Error uploading image");
+                toast.error("Error uploading northern male audio");
                 return;
             });
                 if (audioUrl) {
@@ -321,23 +397,52 @@ const AdminDictionary = () => {
                 }
             }
 
-           
-
         delete dbData.image;
         delete dbData.audio;
 
-        if (false) {
-            // editing word
-            const docRef = doc(db, formData.language + "Dictionary", formData.english);
-            await updateDoc(docRef, dbData);
+        console.log(dbData)
+        console.log("dbData")
+
+        const docRef = doc(db, dbData.language + "Dictionary", dbData.english_lowercase);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            const wordData = docSnap.data();
+            // user did not create the word, so they can not edit it, unless it's the admins account
+            if ((wordData.userRef !== auth.currentUser.uid)&&("4xfyU4vrz2NYs9QVEjDfBDAxKTE2" !== auth.currentUser.uid)) {
+                toast.error(`You are not authorized to edit "${dbData.english_lowercase}"`);
+            } else {
+                // editing word
+                const docRef = doc(db, formData.language + "Dictionary", formData.english_lowercase);
+                await updateDoc(docRef, dbData);
+                toast.success(`Successfully updated "${dbData.english_lowercase}"`);
+            }
         } else {
             // new word 
-            const docRef = doc(db, formData.language + "Dictionary", dbData.english);
-            await addDoc(docRef, dbData);
+            const docRef = doc(db, formData.language + "Dictionary", dbData.english_lowercase);
+            await setDoc(docRef, dbData);
+            toast.success(`Successfully added "${dbData.english_lowercase}" to the dictionary`);
         }
 
-        
-        toast.success("Word Saved");
+        setFormData({
+            ...dbData,
+            audio: {
+                southern: {
+                  female: null,
+                  male: null
+                },
+                central: {
+                  female: null,
+                  male: null
+                },
+                northern: {
+                  female: null,
+                  male: null
+                }
+              },
+        })
+
+
     }
 
     return (
@@ -351,40 +456,40 @@ const AdminDictionary = () => {
                     type="text" 
                     className="w-full max-w-sm px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-out duration-150 focus:text-gray-700 focus:bg-white focus:border-slate-600 mb-6"
                     value={searchValue}
-                    onChange={(e)=>setSearchValue(e.target.value)}
+                    onChange={(e)=>setSearchValue(e.target.value.toLowerCase())}
                 />
             </form>
             <h1 className="text-3xl text-center mt-6 font-bold">{formData.english ? 'Edit Word' : 'Create a Word'}</h1>
             <form onSubmit={onSubmit}>
-                <p className={style.label}>Word (English)</p>
+                <p className={style.label}>Word / phrase / expression / sentence (English)</p>
                 <input type="text" value={formData.english} id="english" onChange={onChange} placeholder="English word" maxLength="50" minLength="1" required
                     className="w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-out duration-150 focus:text-gray-700 focus:bg-white focus:border-slate-600 mb-6"
                 />
-                <p className={`${style.label} mt-0`}>Word (Vietnamese)</p>
+                <p className={`${style.label} mt-0`}>Word / phrase / expression / sentence (Vietnamese)</p>
                 <input type="text" id="vietnamese" value={formData.vietnamese} onChange={onChange} placeholder="Vietnamese word" maxLength="50" minLength="1" required
                     className="w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-out duration-150 focus:text-gray-700 focus:bg-white focus:border-slate-600 mb-6"
                 />
                 <div>
-                    <p className={`${style.label} mt-0`}>Definition</p>
-                    <textarea type="text" id="definition" value={formData.definition} onChange={onChange} placeholder="Definition of word" maxLength="200" minLength="1" required
+                    <p className={`${style.label} mt-0`}>Definition (optional)</p>
+                    <textarea type="text" id="definition" value={formData.definition} onChange={onChange} placeholder="Definition in English" maxLength="200" 
                         className="w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-out duration-150 focus:text-gray-700 focus:bg-white focus:border-slate-600 mb-6"
                     />
                 </div>
                 <div>
-                    <p className={`${style.label} mt-0`}>Alternative Translations (seperated by ", ")</p>
-                    <textarea type="text" id="altTranslations" value={formData.altTranslations} onChange={onChange} placeholder="Alternative Translations" maxLength="100" minLength="20" required
+                    <p className={`${style.label} mt-0`}>Alternative Translations (only if word)</p>
+                    <textarea type="text" id="altTranslations" value={formData.altTranslations} onChange={onChange} placeholder="cheerful, content, delighted, elated, exultant, glad, joyful, jubilant, merry, orgasmic" maxLength="100" 
                         className="w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-out duration-150 focus:text-gray-700 focus:bg-white focus:border-slate-600 mb-6"
                     />
                 </div>
                 <div>
-                    <p className={`${style.label} mt-0`}>Part of Speech</p>
-                    <textarea type="text" id="partOfSpeech" value={formData.partOfSpeech} onChange={onChange} placeholder="Part of Speech" maxLength="100" minLength="1" required
+                    <p className={`${style.label} mt-0`}>Part of Speech (only if word)</p>
+                    <textarea type="text" id="partOfSpeech" value={formData.partOfSpeech} onChange={onChange} placeholder="noun, verb, adjective, adverb, pronoun, preposition, conjunction, interjection, numeral, article, and determiner" maxLength="100" 
                         className="w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-out duration-150 focus:text-gray-700 focus:bg-white focus:border-slate-600 mb-6"
                     />
                 </div>
                 <div>
-                    <p className={`${style.label} mt-0`}>Example Sentence</p>
-                    <textarea type="text" id="exampleSentence" value={formData.exampleSentence} onChange={onChange} placeholder="Example Sentence" maxLength="200" minLength="1" required
+                    <p className={`${style.label} mt-0`}>Example Sentence (optional)</p>
+                    <textarea type="text" id="exampleSentence" value={formData.exampleSentence} onChange={onChange} placeholder="Example Sentence" maxLength="200" 
                         className="w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-out duration-150 focus:text-gray-700 focus:bg-white focus:border-slate-600 mb-6"
                     />
                 </div>
@@ -424,10 +529,17 @@ const AdminDictionary = () => {
                 
                 <div className="mb-6">
                     <p className={`${style.label} mt-0`}>Image</p>  
-                    <input type="file" id="image" onChange={onChange} accept=".jpg,.png,.jpeg" 
-                        className="w-full px-3 py-1.5 text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-out focus:bg-white focus:border-slate-600"
-                    />
-                    {formData.image && (
+                    <div className="flex flex-col justify-center items-start">
+                        <input type="file" id="image" onChange={onChange} accept=".jpg,.png,.jpeg" 
+                            className="w-full px-3 py-1.5 text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-out focus:bg-white focus:border-slate-600"
+                        />
+                        {formData?.imgUrl && (
+                            <div >
+                                <img className="w-full h-80 mt-2" src={formData.imgUrl} alt={formData.english} />
+                            </div>
+                        )}  
+                    </div>
+                    {formData.image && formData.imgUrl && (
                         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                             <p>Any new uploads will replace the existing image.</p>
                         </div>
@@ -437,61 +549,108 @@ const AdminDictionary = () => {
                     <p className={`${style.label} mt-0`}>Audio (Vietnamese only)</p>
                     
 
-                    <p>Southern Female</p>
-                    <input type="file" id="southernFemaleAudio" onChange={onChange} accept=".mp3, .wav, .aac, .ogg"
-                        className="w-full px-3 py-1.5 text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-out focus:bg-white focus:border-slate-600"
-                    />
-                    {formData.audio.southern.female && (
+                    <p className="mt-4 font-semibold">Southern Female</p>
+                    <div className="flex justify-center items-center">
+                        <input type="file" id="southernFemaleAudio" onChange={onChange} accept=".mp3, .wav, .aac, .ogg"
+                            className="w-full px-3 py-1.5 text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-out focus:bg-white focus:border-slate-600"
+                        />
+                        {formData?.audioUrls?.southern?.female && (
+                            <div >
+                                <button onClick={(e)=>playWord(e, formData.audioUrls.southern.female)}><FaVolumeUp className="text-3xl ml-3" /></button>
+                            </div>
+                        )}  
+                    </div>
+                    {formData?.audio?.southern?.female && formData?.audioUrls?.southern?.female && (
                         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                             <p>Any new southern female audio uploads will replace the existing audio.</p>
                         </div>
                     )}
 
-                    <p>Southern Male</p>
-                    <input type="file" id="southernMaleAudio" onChange={onChange} accept=".mp3, .wav, .aac, .ogg"
-                        className="w-full px-3 py-1.5 text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-out focus:bg-white focus:border-slate-600"
-                    />
-                    {formData.audio.southern.male && (
+                    <p className="mt-4 font-semibold">Southern Male</p>
+                    <div className="flex justify-center items-center">
+                        <input type="file" id="southernMaleAudio" onChange={onChange} accept=".mp3, .wav, .aac, .ogg"
+                            className="w-full px-3 py-1.5 text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-out focus:bg-white focus:border-slate-600"
+                        />
+                        {formData?.audioUrls?.southern?.male && (
+                            <div >
+                                <button onClick={(e)=>playWord(e, formData.audioUrls.southern.male)}><FaVolumeUp className="text-3xl ml-3" /></button>
+                            </div>
+                        )}    
+                    </div>
+                    
+                    {formData?.audio?.southern?.male && formData?.audioUrls?.southern?.male && (
                         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                             <p>Any new southern male audio uploads will replace the existing audio.</p>
                         </div>
                     )}
 
-                    <p>Central Female</p>
-                    <input type="file" id="centralFemaleAudio" onChange={onChange} accept=".mp3, .wav, .aac, .ogg"
-                        className="w-full px-3 py-1.5 text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-out focus:bg-white focus:border-slate-600"
-                    />
-                    {formData.audio.central.female && (
+   
+                    <p className="mt-4 font-semibold">Central Female</p>
+                    <div className="flex justify-center items-center">
+                        <input type="file" id="centralFemaleAudio" onChange={onChange} accept=".mp3, .wav, .aac, .ogg"
+                            className="w-full px-3 py-1.5 text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-out focus:bg-white focus:border-slate-600"
+                        />
+                        {formData?.audioUrls?.central?.female && (
+                            <div >
+                                <button onClick={(e)=>playWord(e, formData.audioUrls.central.female)}><FaVolumeUp className="text-3xl ml-3" /></button>
+                            </div>
+                        )}  
+                    </div>
+                    {formData?.audio?.central?.female && formData?.audioUrls?.central?.female && (
                         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                             <p>Any new central female audio uploads will replace the existing audio.</p>
                         </div>
                     )}
 
-                    <p>Central Male</p>
-                    <input type="file" id="centralMaleAudio" onChange={onChange} accept=".mp3, .wav, .aac, .ogg"
-                        className="w-full px-3 py-1.5 text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-out focus:bg-white focus:border-slate-600"
-                    />
-                    {formData.audio.central.male && (
+                    
+                    <p className="mt-4 font-semibold">Central Male</p>
+                    <div className="flex justify-center items-center">
+                        <input type="file" id="centralMaleAudio" onChange={onChange} accept=".mp3, .wav, .aac, .ogg"
+                            className="w-full px-3 py-1.5 text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-out focus:bg-white focus:border-slate-600"
+                        />
+                        {formData?.audioUrls?.central?.male && (
+                            <div >
+                                <button onClick={(e)=>playWord(e, formData.audioUrls.central.male)}><FaVolumeUp className="text-3xl ml-3" /></button>
+                            </div>
+                        )}  
+                    </div>
+                    {formData?.audio?.central?.male && formData?.audioUrls?.central?.male && (
                         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                             <p>Any new central male audio uploads will replace the existing audio.</p>
                         </div>
                     )}
-                    
-                    <p>Northern Female</p>
-                    <input type="file" id="northernFemaleAudio" onChange={onChange} accept=".mp3, .wav, .aac, .ogg"
-                        className="w-full px-3 py-1.5 text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-out focus:bg-white focus:border-slate-600"
-                    />
-                    {formData.audio.northern.female && (
+
+                         
+                    <p className="mt-4 font-semibold">Northern Female</p>
+                    <div className="flex justify-center items-center">
+                        <input type="file" id="northernFemaleAudio" onChange={onChange} accept=".mp3, .wav, .aac, .ogg"
+                            className="w-full px-3 py-1.5 text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-out focus:bg-white focus:border-slate-600"
+                        />
+                        {formData?.audioUrls?.northern?.female && (
+                            <div >
+                                <button onClick={(e)=>playWord(e, formData.audioUrls.northern.female)}><FaVolumeUp className="text-3xl ml-3" /></button>
+                            </div>
+                        )}  
+                    </div>
+                    {formData?.audio?.northern?.female && formData?.audioUrls?.northern?.female && (
                         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                             <p>Any new northern female audio uploads will replace the existing audio.</p>
                         </div>
                     )}
                     
-                    <p>Northern Male</p>
-                    <input type="file" id="northernMaleAudio" onChange={onChange} accept=".mp3, .wav, .aac, .ogg"
-                        className="w-full px-3 py-1.5 text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-out focus:bg-white focus:border-slate-600"
-                    />
-                    {formData.audio.northern.male && (
+                    
+                    <p className="mt-4 font-semibold">Northern Male</p>
+                    <div className="flex justify-center items-center">
+                        <input type="file" id="northernMaleAudio" onChange={onChange} accept=".mp3, .wav, .aac, .ogg"
+                            className="w-full px-3 py-1.5 text-gray-700 bg-white border border-gray-300 rounded transition duration-150 ease-out focus:bg-white focus:border-slate-600"
+                        />
+                        {formData?.audioUrls?.northern?.male && (
+                            <div >
+                                <button onClick={(e)=>playWord(e, formData.audioUrls.northern.male)}><FaVolumeUp className="text-3xl ml-3" /></button>
+                            </div>
+                        )}  
+                    </div>
+                    {formData?.audio?.northern?.male && formData?.audioUrls?.northern?.male && (
                         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                             <p>Any new northern male audio uploads will replace the existing audio.</p>
                         </div>
