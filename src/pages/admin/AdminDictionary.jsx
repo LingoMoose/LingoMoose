@@ -424,25 +424,14 @@ const AdminDictionary = () => {
             toast.success(`Successfully added "${dbData.english_lowercase}" to the dictionary`);
         }
 
-        setFormData({
-            ...dbData,
-            audio: {
-                southern: {
-                  female: null,
-                  male: null
-                },
-                central: {
-                  female: null,
-                  male: null
-                },
-                northern: {
-                  female: null,
-                  male: null
-                }
-              },
-        })
+        if(dbData.english_lowercase === param){
+            window.location.reload()
+        } else {
+            navigate(`/admin/dictionary/${dbData.english_lowercase}`)
+        }
 
-
+        
+        
     }
 
     return (
@@ -451,7 +440,7 @@ const AdminDictionary = () => {
                 className="flex flex-col items-center justify-center"
                 onSubmit={searchWord}
             >
-                <h2 className="text-2xl text-center mt-6 font-semibold">Search Word (in English)</h2>
+                <h2 className="text-2xl text-center mt-6 font-semibold">Search First! (in English)</h2>
                 <input 
                     type="text" 
                     className="w-full max-w-sm px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition ease-out duration-150 focus:text-gray-700 focus:bg-white focus:border-slate-600 mb-6"
