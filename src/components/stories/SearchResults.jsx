@@ -36,9 +36,9 @@ const SearchResults = ({param, levels, hideStudied}) => {
 
                 // create the query
                 const q = query(listingRef,
-                    orderBy('title'), 
-                    where('title', '>=', param),
-                    where('title', '<=', param + '\uf8ff'),
+                    orderBy('title_lowercase'), 
+                    where('title_lowercase', '>=', param),
+                    where('title_lowercase', '<=', param + '\uf8ff'),
                     orderBy('timestamp', 'desc'),
                     where('level', 'in', levels.length === 0 ? ["newbie", "elementary", "intermediate", "upperintermediate", "advanced", "master"] : levels),
                     limit(8)

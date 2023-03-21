@@ -35,7 +35,7 @@ const Filter = ({hideStudied, setHideStudied, levels, setLevels, setChecked }) =
     function search(e){
         e.preventDefault();
         if(searchValue !== ""){
-            navigate(`/search/${searchValue}`)    
+            navigate(`/search/${searchValue.toLowerCase()}`)    
         }
     }
 
