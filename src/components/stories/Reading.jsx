@@ -79,10 +79,8 @@ const Reader = ({ text, audioUrl, translation }) => {
   },[fontSize])
 
   const handleSentenceClick = (sentence) => {
-    const sentenceIndex = text.split(/(.*?[.?!]['"’”]?)(?=\s+(?:[A-ZĐIÁÀẢẠÂẤẦẨẬẪĂẮẰẲẴẶÉÈẺẸÊẾỀỂỄỆÍÌỈỊÓÒỎỌÔỐỒỔỖỘƠỚỜỞỢỠÚÙỦỤƯỨỪỬỰỮYÝỲỶỴĐ]|[A-Z]|\s*$))/gm
-).indexOf(sentence);
-    const selectedSentenceTranslation = translation.split(/(.*?[.?!]['"’”]?)(?=\s+(?:[A-ZĐIÁÀẢẠÂẤẦẨẬẪĂẮẰẲẴẶÉÈẺẸÊẾỀỂỄỆÍÌỈỊÓÒỎỌÔỐỒỔỖỘƠỚỜỞỢỠÚÙỦỤƯỨỪỬỰỮYÝỲỶỴĐ]|[A-Z]|\s*$))/gm
-)[sentenceIndex];
+    const sentenceIndex = text.split(/(.*?[.?!]['"’”]?)(?=\s+(?:[A-ZĐIÁÀẢẠÂẤẦẨẬẪĂẮẰẲẴẶÉÈẺẸÊẾỀỂỄỆÍÌỈỊÓÒỎỌÔỐỒỔỖỘƠỚỜỞỢỠÚÙỦỤƯỨỪỬỰỮYÝỲỶỴĐ]|[A-Z]|\s*$))/gm).filter(sentence => sentence.trim().length > 0).indexOf(sentence);
+    const selectedSentenceTranslation = translation.split(/(.*?[.?!]['"’”]?)(?=\s+(?:[A-ZĐIÁÀẢẠÂẤẦẨẬẪĂẮẰẲẴẶÉÈẺẸÊẾỀỂỄỆÍÌỈỊÓÒỎỌÔỐỒỔỖỘƠỚỜỞỢỠÚÙỦỤƯỨỪỬỰỮYÝỲỶỴĐ]|[A-Z]|\s*$))/gm).filter(sentence => sentence.trim().length > 0)[sentenceIndex];
     setSelectedTranslation(selectedSentenceTranslation);
   };
 
@@ -173,8 +171,7 @@ const Reader = ({ text, audioUrl, translation }) => {
         <div className='p-4 px-6 shadow-sm z-10'
         style={{ backgroundColor: 'var(--background-color4)'}}
         >
-        {text.split(/(.*?[.?!]['"’”]?)(?=\s+(?:[A-ZĐIÁÀẢẠÂẤẦẨẬẪĂẮẰẲẴẶÉÈẺẸÊẾỀỂỄỆÍÌỈỊÓÒỎỌÔỐỒỔỖỘƠỚỜỞỢỠÚÙỦỤƯỨỪỬỰỮYÝỲỶỴĐ]|[A-Z]|\s*$))/gm
-).map((sentence, index) => (
+        {text.split(/(.*?[.?!]['"’”]?)(?=\s+(?:[A-ZĐIÁÀẢẠÂẤẦẨẬẪĂẮẰẲẴẶÉÈẺẸÊẾỀỂỄỆÍÌỈỊÓÒỎỌÔỐỒỔỖỘƠỚỜỞỢỠÚÙỦỤƯỨỪỬỰỮYÝỲỶỴĐ]|[A-Z]|\s*$))/gm).filter(sentence => sentence.trim().length > 0).map((sentence, index) => (
             <p 
                 key={index}
                 className={`inline  leading-loose cursor-pointer hover:rounded-lg ${hoverEffect}
