@@ -64,7 +64,7 @@ const StoryItem = ({story, id, onEdit, onDelete}) => {
                   <div className="w-full h-[170px] max-h-[170px] px-6 mt-2">
                     <img className={`h-full w-full object-cover`} loading="lazy" src={story.imgUrls[0]} alt="story" />
                   </div>
-                    <Moment className="absolute top-2 left-2 bg-[#3377cc] text-white uppercase text-xs font-semibold rounded-md px-2 py-1 shadow-lg" fromNow>{story.timestamp?.toDate()}</Moment>
+                    {/* <Moment className="absolute top-2 left-2 bg-[#3377cc] text-white uppercase text-xs font-semibold rounded-md px-2 py-1 shadow-lg" fromNow>{story.timestamp?.toDate()}</Moment> */}
                     <div className={`w-full p-[10px]  border-b-[6px] ${borderLevelColor}`}>
                             <div className="flex items-center space-x-1">
                                 <p className="font-semibold text-sm mb-[2px] text-gray-600 truncate">{story.address}</p> 
