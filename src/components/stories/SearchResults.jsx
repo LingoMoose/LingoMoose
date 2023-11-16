@@ -133,7 +133,7 @@ const SearchResults = ({param, levels, hideStudied}) => {
 
     return ( 
         <div className="max-w-6xl mx-auto px-3">
-            <h1 className="text-center text-3xl mt-6 mb-6 font-bold capitalize">{param}</h1>
+            {/* <h1 className="text-center text-3xl mt-6 mb-6 font-bold capitalize">{param}</h1> */}
             {loading ? (
                 <Spinner />
             ) : (stories && stories.length) > 0 ? (

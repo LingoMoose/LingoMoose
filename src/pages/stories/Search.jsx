@@ -34,8 +34,7 @@ const Search = () => {
             </div>
             { param && (
                 <div>
-                <h2 className="w-full text-center text-4xl">All results for {param}</h2>  
-                <h3 className="w-full text-center text-4xl mt-20">Still in development</h3>       
+                <h2 className="w-full text-center text-4xl">All results for {param}</h2>        
                 <SearchResults 
                     levels={checked}
                     hideStudied={hideStudied}
