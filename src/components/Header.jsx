@@ -16,6 +16,7 @@ const Header = () => {
                 setUser(user);
             } else {
                 setPageState(["Sign in", "Home"]); 
+                setUser(null);
             }
         })
     }, [auth])
@@ -50,7 +51,7 @@ const Header = () => {
                         <li onClick={() => navigate("/support-us")} className={`${styles.listItem}
                         ${pathMatchRoute("/support-us") && styles.listItemCurrent}`} >Support</li>
 
-                        <li onClick={() => navigate(`${user? "/profile" : "/sign-in"}`)}  className={`${styles.listItem}
+                        <li onClick={() => navigate(`${user ? "/profile" : "/sign-in"}`)}  className={`${styles.listItem}
                         ${(pathMatchRoute("/sign-in") || pathMatchRoute("/profile")) && styles.listItemCurrent}`}>{pageState[0]}</li>
 
                     </ul>

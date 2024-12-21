@@ -30,7 +30,8 @@ const SignIn = () => {
             }
 
         } catch(error) {
-            toast.error(error.message);
+            // toast.error(error.message);
+            toast.error("Login failed: The email and password combination doesn't match any existing account.");
         }
     }
 
